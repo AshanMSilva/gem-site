@@ -1,0 +1,57 @@
+<div class=" content">
+    <div class=" row mt-5">
+        <div class=" col-10 offset-1 col-md-6 offset-md-3 col-lg-4 offset-lg-4 mt-5">
+            <div class=" card">
+
+                <div class=" card-body">
+                    <div class="text-center text-muted mb-4">
+                        <small>Sign In</small>
+                    </div>
+                    <form role="form" [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit()" novalidate="novalidate">
+                        
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Email Address" type="email"
+                            name="email"
+                            formControlName="email" required>
+                            <mat-error *ngIf="loginFormErrors.email">{{loginFormErrors.email}}</mat-error>
+                            
+                          </mat-form-field>
+                          
+
+                          <mat-form-field class="example-full-width">
+                            <input matInput [type]="hide ? 'password' : 'text'" placeholder="Password" 
+                            
+                            name="password" formControlName="password" required>
+                            
+                            <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="loginFormErrors.password">{{loginFormErrors.password}}</mat-error>
+                          </mat-form-field>
+                        
+                            
+
+                            
+                        
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary my-4" type="submit"
+                                [disabled]="loginForm.invalid">Sign In</button>
+                        </div>
+                    </form>
+                    <div class="row mt-3">
+                        <div class="col-6">
+
+                        </div>
+                        <div class="col-6 text-right">
+                            <app-forgot-password></app-forgot-password>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
