@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminLayoutRoutes } from './admin-layout.routing';
-import { DashboardComponent } from '../../dashboard/dashboard.component';
+import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { TableListComponent } from '../../table-list/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
@@ -17,6 +17,7 @@ import {MatRippleModule} from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
+import { NewGemReportComponent } from 'app/pages/new-gem-report/new-gem-report.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import {MatSelectModule} from '@angular/material/select';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
+    
   ],
   declarations: [
     DashboardComponent,
@@ -40,6 +42,7 @@ import {MatSelectModule} from '@angular/material/select';
     MapsComponent,
     NotificationsComponent,
     UpgradeComponent,
+    NewGemReportComponent,
   ]
 })
 
