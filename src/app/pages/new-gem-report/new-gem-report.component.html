@@ -2,86 +2,189 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card" *ngIf="gemReprtType=='Report'|| gemReprtType=='Both'">
                     <div class="card-header card-header-danger">
                         <h4 class="card-title">New Gem Report</h4>
                         <p class="card-category">Complete Gem Details</p>
                     </div>
                     <div class="card-body">
-                        <form>
+                        <form [formGroup]="gemDetailsForm" (ngSubmit)="preprocessForm()" novalidate="novalidate">
+                            <br>
+                            <h5>Details of specimen</h5>
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="col-sm-6 col-md-3">
                                   <mat-form-field class="example-full-width">
-                                      <input matInput placeholder="Company (disabled)" disabled>
+                                      <input matInput placeholder="Weight" type="text" formControlName="weight">
+                                      <mat-error *ngIf="formErrors.get('weight')">{{formErrors.get('weight')}}</mat-error>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-sm-6 col-md-3">
                                     <mat-form-field class="example-full-width">
-                                      <input matInput placeholder="Username">
+                                      <input matInput placeholder="Shape & Cut" type="text"formControlName="shape">
+                                      <mat-error *ngIf="formErrors.get('shape')">{{formErrors.get('shape')}}</mat-error>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-sm-6 col-md-3">
                                     <mat-form-field class="example-full-width">
-                                      <input matInput placeholder="Email address" type="email">
+                                      <input matInput placeholder="Transparency" type="text" formControlName="transparency">
+                                      <mat-error *ngIf="formErrors.get('transparency')">{{formErrors.get('transparency')}}</mat-error>
                                     </mat-form-field>
                                 </div>
+                                <div class="col-sm-6 col-md-3">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Dimensions" type="text" formControlName="dimensions">
+                                    <mat-error *ngIf="formErrors.get('dimensions')">{{formErrors.get('dimensions')}}</mat-error>
+                                  </mat-form-field>
+                                </div>
+                            </div>
+                            <br>
+                            <h5>Tested Data</h5>
+                            <div class="row">
+                              <div class="col-sm-6 col-md-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Refractive Index" type="text" formControlName="refractiveIndex">
+                                    <mat-error *ngIf="formErrors.get('refractiveIndex')">{{formErrors.get('refractiveIndex')}}</mat-error>
+                                  </mat-form-field>
+                              </div>
+                              <div class="col-sm-6 col-md-3">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Specify gravity" type="text" formControlName="specifyGravity">
+                                    <mat-error *ngIf="formErrors.get('specifyGravity')">{{formErrors.get('specifyGravity')}}</mat-error>
+                                  </mat-form-field>
+                              </div>
+                              <div class="col-sm-6 col-md-3">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Hardness" type="text" formControlName="hardness">
+                                    <mat-error *ngIf="formErrors.get('hardness')">{{formErrors.get('hardness')}}</mat-error>
+                                  </mat-form-field>
+                              </div>
+                              <div class="col-sm-6 col-md-3">
+                                <mat-form-field class="example-full-width">
+                                  <input matInput placeholder="Optic Character" type="text" formControlName="opticCharacter">
+                                  <mat-error *ngIf="formErrors.get('opticCharacter')">{{formErrors.get('opticCharacter')}}</mat-error>
+                                </mat-form-field>
+                              </div>
+                          
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                  <mat-form-field class="example-full-width">
-                                    <input matInput placeholder="Fist Name" type="text">
+                              <div class="col-sm-6 col-md-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Magnification" type="text" formControlName="magnification">
+                                    <mat-error *ngIf="formErrors.get('magnification')">{{formErrors.get('magnification')}}</mat-error>
                                   </mat-form-field>
-                                </div>
-                                <div class="col-md-6">
+                              </div>
+                              <div class="col-sm-6 col-md-3">
                                   <mat-form-field class="example-full-width">
-                                    <input matInput placeholder="Last Name" type="text">
+                                    <input matInput placeholder="Color"type="text" formControlName="color">
+                                    <mat-error *ngIf="formErrors.get('color')">{{formErrors.get('color')}}</mat-error>
                                   </mat-form-field>
-                                </div>
+                              </div>
+                              <div class="col-sm-6 col-md-3">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Variety" type="text" formControlName="variety">
+                                    <mat-error *ngIf="formErrors.get('variety')">{{formErrors.get('variety')}}</mat-error>
+                                  </mat-form-field>
+                              </div>
+                              <div class="col-sm-6 col-md-3">
+                                <mat-form-field class="example-full-width">
+                                  <input matInput placeholder="Apex" type="text" formControlName="apex">
+                                  <mat-error *ngIf="formErrors.get('apex')">{{formErrors.get('apex')}}</mat-error>
+                                </mat-form-field>
+                              </div>
+                          
                             </div>
+                            
                             <div class="row">
-                                <div class="col-md-12">
-                                  <mat-form-field class="example-full-width">
-                                    <input matInput placeholder="Adress" type="text">
-                                  </mat-form-field>
-                                </div>
+                              <div class="col-12 col-md-6">
+                                <mat-form-field class="example-full-width">
+                                  <input matInput placeholder="Species" type="text" formControlName="species">
+                                  <mat-error *ngIf="formErrors.get('species')">{{formErrors.get('species')}}</mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-12 col-md-6">
+                                <mat-form-field class="example-full-width">
+                                  <input matInput placeholder="Comments" type="text" formControlName="comments">
+                                  <mat-error *ngIf="formErrors.get('comments')">{{formErrors.get('comments')}}</mat-error>
+                                </mat-form-field>
+                              </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                  <mat-form-field class="example-full-width">
-                                    <input matInput placeholder="City" type="text">
-                                  </mat-form-field>
-                                </div>
-                                <div class="col-md-4">
-                                  <mat-form-field class="example-full-width">
-                                    <input matInput placeholder="Country" type="text">
-                                  </mat-form-field>
-                                </div>
-                                <div class="col-md-4">
-                                  <mat-form-field class="example-full-width">
-                                    <input matInput placeholder="Postal Code" type="text">
-                                  </mat-form-field>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                  <label>About Me</label>
-                                  <mat-form-field class="example-full-width">
-                                     <textarea matInput placeholder="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."></textarea>
-                                   </mat-form-field>
-                                    <!-- <div class="form-group">
-  
-                                        <div class="form-group">
-                                            <label class="bmd-label-floating"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
-                                            <textarea class="form-control" rows="5"></textarea>
-                                        </div>
-                                    </div> -->
-                                </div>
-                            </div>
-                            <button mat-raised-button type="submit" class="btn btn-danger pull-right">Update Profile</button>
+                            
+                            <button mat-raised-button type="submit" class="btn btn-danger pull-right" [disabled]="gemDetailsForm.invalid">Add</button>
                             <div class="clearfix"></div>
                         </form>
                     </div>
                 </div>
+                <div class="card" *ngIf="gemReprtType=='Memo Card'">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title">New Gem Report</h4>
+                      <p class="card-category">Complete Gem Details</p>
+                  </div>
+                  <div class="card-body">
+                      <form [formGroup]="gemDetailsForm" (ngSubmit)="preprocessForm()" novalidate="novalidate">
+                          <br>
+                          <h5>Details of specimen</h5>
+                          <div class="row">
+                              <div class="col-sm-6 col-md-4">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Weight" type="text" formControlName="weight">
+                                    <mat-error *ngIf="formErrors.get('weight')">{{formErrors.get('weight')}}</mat-error>
+                                  </mat-form-field>
+                              </div>
+                              <div class="col-sm-6 col-md-4">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Shape & Cut" type="text"formControlName="shape">
+                                    <mat-error *ngIf="formErrors.get('shape')">{{formErrors.get('shape')}}</mat-error>
+                                  </mat-form-field>
+                              </div>
+                              
+                              <div class="col-sm-6 col-md-4">
+                                <mat-form-field class="example-full-width">
+                                  <input matInput placeholder="Dimensions" type="text" formControlName="dimensions">
+                                  <mat-error *ngIf="formErrors.get('dimensions')">{{formErrors.get('dimensions')}}</mat-error>
+                                </mat-form-field>
+                              </div>
+                          </div>
+                          <br>
+                          <h5>Tested Data</h5>
+                         
+                          <div class="row">
+                            
+                            <div class="col-sm-6">
+                                <mat-form-field class="example-full-width">
+                                  <input matInput placeholder="Color"type="text" formControlName="color">
+                                  <mat-error *ngIf="formErrors.get('color')">{{formErrors.get('color')}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-form-field class="example-full-width">
+                                  <input matInput placeholder="Variety" type="text" formControlName="variety">
+                                  <mat-error *ngIf="formErrors.get('variety')">{{formErrors.get('variety')}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            
+                        
+                          </div>
+                          
+                          <div class="row">
+                            <div class="col-12 col-md-6">
+                              <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Species" type="text" formControlName="species">
+                                <mat-error *ngIf="formErrors.get('species')">{{formErrors.get('species')}}</mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-12 col-md-6">
+                              <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Comments" type="text" formControlName="comments">
+                                <mat-error *ngIf="formErrors.get('comments')">{{formErrors.get('comments')}}</mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          
+                          <button mat-raised-button type="submit" class="btn btn-danger pull-right" [disabled]="gemDetailsForm.invalid">Add</button>
+                          <div class="clearfix"></div>
+                      </form>
+                  </div>
+              </div>
             </div>
         </div>
     </div>

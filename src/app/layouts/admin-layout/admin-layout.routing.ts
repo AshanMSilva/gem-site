@@ -21,5 +21,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'maps',           component: MapsComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
     { path: 'notifications',  component: NotificationsComponent , canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin }},
     { path: 'upgrade',        component: UpgradeComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
-    { path: 'gem-report/new', component: NewGemReportComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+    { path: 'gem-report/new/:type', component: NewGemReportComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
 ];

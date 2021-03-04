@@ -1,3 +1,4 @@
 export enum MODELTYPE {
-    GEM_REPORTS = "gemReports", 
+    GEM_DETAILS = "gemDetails",
+    CONFIG = "config",
   }
