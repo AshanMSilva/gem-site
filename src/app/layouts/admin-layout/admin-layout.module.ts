@@ -17,8 +17,9 @@ import {MatRippleModule} from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
+import {MatDialogModule} from '@angular/material/dialog';
 import { NewGemReportComponent } from 'app/pages/new-gem-report/new-gem-report.component';
-
+import { SelectReportTypeComponent } from 'app/pages/dashboard/components/select-report-type/select-report-type.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,6 +32,9 @@ import { NewGemReportComponent } from 'app/pages/new-gem-report/new-gem-report.c
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
+    MatDialogModule
+    
+   
     
   ],
   declarations: [
@@ -43,6 +47,7 @@ import { NewGemReportComponent } from 'app/pages/new-gem-report/new-gem-report.c
     NotificationsComponent,
     UpgradeComponent,
     NewGemReportComponent,
+    SelectReportTypeComponent
   ]
 })
 
