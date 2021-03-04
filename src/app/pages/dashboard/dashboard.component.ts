@@ -1,7 +1,8 @@
 import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import * as Chartist from 'chartist';
+import { MatDialog } from '@angular/material/dialog';
+
+import { SelectReportTypeComponent } from './components/select-report-type/select-report-type.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,13 +12,19 @@ import * as Chartist from 'chartist';
 export class DashboardComponent implements OnInit {
 
   constructor(
-    private router: Router
+    
+    private dialog: MatDialog
   ) { }
   ngOnInit() {
 
   }
-  goToNewGemReport(){
-    this.router.navigateByUrl('gem-report/new');
+
+  openDialog() {
+    const dialogRef = this.dialog.open(SelectReportTypeComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
 }
