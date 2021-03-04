@@ -30,6 +30,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 
 
+
 @NgModule({
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -52,6 +53,7 @@ import { ToastrModule } from 'ngx-toastr';
     AppComponent,
     AdminLayoutComponent,
     AuthLayoutComponent,
+   
     
 
   ],
