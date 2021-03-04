@@ -1,3 +1,0 @@
-class GemReport{
-    id:string;
-}
