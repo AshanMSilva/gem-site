@@ -10,6 +10,8 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { NewGemReportComponent } from 'app/pages/new-gem-report/new-gem-report.component';
+import { GemDetailsComponent } from 'app/pages/gem-details/gem-details.component';
+import { GemDetailsNewComponent } from 'app/pages/gem-details/gem-details-new/gem-details-new.component';
 
 export const AdminLayoutRoutes: Routes = [
     
@@ -22,4 +24,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'notifications',  component: NotificationsComponent , canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin }},
     { path: 'upgrade',        component: UpgradeComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
     { path: 'gem-report/new/:type', component: NewGemReportComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+    { path: 'gem-details',    component: GemDetailsComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+    { path: 'gem-detail/new', component: GemDetailsNewComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
 ];

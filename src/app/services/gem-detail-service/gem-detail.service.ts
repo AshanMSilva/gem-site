@@ -4,6 +4,8 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { MODELTYPE } from 'app/shared/utils/model-types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { GemDetail } from 'app/shared/models/gem-detail'
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -11,57 +13,69 @@ import { map } from 'rxjs/operators';
 export class GemDetailService {
 
   gemReportList: AngularFireList<GemDetail>;
-  gemReports:Observable<GemDetail[]>;
-  gemReport:Observable<GemDetail>;
+  gemReports: Observable<GemDetail[]>;
+  gemReport: Observable<GemDetail>;
   constructor(
-    private db:AngularFireDatabase,
-    private storage: AngularFireStorage
-    ) {
+    private db: AngularFireDatabase,
+    private storage: AngularFireStorage,
+    private toasterService: ToastrService
+  ) {
   }
 
-  getGemDetails(): Observable<GemDetail[]>{
-    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,); 
+  getGemDetails(): Observable<GemDetail[]> {
+    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,);
     this.gemReports = this.gemReportList.snapshotChanges().pipe(
-      map(actions => actions.map(a=>{
-          const data = a.payload.val() as GemDetail;
-          data.id = a.payload.key;
-          return data;
+      map(actions => actions.map(a => {
+        const data = a.payload.val() as GemDetail;
+        data.detailId = a.payload.key;
+        return data;
       }))
     );
     return this.gemReports;
-  } 
- 
-  
-  getGemDetailById(id:string):Observable<GemDetail>{
-    this.gemReport = this.db.object<GemDetail>(MODELTYPE.GEM_DETAILS+'/'+id).snapshotChanges().pipe(
+  }
+
+
+  getGemDetailById(id: string): Observable<GemDetail> {
+    this.gemReport = this.db.object<GemDetail>(MODELTYPE.GEM_DETAILS + '/' + id).snapshotChanges().pipe(
       map(response => {
-       
         const data = response.payload.val() as GemDetail;
-        if(data!=null){
-          data.id = response.payload.key;
+        if (data != null) {
+          data.detailId = response.payload.key;
         }
-        
         return data;
       })
     );
     return this.gemReport;
   }
 
- 
 
-  addGemDetail(id:string, gemReport:any){
-    this.db.object(MODELTYPE.GEM_DETAILS+'/'+id).set(gemReport);
+  addGemDetail(gemDetail: any) {
+    this.db.database.ref(MODELTYPE.GEM_DETAILS).push(gemDetail, (e) => {
+      if (e) {
+        this.toasterService.error("Gem Detail Could Not Be Added!\n " + e.message, "Error")
+      } else {
+        this.toasterService.success("Gem Detail Added", "Success")
+      }
+    });
   }
 
-  updateGemDetail(id:string, gemReport:any){
-    this.db.object(MODELTYPE.GEM_DETAILS+'/'+id).update(gemReport);
+  setGemDetail(id: string, gemDetail: any) {
+    this.db.object(MODELTYPE.GEM_DETAILS + '/' + id).set(gemDetail);
   }
 
-  deleteGemDetail(id:string){
-    this.db.object(MODELTYPE.GEM_DETAILS+'/'+id).remove();
+  updateGemDetail(id: string, gemDetail: any) {
+    this.db.object(MODELTYPE.GEM_DETAILS + '/' + id).update(gemDetail).then(()=>{
+      this.toasterService.success("Gem Detail Updated", "Success")
+    },(e)=>{
+      this.toasterService.error("Gem Detail Could Not Be Updated!\n ", "Error")
+    });
   }
-   getFiles(filepath: string):Observable<string>{
-    return  this.storage.ref(filepath).getDownloadURL();
+
+  deleteGemDetail(id: string) {
+    this.db.object(MODELTYPE.GEM_DETAILS + '/' + id).remove();
+  }
+  getFiles(filepath: string): Observable<string> {
+    return this.storage.ref(filepath).getDownloadURL();
   }
 
   uploadFile(file: File, filepath: string) {
@@ -79,4 +93,16 @@ export class GemDetailService {
   deleteFile(filepath: string) {
     return this.storage.ref(filepath).delete();
   }
+
+
+  private selectedGemDetailForView: GemDetail
+
+  getSelectedGemDetailForView() {
+    return this.selectedGemDetailForView
+  }
+
+  setSelectedGemDetailForView(gemDetail: GemDetail) {
+    this.selectedGemDetailForView = gemDetail
+  }
+
 }
