@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GemReportService } from './gem-report.service';
+import { GemDetailService } from './gem-detail.service';
 
-describe('GemReportService', () => {
-  let service: GemReportService;
+describe('GemDetailService', () => {
+  let service: GemDetailService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(GemReportService);
+    service = TestBed.inject(GemDetailService);
   });
 
   it('should be created', () => {
