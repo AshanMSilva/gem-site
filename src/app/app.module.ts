@@ -28,6 +28,9 @@ import { AngularFireModule } from '@angular/fire';
 import { environment } from 'environments/environment';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
+import { PdfGenerationComponent } from './pages/pdf-generation/pdf-generation.component';
+import { PdfGenerationCardComponent } from './pages/pdf-generation/pdf-generation-card/pdf-generation-card.component';
+import { PdfGenerationReportComponent } from './pages/pdf-generation/pdf-generation-report/pdf-generation-report.component';
 
 
 
@@ -53,6 +56,9 @@ import { ToastrModule } from 'ngx-toastr';
     AppComponent,
     AdminLayoutComponent,
     AuthLayoutComponent,
+    PdfGenerationComponent,
+    PdfGenerationCardComponent,
+    PdfGenerationReportComponent,
    
     
 

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GemDetailService } from 'app/services/gem-detail-service/gem-detail.service';
 import { GemDetail } from 'app/shared/models/gem-detail';
 import { FormUtil } from 'app/shared/utils/form-utility';
+import { environment } from 'environments/environment';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -34,6 +35,8 @@ export class GemDetailsNewComponent implements OnInit {
   createForm() {
     let today = new Date().toLocaleDateString()
     let todayTime = new Date().getTime()
+    let cardURL = environment.baseURLForQR + "/card/" + todayTime.toString()
+    let reportURL = environment.baseURLForQR + "/report/" + todayTime.toString()
     this.gemDetailsForm = this.formBuilder.group({
 
       //common
@@ -48,7 +51,7 @@ export class GemDetailsNewComponent implements OnInit {
 
       //Tested data
       refractiveIndex: [''],
-      specifyGravity: [''],
+      specificGravity: [''],
       hardness: [''],
       opticCharacter: [''],
       magnification: [''],
@@ -59,16 +62,16 @@ export class GemDetailsNewComponent implements OnInit {
       comments: ['', Validators.required],       //common
       apex: [''],
 
-      // //Gem Imag
-      // gemImageURL: "string",
+      // //Gem Image
+      gemImageURL: ['', Validators.required],       //common
 
-      // //LatestReportLink for QR
-      // qrCodePdfLink: "string",
-      // qrCodeImageURL: "string",
+      // //QR code URLs
+      cardQRCodeImageURL: [cardURL, Validators.required],       //common
+      reportQRCodeImageURL: [reportURL, Validators.required],       //common
 
       // //Latest Card,Report Ids filter by sgtlReportNo and latest revision
-      // latestCardId: "string",
-      // latestReportId: "string",
+      // latestCardId: string
+      // latestReportId: string
     });
 
     this.gemDetailsForm.valueChanges.subscribe(data => this.onFormChange())
@@ -144,7 +147,6 @@ export class GemDetailsNewComponent implements OnInit {
     } else {
       this.displayValidation();
     }
-    //if new save
   }
 
   onClickGenerateCard() {
@@ -159,7 +161,6 @@ export class GemDetailsNewComponent implements OnInit {
     } else {
       this.displayValidation();
     }
-    //if new Save
   }
 
   setValidatorsForReportFields(isValidatingForReport: boolean) {
@@ -167,7 +168,7 @@ export class GemDetailsNewComponent implements OnInit {
 
     this.gemDetailsForm.get("transparency").setValidators(validators)
     this.gemDetailsForm.get("refractiveIndex").setValidators(validators)
-    this.gemDetailsForm.get("specifyGravity").setValidators(validators)
+    this.gemDetailsForm.get("specificGravity").setValidators(validators)
     this.gemDetailsForm.get("hardness").setValidators(validators)
     this.gemDetailsForm.get("opticCharacter").setValidators(validators)
     this.gemDetailsForm.get("magnification").setValidators(validators)
@@ -176,7 +177,7 @@ export class GemDetailsNewComponent implements OnInit {
     //updateValueAndValidity
     this.gemDetailsForm.get("transparency").updateValueAndValidity()
     this.gemDetailsForm.get("refractiveIndex").updateValueAndValidity()
-    this.gemDetailsForm.get("specifyGravity").updateValueAndValidity()
+    this.gemDetailsForm.get("specificGravity").updateValueAndValidity()
     this.gemDetailsForm.get("hardness").updateValueAndValidity()
     this.gemDetailsForm.get("opticCharacter").updateValueAndValidity()
     this.gemDetailsForm.get("magnification").updateValueAndValidity()
@@ -184,12 +185,12 @@ export class GemDetailsNewComponent implements OnInit {
 
   }
 
-  proceedToReportGeneration(){
+  proceedToReportGeneration() {
 
   }
 
-  proceedToCardGeneration(){
-    
+  proceedToCardGeneration() {
+
   }
 
 

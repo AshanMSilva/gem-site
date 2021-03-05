@@ -11,7 +11,7 @@ export class GemDetail {
 
     //Tested data
     refractiveIndex: string;
-    specifyGravity: string;
+    specificGravity: string;
     hardness: string;
     opticCharacter: string;
     magnification: string;
@@ -25,12 +25,8 @@ export class GemDetail {
     //Gem Image
     gemImageURL: string;
 
-    //LatestLink for QR
-    qrCodePdfLinkCard: string;
-    qrCodeImageURLCard: string;
-
-    qrCodePdfLinkReport: string;
-    qrCodeImageURLReport: string;
+    cardQRCodeImageURL: string;
+    reportQRCodeImageURL: string;
 
     //Latest Card,Report Ids filter by sgtlReportNo and latest revision
     latestCardId: string

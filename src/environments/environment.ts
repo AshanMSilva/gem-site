@@ -12,5 +12,6 @@ export const environment = {
     storageBucket: "serendip-gemcert-dev.appspot.com",
     messagingSenderId: "792761522129",
     appId: "1:792761522129:web:c8409844b77dd8eacb72f0"
-  }
+  },
+  baseURLForQR:"http://localhost:4200/#/viewpdf",
 };

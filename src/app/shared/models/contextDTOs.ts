@@ -1,7 +1,6 @@
 import { GemDetail } from "./gem-detail";
 
 export class ReportContext {
-    // firebase
     sgtlReportNumber: string;
     date: string;
 
@@ -10,10 +9,10 @@ export class ReportContext {
     shapeAndCut: string;
     transparency: string;
     dimensions: string;
-    
+
     //Tested data
     refractiveIndex: string;
-    specifyGravity: string;
+    specificGravity: string;
     hardness: string;
     opticCharacter: string;
     magnification: string;
@@ -26,13 +25,7 @@ export class ReportContext {
 
     //Not in report as text
     gemImageURL: string;
-    
-    //LatestLink for QR
-    qrCodePdfLinkReport: string;
-    qrCodeImageURLReport: string;
-
-    revision: number;
-
+    reportQRCodeImageURL: string;
 
     constructor(gemDetail: GemDetail) {
 
@@ -47,7 +40,7 @@ export class ReportContext {
 
         //Tested data
         this.refractiveIndex = gemDetail.refractiveIndex
-        this.specifyGravity = gemDetail.specifyGravity
+        this.specificGravity = gemDetail.specificGravity
         this.hardness = gemDetail.hardness
         this.opticCharacter = gemDetail.opticCharacter
         this.magnification = gemDetail.magnification
@@ -57,6 +50,9 @@ export class ReportContext {
         this.variety = gemDetail.variety
         this.comments = gemDetail.comments
         this.apex = gemDetail.apex
+
+        this.gemImageURL = gemDetail.gemImageURL;
+        this.reportQRCodeImageURL = gemDetail.reportQRCodeImageURL;
     }
 
     getDetailsOfSpecimenMap(): Map<string, string> {
@@ -72,7 +68,7 @@ export class ReportContext {
         let testData = new Map<string, string>()
 
         testData.set("Refractive Index", this.refractiveIndex)
-        testData.set("Specific Gravity", this.specifyGravity)
+        testData.set("Specific Gravity", this.specificGravity)
         testData.set("Hardness", this.hardness)
         testData.set("Optic Character", this.opticCharacter)
         testData.set("Magnification", this.magnification)
@@ -80,7 +76,6 @@ export class ReportContext {
     }
 }
 export class CardContext {
-    //firebase
     sgtlReportNumber: string;
     date: string;
 
@@ -95,12 +90,7 @@ export class CardContext {
 
     //Not in report text
     gemImageURL: string;
-
-    //LatestLink for QR
-    qrCodePdfLinkCard: string;
-    qrCodeImageURLCard: string;
-
-    revision: number;
+    cardQRCodeImageURL: string;
 
     constructor(gemDetail: GemDetail) {
         this.date = gemDetail.date
@@ -114,5 +104,8 @@ export class CardContext {
         this.species = gemDetail.species
         this.variety = gemDetail.variety
         this.comments = gemDetail.comments
+
+        this.gemImageURL= gemDetail.gemImageURL;
+        this.cardQRCodeImageURL= gemDetail.cardQRCodeImageURL;
     }
 }
