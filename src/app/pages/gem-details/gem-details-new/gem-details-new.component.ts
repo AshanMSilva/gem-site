@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GemDetailService } from 'app/services/gem-detail-service/gem-detail.service';
 import { GemDetail } from 'app/shared/models/gem-detail';
 import { FormUtil } from 'app/shared/utils/form-utility';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-gem-details-new',
@@ -10,7 +11,7 @@ import { FormUtil } from 'app/shared/utils/form-utility';
   styleUrls: ['./gem-details-new.component.css']
 })
 export class GemDetailsNewComponent implements OnInit {
-  isInEdit: boolean = false
+  isRecordSaved: boolean = false
 
   gemDetailToEdit: GemDetail
 
@@ -21,6 +22,7 @@ export class GemDetailsNewComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private gemDetailService: GemDetailService,
+    private toasterService: ToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -77,8 +79,9 @@ export class GemDetailsNewComponent implements OnInit {
 
   bindFormData() {
     if (this.gemDetailToEdit) {
-      this.isInEdit = true;
+      this.isRecordSaved = true;
       this.gemDetailsForm.patchValue(this.gemDetailToEdit)
+      this.gemDetailsForm.disable();
       // gemDetailsFormValue.date = this.gemDetailToEdit.detailId
       // gemDetailsFormValue.sgtlReportNumber = this.gemDetailToEdit.sgtlReportNumber
     }
@@ -93,7 +96,7 @@ export class GemDetailsNewComponent implements OnInit {
   }
 
   displayValidation() {
-    this.formValidationMessages = FormUtil.validateForm(this.gemDetailsForm, this.formErrors, this.formValidationMessages)
+    this.formErrors = FormUtil.validateForm(this.gemDetailsForm, this.formErrors, this.formValidationMessages)
   }
 
   preprocessForm() {
@@ -106,7 +109,7 @@ export class GemDetailsNewComponent implements OnInit {
 
   onFormSubmit() {
     let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
-    if (this.isInEdit) {
+    if (this.isRecordSaved) {
       // gemDetailsFormValue.detailId = this.gemDetailToEdit.detailId
       // gemDetailsFormValue.date = this.gemDetailToEdit.detailId
       // gemDetailsFormValue.sgtlReportNumber = this.gemDetailToEdit.sgtlReportNumber
@@ -117,22 +120,77 @@ export class GemDetailsNewComponent implements OnInit {
   }
 
   editGemDetail(gemDetailsFormValue: GemDetail) {
-    this.gemDetailService.updateGemDetail(this.gemDetailToEdit.detailId, gemDetailsFormValue)
+    return this.gemDetailService.updateGemDetail(this.gemDetailToEdit.sgtlReportNumber, gemDetailsFormValue)
   }
 
   saveGemDetail(gemDetailsFormValue: GemDetail) {
-    this.gemDetailService.addGemDetail(gemDetailsFormValue)
+    this.gemDetailService.setGemDetail(gemDetailsFormValue.sgtlReportNumber, gemDetailsFormValue).then((ref) => {
+      this.isRecordSaved = true
+      this.gemDetailToEdit = gemDetailsFormValue
+    }, (e) => {
+      console.log(e);
+    })
   }
 
   onClickGenerateReport() {
-    //validators Add
-    //check if new
+    this.setValidatorsForReportFields(true)
+    if (this.gemDetailsForm.valid) {
+      let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
+      this.editGemDetail(gemDetailsFormValue).then((ref) => {
+        this.toasterService.info("Proceeding to Report Generation")
+      }, (e) => {
+        console.log(e);
+      })
+    } else {
+      this.displayValidation();
+    }
     //if new save
   }
 
   onClickGenerateCard() {
-    //validators remove
-    //check if new
+    this.setValidatorsForReportFields(false)
+    if (this.gemDetailsForm.valid) {
+      let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
+      this.editGemDetail(gemDetailsFormValue).then((ref) => {
+        this.toasterService.info("Proceeding to Card Generation")
+      }, (e) => {
+        console.log(e);
+      })
+    } else {
+      this.displayValidation();
+    }
     //if new Save
   }
+
+  setValidatorsForReportFields(isValidatingForReport: boolean) {
+    let validators = (isValidatingForReport) ? [Validators.required] : []
+
+    this.gemDetailsForm.get("transparency").setValidators(validators)
+    this.gemDetailsForm.get("refractiveIndex").setValidators(validators)
+    this.gemDetailsForm.get("specifyGravity").setValidators(validators)
+    this.gemDetailsForm.get("hardness").setValidators(validators)
+    this.gemDetailsForm.get("opticCharacter").setValidators(validators)
+    this.gemDetailsForm.get("magnification").setValidators(validators)
+    this.gemDetailsForm.get("apex").setValidators(validators)
+
+    //updateValueAndValidity
+    this.gemDetailsForm.get("transparency").updateValueAndValidity()
+    this.gemDetailsForm.get("refractiveIndex").updateValueAndValidity()
+    this.gemDetailsForm.get("specifyGravity").updateValueAndValidity()
+    this.gemDetailsForm.get("hardness").updateValueAndValidity()
+    this.gemDetailsForm.get("opticCharacter").updateValueAndValidity()
+    this.gemDetailsForm.get("magnification").updateValueAndValidity()
+    this.gemDetailsForm.get("apex").updateValueAndValidity()
+
+  }
+
+  proceedToReportGeneration(){
+
+  }
+
+  proceedToCardGeneration(){
+    
+  }
+
+
 }

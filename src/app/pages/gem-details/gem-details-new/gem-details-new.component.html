@@ -2,11 +2,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <form [formGroup]="gemDetailsForm" (ngSubmit)="preprocessForm()" novalidate="novalidate">
+                <form [formGroup]="gemDetailsForm" novalidate="novalidate">
                     <div class="card">
                         <div class="card-header card-header-info">
-                            <h4 *ngIf="isInEdit" class="card-title">Edit Gem Details</h4>
-                            <h4 *ngIf="!isInEdit" class="card-title">Add new Gem Details</h4>
+                            <h4 *ngIf="isRecordSaved" class="card-title">Edit Gem Details</h4>
+                            <h4 *ngIf="!isRecordSaved" class="card-title">Add new Gem Details</h4>
                             <p class="card-category">Complete Gem Details</p>
                         </div>
                         <div class="card-body">
@@ -79,7 +79,7 @@
                                 </div>
                                 <div class="col-sm-6 col-md-3">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Specify gravity" type="text"
+                                        <input matInput placeholder="Specific gravity" type="text"
                                             formControlName="specifyGravity">
                                         <mat-error *ngIf="formErrors.get('specifyGravity')">
                                             {{formErrors.get('specifyGravity')}}</mat-error>
@@ -154,16 +154,19 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <button mat-raised-button type="button" class="btn btn-info" (click)="onClickGenerateReport()">Generate Report</button>
+                                    <button *ngIf="isRecordSaved" mat-raised-button type="submit" class="btn btn-info"
+                                        (click)="onClickGenerateReport()">Generate Report</button>
                                 </div>
                                 <div class="col-md-3">
-                                    <button mat-raised-button type="button" class="btn btn-info" (click)="onClickGenerateCard()">Generate Card</button>
+                                    <button *ngIf="isRecordSaved" mat-raised-button type="submit" class="btn btn-info"
+                                        (click)="onClickGenerateCard()">Generate Card</button>
                                 </div>
                                 <div class="col-md-3">
                                     <button mat-raised-button type="button" class="btn btn-warning">Edit</button>
                                 </div>
                                 <div class="col-md-3">
-                                    <button mat-raised-button type="submit" class="btn btn-success">Save</button>
+                                    <button mat-raised-button type="submit" class="btn btn-success"
+                                        (click)="preprocessForm()">Save</button>
                                 </div>
                             </div>
                             <div class="clearfix"></div>

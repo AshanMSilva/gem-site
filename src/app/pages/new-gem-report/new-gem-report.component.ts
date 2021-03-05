@@ -86,7 +86,7 @@ export class NewGemReportComponent implements OnInit {
   }
 
   displayValidation() {
-    this.formValidationMessages = FormUtil.validateForm(this.gemDetailsForm, this.formErrors, this.formValidationMessages)
+    this.formErrors = FormUtil.validateForm(this.gemDetailsForm, this.formErrors, this.formValidationMessages)
   }
 
   preprocessForm() {

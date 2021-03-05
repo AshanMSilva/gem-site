@@ -27,7 +27,7 @@ export class GemDetailService {
     this.gemReports = this.gemReportList.snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.val() as GemDetail;
-        data.detailId = a.payload.key;
+        data.sgtlReportNumber = a.payload.key;
         return data;
       }))
     );
@@ -40,7 +40,7 @@ export class GemDetailService {
       map(response => {
         const data = response.payload.val() as GemDetail;
         if (data != null) {
-          data.detailId = response.payload.key;
+          data.sgtlReportNumber = response.payload.key;
         }
         return data;
       })
@@ -50,7 +50,7 @@ export class GemDetailService {
 
 
   addGemDetail(gemDetail: any) {
-    this.db.database.ref(MODELTYPE.GEM_DETAILS).push(gemDetail, (e) => {
+    return this.db.database.ref(MODELTYPE.GEM_DETAILS).push(gemDetail, (e) => {
       if (e) {
         this.toasterService.error("Gem Detail Could Not Be Added!\n " + e.message, "Error")
       } else {
@@ -60,13 +60,19 @@ export class GemDetailService {
   }
 
   setGemDetail(id: string, gemDetail: any) {
-    this.db.object(MODELTYPE.GEM_DETAILS + '/' + id).set(gemDetail);
+    return this.db.object(MODELTYPE.GEM_DETAILS + '/' + id).set(gemDetail).then((e) => {
+      this.toasterService.success("Gem Detail Added", "Success")
+    }, (e) => {
+      if (e) {
+        this.toasterService.error("Gem Detail Could Not Be Added!\n " + e.message, "Error")
+      }
+    });
   }
 
   updateGemDetail(id: string, gemDetail: any) {
-    this.db.object(MODELTYPE.GEM_DETAILS + '/' + id).update(gemDetail).then(()=>{
+    return this.db.object(MODELTYPE.GEM_DETAILS + '/' + id).update(gemDetail).then(() => {
       this.toasterService.success("Gem Detail Updated", "Success")
-    },(e)=>{
+    }, (e) => {
       this.toasterService.error("Gem Detail Could Not Be Updated!\n ", "Error")
     });
   }
