@@ -19,6 +19,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
 import { NewGemReportComponent } from 'app/pages/new-gem-report/new-gem-report.component';
+import { ImageUploaderModule } from 'ngx-image-uploader-next';
 import { SelectReportTypeComponent } from 'app/pages/dashboard/components/select-report-type/select-report-type.component';
 @NgModule({
   imports: [
@@ -32,8 +33,8 @@ import { SelectReportTypeComponent } from 'app/pages/dashboard/components/select
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
-    MatDialogModule
-    
+    MatDialogModule,
+    ImageUploaderModule
    
     
   ],
