@@ -7,10 +7,10 @@
                         <h4 class="card-title">Generate Report</h4>
                         <p class="card-category">Genrate report pdf</p>
                     </div>
-                    <div class="card-body" *ngIf="gemDetailToGenReport">
+                    <div class="card-body" >
                         <br>
                         <h5>Basic Data</h5>
-                        <div class="row">
+                        <div class="row" *ngIf="gemDetailToGenReport">
                             <div class="col-4 col-md-4">
                                 <p>SGTL Report Number : <span class="text-info">
                                         {{gemDetailToGenReport.sgtlReportNumber}}</span></p>
@@ -25,7 +25,7 @@
                         </div>
                         <br>
                         <h5>Details os Specimen</h5>
-                        <div class="row">
+                        <div class="row" *ngIf="gemDetailToGenReport">
                             <div class="col-3 col-md-3">
                                 <p>Weight : <span class="text-info"> {{gemDetailToGenReport.weight}}</span>
                                 </p>
@@ -45,7 +45,7 @@
                         </div>
                         <br>
                         <h5>Tested Data</h5>
-                        <div class="row">
+                        <div class="row" *ngIf="gemDetailToGenReport">
                             <div class="col-3 col-md-3">
                                 <p>Refractive Index : <span class="text-info">
                                         {{gemDetailToGenReport.refractiveIndex}}</span></p>
@@ -79,7 +79,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" *ngIf="gemDetailToGenReport">
                             <div class="col-6 col-md-6">
                                 <p>Apex : <span class="text-info"> {{gemDetailToGenReport.apex}}</span></p>
                             </div>

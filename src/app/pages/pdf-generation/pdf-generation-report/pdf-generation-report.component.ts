@@ -41,7 +41,6 @@ export class PdfGenerationReportComponent implements OnInit {
   ngOnInit(): void {
     if (this.gemDetailService.getSelectedGemDetailIdForView()) {
       this.mediaCompletionContext = new MediaCompletionContext();
-      this.setSubscriptionToOnload()
 
       this.gemDetailIdToGenReport = this.gemDetailService.getSelectedGemDetailIdForView()
       this.gemDetailService.getGemDetailById(this.gemDetailIdToGenReport).subscribe(res => {
@@ -59,10 +58,12 @@ export class PdfGenerationReportComponent implements OnInit {
           this.gemImgSubscription.unsubscribe()
         }
       })
+
+      this.generateQRCodes()
+      this.setSubscriptionToOnload()
     } else {
       this.router.navigateByUrl("gem-details")
     }
-    this.generateQRCodes()
   }
 
   setSubscriptionToOnload() {
@@ -175,7 +176,7 @@ export class PdfGenerationReportComponent implements OnInit {
       doc.addImage(gemImg, "png", 19.275, 5.5, 5, 5);
       doc.addImage(signature, "png", 19.775, 13, 4, 2);
 
-    }else{
+    } else {
       this.toasterService.warning("All media not loaded Yet")
     }
 
@@ -222,14 +223,18 @@ export class PdfGenerationReportComponent implements OnInit {
 
     //Apex
     if (this.reporContext.apex) {
-      doc.text("Apex", keyMargin, postion, { align: "left" });
-      doc.text(": " + this.reporContext.apex, valueMargin, postion, { align: "left" });
+      doc.text("Apex", keyMargin, postion, { align: "left", maxWidth: 2.5 });
+      var splitApexText = doc.splitTextToSize(this.reporContext.apex, 5);
+      doc.text(": ", valueMargin, postion, { align: "left" });
+      doc.text(splitApexText, valueMargin + 0.2, postion, { align: "justify", maxWidth: 5 });
     }
     //species, variety
     let speciesAndVariety = "Species : " + this.reporContext.species + "  Variety: " + this.reporContext.variety
-    doc.text(speciesAndVariety, 22.275, 11.5, { align: "center" });
+    doc.text(speciesAndVariety, 21.775, 11.5, { align: "center" });
+
+    //comments
     let comments = "Comments : " + this.reporContext.comments
-    doc.text(comments, 22.275, 12, { align: "center" });
+    doc.text(comments, 21.775, 12, { align: "center" });
   }
 
 
