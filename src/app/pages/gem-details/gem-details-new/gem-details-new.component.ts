@@ -5,7 +5,13 @@ import { GemDetail } from 'app/shared/models/gem-detail';
 import { FormUtil } from 'app/shared/utils/form-utility';
 import { environment } from 'environments/environment';
 import { ToastrService } from 'ngx-toastr';
+
 import * as QRCode from 'qrcode';
+
+import { FileQueueObject, ImageUploaderOptions } from 'ngx-image-uploader-next';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-gem-details-new',
   templateUrl: './gem-details-new.component.html',
@@ -21,10 +27,15 @@ export class GemDetailsNewComponent implements OnInit {
   formErrors: Map<string, string> = new Map();
   formValidationMessages: Map<string, Map<string, string>> = new Map();
 
+  gemImageFile: File;
+  reportQRImageFile: File;
+  cardQRImageFile: File;
+
   constructor(
     private formBuilder: FormBuilder,
     private gemDetailService: GemDetailService,
     private toasterService: ToastrService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -45,13 +56,12 @@ export class GemDetailsNewComponent implements OnInit {
 
   createForm() {
     let today = new Date().toLocaleDateString()
-    let cardURL = environment.baseURLForQR + "/card/" + this.gemDetailIdToEdit
-    let reportURL = environment.baseURLForQR + "/report/" + this.gemDetailIdToEdit
     this.gemDetailsForm = this.formBuilder.group({
 
       //common
       date: [{ value: today, disabled: true }, Validators.required],   //will get overidden at bind 
       sgtlReportNumber: [{ value: this.gemDetailIdToEdit, disabled: true }, Validators.required],
+      object: ['', Validators.required],           //common
 
       //Details of specimen
       weight: ['', Validators.required],           //common
@@ -74,10 +84,6 @@ export class GemDetailsNewComponent implements OnInit {
 
       // //Gem Image
       gemImageURL: ['', Validators.required],       //common
-
-      // //QR code URLs
-      cardQRCodeImageURL: ['', Validators.required],       //common
-      reportQRCodeImageURL: ['', Validators.required],       //common
 
       // //Latest Card,Report Ids filter by sgtlReportNumber and latest revision
       // latestCardId: [''],
@@ -143,7 +149,7 @@ export class GemDetailsNewComponent implements OnInit {
     if (this.gemDetailsForm.valid) {
       let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
       this.editGemDetail(gemDetailsFormValue).then((ref) => {
-        this.toasterService.info("Proceeding to Report Generation")
+        this.proceedToReportGeneration()
       }, (e) => {
         console.log(e);
       })
@@ -157,7 +163,7 @@ export class GemDetailsNewComponent implements OnInit {
     if (this.gemDetailsForm.valid) {
       let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
       this.editGemDetail(gemDetailsFormValue).then((ref) => {
-        this.toasterService.info("Proceeding to Card Generation")
+        this.proceedToCardGeneration()
       }, (e) => {
         console.log(e);
       })
@@ -189,32 +195,85 @@ export class GemDetailsNewComponent implements OnInit {
   }
 
   proceedToReportGeneration() {
-
+    this.toasterService.info("Proceeding to Report Generation")
+    this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
+    this.router.navigateByUrl("pdf-gen/report") // create view screen if time is available
   }
 
   proceedToCardGeneration() {
-
+    this.toasterService.info("Proceeding to Card Generation")
+    this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
+    this.router.navigateByUrl("pdf-gen/card") // create view screen if time is available
   }
 
   generateQRCodes() {
+    let cardURL = environment.baseURLForQR + "/card/" + this.gemDetailIdToEdit
+    let reportURL = environment.baseURLForQR + "/report/" + this.gemDetailIdToEdit
 
     let cardCanvas = document.getElementById("cardQRCode");
-
-    let qrcodeCard = QRCode.toCanvas(cardCanvas, "localhost", { errorCorrectionLevel: "quartile" }).then(() => {
-
-    }, () => {
-      this.toasterService.error("Card QR code could not be generated")
-    })
+    let qrcodeCard = QRCode.toCanvas(cardCanvas, cardURL, { errorCorrectionLevel: "quartile" }).then((res) => { }
+      , (e) => {
+        this.toasterService.error("Card QR code could not be generated")
+      })
 
     let reportCanvas = document.getElementById("reportQRCode");
-
-    let qrcodeReport = QRCode.toCanvas(reportCanvas, "localhost", { errorCorrectionLevel: "quartile" }).then(() => {
-
-    }, () => {
-      this.toasterService.error("reportQR code could not be generated")
-    })
+    let qrcodeReport = QRCode.toCanvas(reportCanvas, reportURL, { errorCorrectionLevel: "quartile" }).then((res) => { }
+      , (e) => {
+        this.toasterService.error("reportQR code could not be generated")
+      })
   }
 
 
+  options: ImageUploaderOptions = {
+
+    uploadUrl: '',
+    allowedImageTypes: ['image/png', 'image/jpeg'],
+    maxImageSize: 1,
+    autoUpload: false,
+  };
+
+  onDrop(event) {
+    event.preventDefault();
+    if (event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      if (file.type == 'image/png' || file.type == 'image/jpeg') {
+        this.gemImageFile = file;
+        console.log(this.gemImageFile);
+      }
+    }
+
+  }
+
+
+  selectImage(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      if (file.type == 'image/png' || file.type == 'image/jpeg') {
+        this.gemImageFile = file;
+        console.log(this.gemImageFile);
+      }
+
+    }
+  }
+
+  gemImagePercentage: number
+  uploadGemImage() {
+    let filePath = this.gemDetailIdToEdit + "_gem"
+    let result = this.gemDetailService.uploadFile(this.gemImageFile, filePath)
+    result.task.percentageChanges().subscribe(res => {
+      if (res) {
+        this.gemImagePercentage = (res >= 100) ? null : res;
+      }
+    })
+
+    result.task.then(res => {
+      this.toasterService.success("Gem Stone Image Uploaded")
+      this.gemImagePercentage = null
+      this.gemDetailService.updateGemDetail(this.gemDetailIdToEdit, { gemImageURL: filePath })
+    }, e => {
+      this.toasterService.error("Gem Stone Image could not be Uploaded")
+      this.gemImagePercentage = null
+    })
+  }
 
 }

@@ -3,6 +3,8 @@ export class GemDetail {
     sgtlReportNumber: string;
     date: string;
 
+    object: string;
+
     //Details of specimen
     weight: string;
     shapeAndCut: string;
@@ -24,9 +26,6 @@ export class GemDetail {
 
     //Gem Image
     gemImageURL: string;
-
-    cardQRCodeImageURL: string;
-    reportQRCodeImageURL: string;
 
     //Latest Card,Report Ids filter by sgtlReportNo and latest revision
     latestCardId: string

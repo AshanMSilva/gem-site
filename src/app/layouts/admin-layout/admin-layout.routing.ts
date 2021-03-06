@@ -12,6 +12,8 @@ import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth
 import { NewGemReportComponent } from 'app/pages/new-gem-report/new-gem-report.component';
 import { GemDetailsComponent } from 'app/pages/gem-details/gem-details.component';
 import { GemDetailsNewComponent } from 'app/pages/gem-details/gem-details-new/gem-details-new.component';
+import { PdfGenerationReportComponent } from 'app/pages/pdf-generation/pdf-generation-report/pdf-generation-report.component';
+import { PdfGenerationCardComponent } from 'app/pages/pdf-generation/pdf-generation-card/pdf-generation-card.component';
 
 export const AdminLayoutRoutes: Routes = [
     
@@ -26,4 +28,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'gem-report/new/:type', component: NewGemReportComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
     { path: 'gem-details',    component: GemDetailsComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
     { path: 'gem-detail/new', component: GemDetailsNewComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+    { path: 'pdf-gen/report', component: PdfGenerationReportComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+    { path: 'pdf-gen/card', component: PdfGenerationCardComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
 ];

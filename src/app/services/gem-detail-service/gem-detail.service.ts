@@ -80,6 +80,7 @@ export class GemDetailService {
   deleteGemDetail(id: string) {
     this.db.object(MODELTYPE.GEM_DETAILS + '/' + id).remove();
   }
+  
   getFiles(filepath: string): Observable<string> {
     return this.storage.ref(filepath).getDownloadURL();
   }

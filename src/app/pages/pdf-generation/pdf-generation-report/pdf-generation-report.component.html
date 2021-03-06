@@ -1,1 +1,31 @@
-<p>pdf-generation-report works!</p>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h4 class="card-title">Generate Report</h4>
+                        <p class="card-category">Genrate report pdf</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <button mat-raised-button type="submit" class="btn btn-success"
+                                        (click)="OnClickGenerateReport()">Generate</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-4 col-md-4">
+                                <p>Report QR Code</p>
+                                <canvas id="reportQRCodeImg"></canvas>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

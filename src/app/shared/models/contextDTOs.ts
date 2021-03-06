@@ -4,6 +4,8 @@ export class ReportContext {
     sgtlReportNumber: string;
     date: string;
 
+    object: string;
+
     //Details of specimen
     weight: string;
     shapeAndCut: string;
@@ -25,12 +27,12 @@ export class ReportContext {
 
     //Not in report as text
     gemImageURL: string;
-    reportQRCodeImageURL: string;
 
     constructor(gemDetail: GemDetail) {
 
         this.date = gemDetail.date
         this.sgtlReportNumber = gemDetail.sgtlReportNumber
+        this.object = gemDetail.object
 
         //Details of specimen
         this.weight = gemDetail.weight
@@ -52,7 +54,14 @@ export class ReportContext {
         this.apex = gemDetail.apex
 
         this.gemImageURL = gemDetail.gemImageURL;
-        this.reportQRCodeImageURL = gemDetail.reportQRCodeImageURL;
+    }
+
+    getBasicDetialsMap(): Map<string, string> {
+        let details = new Map<string, string>();
+        details.set("SGTL Report No.", this.sgtlReportNumber);
+        details.set("Date", this.date);
+        details.set("Object", this.object);
+        return details
     }
 
     getDetailsOfSpecimenMap(): Map<string, string> {
@@ -72,6 +81,7 @@ export class ReportContext {
         testData.set("Hardness", this.hardness)
         testData.set("Optic Character", this.opticCharacter)
         testData.set("Magnification", this.magnification)
+        testData.set("Color", this.magnification)
         return testData
     }
 }
@@ -90,7 +100,6 @@ export class CardContext {
 
     //Not in report text
     gemImageURL: string;
-    cardQRCodeImageURL: string;
 
     constructor(gemDetail: GemDetail) {
         this.date = gemDetail.date
@@ -106,6 +115,5 @@ export class CardContext {
         this.comments = gemDetail.comments
 
         this.gemImageURL= gemDetail.gemImageURL;
-        this.cardQRCodeImageURL= gemDetail.cardQRCodeImageURL;
     }
 }
