@@ -7,100 +7,141 @@
                         <h4 class="card-title">Generate Report</h4>
                         <p class="card-category">Genrate report pdf</p>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    <button mat-raised-button type="submit" class="btn btn-success"
-                                        (click)="OnClickGenerateReport()">Generate</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body" *ngIf="gemDetailToGenReport">
                         <br>
                         <h5>Basic Data</h5>
                         <div class="row">
                             <div class="col-4 col-md-4">
-                                <p>SGTL Report Number</p>
+                                <p>SGTL Report Number : <span class="text-info">
+                                        {{gemDetailToGenReport.sgtlReportNumber}}</span></p>
                             </div>
                             <div class="col-4 col-md-4">
-                                <p>Date</p>
+                                <p>Date : <span class="text-info"> {{gemDetailToGenReport.date}}</span></p>
                             </div>
                             <div class="col-4 col-md-4">
-                                <p>Object</p>
+                                <p>Object : <span class="text-info"> {{gemDetailToGenReport.object}}</span>
+                                </p>
                             </div>
                         </div>
+                        <br>
                         <h5>Details os Specimen</h5>
                         <div class="row">
                             <div class="col-3 col-md-3">
-                                <p>Weight</p>
+                                <p>Weight : <span class="text-info"> {{gemDetailToGenReport.weight}}</span>
+                                </p>
                             </div>
                             <div class="col-3 col-md-3">
-                                <p>Shape And Cut</p>
+                                <p>Shape And Cut : <span class="text-info">
+                                        {{gemDetailToGenReport.shapeAndCut}}</span></p>
                             </div>
                             <div class="col-3 col-md-3">
-                                <p>Transparency</p>
+                                <p>Transparency : <span class="text-info">
+                                        {{gemDetailToGenReport.transparency}}</span></p>
                             </div>
                             <div class="col-3 col-md-3">
-                                <p>Dimentions</p>
+                                <p>Dimentions : <span class="text-info">
+                                        {{gemDetailToGenReport.dimensions}}</span></p>
                             </div>
                         </div>
+                        <br>
                         <h5>Tested Data</h5>
                         <div class="row">
                             <div class="col-3 col-md-3">
-                                <p>Refractive Index</p>
+                                <p>Refractive Index : <span class="text-info">
+                                        {{gemDetailToGenReport.refractiveIndex}}</span></p>
                             </div>
                             <div class="col-3 col-md-3">
-                                <p>Specific Gravity</p>
+                                <p>Specific Gravity : <span class="text-info">
+                                        {{gemDetailToGenReport.specificGravity}}</span></p>
                             </div>
                             <div class="col-3 col-md-3">
-                                <p>Hardness</p>
+                                <p>Hardness : <span class="text-info"> {{gemDetailToGenReport.hardness}}</span>
+                                </p>
                             </div>
                             <div class="col-3 col-md-3">
-                                <p>Optic character</p>
+                                <p>Optic character : <span class="text-info">
+                                        {{gemDetailToGenReport.opticCharacter}}</span></p>
                             </div>
                             <div class="col-3 col-md-3">
-                                <p>Magnification</p>
+                                <p>Magnification : <span class="text-info">
+                                        {{gemDetailToGenReport.magnification}}</span></p>
                             </div>
                             <div class="col-3 col-md-3">
-                                <p>Colour</p>
+                                <p>Colour : <span class="text-info"> {{gemDetailToGenReport.color}}</span>
+                                </p>
                             </div>
                             <div class="col-3 col-md-3">
-                                <p>Variety</p>
+                                <p>Variety : <span class="text-info"> {{gemDetailToGenReport.variety}}</span>
+                                </p>
                             </div>
                             <div class="col-3 col-md-3">
-                                <p>Species</p>
+                                <p>Species : <span class="text-info"> {{gemDetailToGenReport.species}}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6 col-md-6">
-                                <p>Apex</p>
+                                <p>Apex : <span class="text-info"> {{gemDetailToGenReport.apex}}</span></p>
                             </div>
                             <div class="col-6 col-md-6">
-                                <p>Comments </p>
+                                <p>Comments : <span class="text-info"> {{gemDetailToGenReport.comments}}</span>
+                                </p>
                             </div>
                         </div>
+                        <br>
                         <div class="row text-center">
+
                             <div class="col-3 col-md-3">
                                 <p>Template Image</p>
-                                <img src="" alt="Template image" style="width: 150px;height: 150px;"
-                                    id="templateImg">
-                                    <p *ngIf="mediaCompletionContext.isTemplateImageComplete" class="text-success">Loaded to PDF</p>
+                                <img src="/assets/pdf-templates/report_template.jpeg" alt="Template image"
+                                    style="width: 150px;height: 150px;" id="templateImg">
                             </div>
+
                             <div class="col-3 col-md-3">
                                 <p>Report QR Code</p>
                                 <canvas id="reportQRCodeImg"></canvas>
-                                <p *ngIf="mediaCompletionContext.isQRImageComplete" class="text-success">Loaded to PDF</p>
                             </div>
+
                             <div class="col-3 col-md-3">
                                 <p>Gemstone Image</p>
-                                <img src="{{gemImageURL}}" crossorigin="anonymous" alt="Gemstone image" style="width: 150px;height: 150px;"
-                                    id="gemImage">
-                                    <p *ngIf="mediaCompletionContext.isGemImageComplete" class="text-success">Loaded to PDF</p>
+                                <img src="{{gemImageURL}}" crossorigin="anonymous" alt="Gemstone image"
+                                    style="width: 150px;height: 150px;" id="gemImage">
                             </div>
+
                             <div class="col-3 col-md-3">
                                 <p>Signature Image</p>
-                                <p *ngIf="mediaCompletionContext.isSignatureImageComplete" class="text-success">Loaded to PDF</p>
-                                <!-- <canvas id="reportQRCodeImg"></canvas> -->
+                                <img src="/assets/pdf-templates/signature.png" alt="Template image"
+                                    style="width: 150px;height: 150px;" id="signatureImg">
+                            </div>
+
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-3 col-md-3">
+                                <p *ngIf="mediaCompletionContext.isTemplateImageComplete" class="text-success">Template
+                                    Image Loaded to PDF
+                                </p>
+                            </div>
+                            <div class="col-3 col-md-3">
+                                Report QR Code
+                                <p *ngIf="mediaCompletionContext.isQRImageComplete" class="text-success">
+                                    Report QR Code Loaded to PDF
+                                </p>
+                            </div>
+                            <div class="col-3 col-md-3">
+                                <p *ngIf="mediaCompletionContext.isGemImageComplete" class="text-success">
+                                    Gemstone Image Loaded to PDF
+                                </p>
+                            </div>
+                            <div class="col-3 col-md-3">
+                                <p *ngIf="mediaCompletionContext.isSignatureImageComplete" class="text-success">
+                                    Signature Image Loaded to PDF
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button mat-raised-button type="submit" class="btn btn-success pull-right"
+                                    (click)="OnClickGenerateReport()">Generate</button>
                             </div>
                         </div>
                     </div>

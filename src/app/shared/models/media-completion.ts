@@ -10,9 +10,13 @@ export class MediaCompletionContext {
     this.isSignatureImageComplete = false
     this.isQRImageComplete = false
   }
-  
+
   isAllCompleted() {
     return this.isTemplateImageComplete && this.isGemImageComplete
       && this.isQRImageComplete && this.isSignatureImageComplete
+  }
+
+  isAllCompletedExecptQR() {
+    return this.isTemplateImageComplete && this.isGemImageComplete && this.isSignatureImageComplete
   }
 }

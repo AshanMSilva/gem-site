@@ -27,6 +27,8 @@ export class PdfGenerationReportComponent implements OnInit {
   gemImageURL: string
   gemImgSubscription: Subscription
 
+  qrImage: any
+
   mediaCompletionContext: MediaCompletionContext = new MediaCompletionContext();
   reporContext: ReportContext
 
@@ -37,9 +39,11 @@ export class PdfGenerationReportComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.mediaCompletionContext = new MediaCompletionContext();
-    if (this.gemDetailService.getSelectedGemDetailIdForView() || true) {/////////////////////////
-      this.gemDetailIdToGenReport = "1614970781510"// this.gemDetailService.getSelectedGemDetailIdForView()
+    if (this.gemDetailService.getSelectedGemDetailIdForView()) {
+      this.mediaCompletionContext = new MediaCompletionContext();
+      this.setSubscriptionToOnload()
+
+      this.gemDetailIdToGenReport = this.gemDetailService.getSelectedGemDetailIdForView()
       this.gemDetailService.getGemDetailById(this.gemDetailIdToGenReport).subscribe(res => {
         if (res) {
           this.gemDetailToGenReport = res as GemDetail
@@ -56,9 +60,40 @@ export class PdfGenerationReportComponent implements OnInit {
         }
       })
     } else {
-      //this.router.navigateByUrl("gem-details")
+      this.router.navigateByUrl("gem-details")
     }
     this.generateQRCodes()
+  }
+
+  setSubscriptionToOnload() {
+    this.imageSubject.subscribe(res => {
+      this.onImageComplete(res.image)
+    })
+
+    let subject = this.imageSubject
+
+    let templateImg = document.getElementById("templateImg") as HTMLImageElement
+    templateImg.onload = function () {
+      subject.next({ image: IMAGES.TEMPLATE })
+    };
+
+    let gemImg = document.getElementById("gemImage") as HTMLImageElement
+    gemImg.onload = function () {
+      subject.next({ image: IMAGES.GEM })
+    };
+
+    let signature = document.getElementById("signatureImg") as HTMLImageElement
+    signature.onload = function () {
+      subject.next({ image: IMAGES.SIGNATURE })
+    };
+
+    // let reportCanvas = document.getElementById("reportQRCodeImg") as HTMLCanvasElement;
+    // this.qrImage = new Image();
+    // this.qrImage.onload = function () {
+    //   subject.next({ image: IMAGES.QR })
+    // };
+    // this.qrImage.crossOrigin = "";
+    // this.qrImage.src = reportCanvas.toDataURL("png", 1);
   }
 
   generateQRCodes() {
@@ -87,71 +122,62 @@ export class PdfGenerationReportComponent implements OnInit {
   }
 
   OnClickGenerateReport() {
-    //subjet to image onload completion
-    this.imageSubject.subscribe(res => {
-      if (res.image) {
-        this.onImageComplete(res.image)
-        if (this.mediaCompletionContext.isAllCompleted()) {          // TODO
-          doc.addImage(gemImg, "png", 19.275, 5.5, 5, 5);
-          doc.addImage(signature, "png", 19.775, 13, 4, 2);
-          doc.addImage(qrImg, "png", 20.775, 15.5, 2, 2);
-          doc.save("alldone.pdf");
-        }
-        if (res.image == IMAGES.TEMPLATE) {
-          this.addTextInfo(doc)
-        }
-      }
-    })
+    if (this.mediaCompletionContext.isAllCompletedExecptQR()) {
+      //A4 210 x 297 
+      var docHeight = 21
+      var docWidth = 29.7
 
-    let subject = this.imageSubject
+      //init Doc
+      const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "cm",
+        format: [docHeight, docWidth]
+      });
 
-    //A4 210 x 297 
-    var docHeight = 21
-    var docWidth = 29.7
+      //template image
+      let templateImg = document.getElementById("templateImg") as HTMLImageElement
+      // templateImg.onload = function () {
+      //   doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
+      //   subject.next({ image: IMAGES.TEMPLATE })
+      // };
+      // templateImg.crossOrigin = "";
+      // templateImg.src = '/assets/pdf-templates/report_template.jpeg';
 
-    //init Doc
-    const doc = new jsPDF({
-      orientation: "landscape",
-      unit: "cm",
-      format: [docHeight, docWidth]
-    });
+      //gemImg image
+      let gemImg = document.getElementById("gemImage") as HTMLImageElement
+      // gemImg.onload = function () {
+      //   subject.next({ image: IMAGES.GEM })
+      // };
+      // gemImg.crossOrigin = "";
+      //gemImg.src = this.gemImageURL;
 
-    //template image
-    let templateImg = new Image();
-    templateImg.onload = function () {
+      // qrImg image
+      let reportCanvas = document.getElementById("reportQRCodeImg") as HTMLCanvasElement;
+      let qrImg = new Image();
+      let subject = this.imageSubject
+      qrImg.onload = function () {
+        subject.next({ image: IMAGES.QR })
+        doc.addImage(qrImg, "png", 20.775, 15.5, 2, 2);
+        doc.save("alldone.pdf");
+      };
+      qrImg.crossOrigin = "";
+      qrImg.src = reportCanvas.toDataURL("png", 1);
+
+      //signature image
+      let signature = document.getElementById("signatureImg") as HTMLImageElement
+      // signature.onload = function () {
+      //   subject.next({ image: IMAGES.SIGNATURE })
+      // };
+      // signature.crossOrigin = "";
+      // signature.src = '/assets/pdf-templates/signature.png';
       doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
-      subject.next({ image: IMAGES.TEMPLATE })
-    };
+      this.addTextInfo(doc)
+      doc.addImage(gemImg, "png", 19.275, 5.5, 5, 5);
+      doc.addImage(signature, "png", 19.775, 13, 4, 2);
 
-    templateImg.crossOrigin = "";
-    templateImg.src = '/assets/pdf-templates/report_template.jpeg';
-
-
-    //gemImg image
-    let gemImg = document.getElementById("gemImage") as HTMLImageElement
-    gemImg.onload = function () {
-      subject.next({ image: IMAGES.GEM })
-    };
-    // gemImg.crossOrigin = "";
-    //gemImg.src = this.gemImageURL;
-
-    //qrImg image
-    let reportCanvas = document.getElementById("reportQRCodeImg") as HTMLCanvasElement;
-
-    let qrImg = new Image();
-    qrImg.onload = function () {
-      subject.next({ image: IMAGES.QR })
-    };
-    qrImg.crossOrigin = "";
-    qrImg.src = reportCanvas.toDataURL("png", 1);
-
-    //signature image
-    let signature = new Image();
-    signature.onload = function () {
-      subject.next({ image: IMAGES.SIGNATURE })
-    };
-    signature.crossOrigin = "";
-    signature.src = '/assets/pdf-templates/signature.png';
+    }else{
+      this.toasterService.warning("All media not loaded Yet")
+    }
 
   }
 
