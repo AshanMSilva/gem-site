@@ -19,6 +19,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
 import { NewGemReportComponent } from 'app/pages/new-gem-report/new-gem-report.component';
+import { ImageUploaderModule } from 'ngx-image-uploader-next';
 import { SelectReportTypeComponent } from 'app/pages/dashboard/components/select-report-type/select-report-type.component';
 import { GemDetailsComponent } from 'app/pages/gem-details/gem-details.component';
 import { GemDetailsListComponent } from 'app/pages/gem-details/gem-details-list/gem-details-list.component';
@@ -35,8 +36,8 @@ import { GemDetailsNewComponent } from 'app/pages/gem-details/gem-details-new/ge
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
-    MatDialogModule
-    
+    MatDialogModule,
+    ImageUploaderModule
    
     
   ],

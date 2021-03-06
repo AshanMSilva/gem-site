@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FormUtil } from 'app/shared/utils/form-utility';
 import { GEMREPORTTYPE } from 'app/shared/utils/gem-details-types';
+import { FileQueueObject, ImageUploaderOptions } from 'ngx-image-uploader-next';
 
 
 
@@ -18,6 +19,7 @@ export class NewGemReportComponent implements OnInit {
   formErrors: Map<string, string> = new Map();
   formValidationMessages: Map<string, Map<string, string>> = new Map();
   gemReprtType:string;
+  imageFile: File;
   constructor(
     private formBuilder: FormBuilder,
     private route:ActivatedRoute,
@@ -99,6 +101,38 @@ export class NewGemReportComponent implements OnInit {
 
   onFormSubmit() {
     
+  }
+  options: ImageUploaderOptions = {
+    
+    uploadUrl: '',
+    allowedImageTypes: ['image/png', 'image/jpeg'],
+    maxImageSize: 1,
+    autoUpload:false,
+};
+
+  onUpload(file: FileQueueObject) {
+    console.log(file.response);
+  }
+  onDrop(event){
+    event.preventDefault();
+    if (event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      if(file.type =='image/png' || file.type =='image/jpeg'){
+        this.imageFile = file;
+        console.log(this.imageFile);
+      }
+    }
+    
+  }
+  selectImage(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      if(file.type =='image/png' || file.type =='image/jpeg'){
+        this.imageFile = file;
+        console.log(this.imageFile);
+      }
+      
+    }
   }
 
  
