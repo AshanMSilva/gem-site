@@ -134,31 +134,48 @@
                                 </div>
                                 <div class="col-sm-6 col-md-3">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Apex" type="text" formControlName="apex">
-                                        <mat-error *ngIf="formErrors.get('apex')">{{formErrors.get('apex')}}</mat-error>
-                                    </mat-form-field>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-12 col-md-6">
-                                    <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Species" type="text" formControlName="species">
                                         <mat-error *ngIf="formErrors.get('species')">{{formErrors.get('species')}}
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
+
                             </div>
                             <div class="row">
-                                <div class="col-12 col-md-6">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Comments" type="text" formControlName="comments">
-                                        <mat-error *ngIf="formErrors.get('comments')">{{formErrors.get('comments')}}
-                                        </mat-error>
-                                    </mat-form-field>
+                                <div class="col-6">
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Apex" type="text" formControlName="apex">
+                                                <mat-error *ngIf="formErrors.get('apex')">{{formErrors.get('apex')}}
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12 col-md-12">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Comments" type="text"
+                                                    formControlName="comments">
+                                                <mat-error *ngIf="formErrors.get('comments')">
+                                                    {{formErrors.get('comments')}}
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <p>Gem Image <span *ngIf="gemImagePercentage"
+                                            class="text-success">{{gemImagePercentage|number:"2.2-2"}}%</span></p>
+
+                                    <ngx-image-uploader [options]="options" (drop)="onDrop($event)"
+                                        (change)="selectImage($event)"></ngx-image-uploader>
+                                        
+                                    <mat-error *ngIf="formErrors.get('gemImageURL')">
+                                        {{formErrors.get('gemImageURL')}}
+                                    </mat-error>
                                 </div>
                             </div>
+
                             <br>
                             <div class="row text-center">
                                 <div class="col-4 col-md-4">
@@ -172,12 +189,9 @@
 
                                 </div>
                                 <div class="col-4 col-md-4">
-                                    <p>Gem Image <span *ngIf="gemImagePercentage">{{gemImagePercentage|number:"2.2-2"}}</span></p>
-                                    <ngx-image-uploader [options]="options" (drop)="onDrop($event)"
-                                        (change)="selectImage($event)"></ngx-image-uploader>
-                                    <mat-error *ngIf="formErrors.get('gemImageURL')">
-                                        {{formErrors.get('gemImageURL')}}
-                                    </mat-error>
+                                    <p>Signature</p>
+                                    <canvas id="signature"></canvas>
+
                                 </div>
                             </div>
                             <br>
@@ -191,7 +205,8 @@
                                         (click)="onClickGenerateCard()">Generate Card</button>
                                 </div>
                                 <div class="col-md-3">
-                                    <button mat-raised-button type="button" class="btn btn-warning" (click)="uploadGemImage()">Edit</button>
+                                    <button mat-raised-button type="button" class="btn btn-warning"
+                                        (click)="uploadGemImage()">Edit</button>
                                 </div>
                                 <div class="col-md-3">
                                     <button mat-raised-button type="submit" class="btn btn-success"
