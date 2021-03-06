@@ -34,7 +34,8 @@ export class PdfGenerationReportComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.gemDetailService.getSelectedGemDetailIdForView() || true) {
+    this.mediaCompletionContext = new MediaCompletionContext();
+    if (this.gemDetailService.getSelectedGemDetailIdForView() || true) {/////////////////////////
       this.gemDetailIdToGenReport = "1614970781510"// this.gemDetailService.getSelectedGemDetailIdForView()
       this.gemDetailService.getGemDetailById(this.gemDetailIdToGenReport).subscribe(res => {
         if (res) {

@@ -169,7 +169,7 @@
 
                                     <ngx-image-uploader [options]="options" (drop)="onDrop($event)"
                                         (change)="selectImage($event)"></ngx-image-uploader>
-                                        
+
                                     <mat-error *ngIf="formErrors.get('gemImageURL')">
                                         {{formErrors.get('gemImageURL')}}
                                     </mat-error>
@@ -198,11 +198,11 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <button *ngIf="isRecordSaved" mat-raised-button type="submit" class="btn btn-info"
-                                        (click)="onClickGenerateReport()">Generate Report</button>
+                                        (click)="onClickGenerateReport()">Proceed to Report Gen</button>
                                 </div>
                                 <div class="col-md-3">
                                     <button *ngIf="isRecordSaved" mat-raised-button type="submit" class="btn btn-info"
-                                        (click)="onClickGenerateCard()">Generate Card</button>
+                                        (click)="onClickGenerateCard()">Proceed to Card Gen</button>
                                 </div>
                                 <div class="col-md-3">
                                     <button mat-raised-button type="button" class="btn btn-warning"

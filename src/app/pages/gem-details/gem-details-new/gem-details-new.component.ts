@@ -147,28 +147,20 @@ export class GemDetailsNewComponent implements OnInit {
   onClickGenerateReport() {
     this.setValidatorsForReportFields(true)
     if (this.gemDetailsForm.valid) {
-      let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
-      this.editGemDetail(gemDetailsFormValue).then((ref) => {
-        this.proceedToReportGeneration()
-      }, (e) => {
-        console.log(e);
-      })
+      this.proceedToReportGeneration()
     } else {
       this.displayValidation();
+      this.toasterService.warning("Please fill mandatory details for the Report")
     }
   }
 
   onClickGenerateCard() {
     this.setValidatorsForReportFields(false)
     if (this.gemDetailsForm.valid) {
-      let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
-      this.editGemDetail(gemDetailsFormValue).then((ref) => {
-        this.proceedToCardGeneration()
-      }, (e) => {
-        console.log(e);
-      })
+      this.proceedToCardGeneration()
     } else {
       this.displayValidation();
+      this.toasterService.warning("Please fill mandatory details for the Card")
     }
   }
 
