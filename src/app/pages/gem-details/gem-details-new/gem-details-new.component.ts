@@ -79,7 +79,7 @@ export class GemDetailsNewComponent implements OnInit {
       color: ['', Validators.required],       //common
       species: ['', Validators.required],       //common
       variety: ['', Validators.required],       //common
-      comments: ['', Validators.required],       //common
+      comments: ['', [Validators.required,Validators.maxLength(40)]],       //common
       apex: [''],
 
       // //Gem Image
@@ -94,6 +94,7 @@ export class GemDetailsNewComponent implements OnInit {
     this.onFormChange();
     this.formErrors = FormUtil.getFormErrorMap(this.gemDetailsForm);
     this.formValidationMessages = FormUtil.getGenericFormValidators(this.gemDetailsForm);
+    this.formValidationMessages.get("comments").set("maxlength","Comments should be less than 40 characters")
   }
 
   bindFormData(res: GemDetail) {
