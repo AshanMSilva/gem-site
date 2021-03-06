@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 
 
 import * as QRCode from 'qrcode';
-import { Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { jsPDF } from "jspdf";
 import { MediaCompletionContext } from 'app/shared/models/media-completion';
 import { GemDetail } from 'app/shared/models/gem-detail';
@@ -24,7 +24,8 @@ export class PdfGenerationReportComponent implements OnInit {
 
   imageSubject: Subject<{ image: IMAGES }> = new Subject()
 
-  qrImg: any
+  gemImageURL: string
+  gemImgSubscription: Subscription
 
   mediaCompletionContext: MediaCompletionContext = new MediaCompletionContext();
   reporContext: ReportContext
@@ -36,7 +37,6 @@ export class PdfGenerationReportComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.qrImg = new Image()
     this.mediaCompletionContext = new MediaCompletionContext();
     if (this.gemDetailService.getSelectedGemDetailIdForView() || true) {/////////////////////////
       this.gemDetailIdToGenReport = "1614970781510"// this.gemDetailService.getSelectedGemDetailIdForView()
@@ -44,6 +44,15 @@ export class PdfGenerationReportComponent implements OnInit {
         if (res) {
           this.gemDetailToGenReport = res as GemDetail
           this.reporContext = new ReportContext(res)
+        }
+      })
+
+      let filePath = this.gemDetailIdToGenReport + "_gem"
+      this.gemImgSubscription = this.gemDetailService.getFiles(filePath).subscribe(res => {
+        if (res) {
+          console.log(res);
+          this.gemImageURL = res
+          this.gemImgSubscription.unsubscribe()
         }
       })
     } else {
@@ -85,13 +94,11 @@ export class PdfGenerationReportComponent implements OnInit {
         if (this.mediaCompletionContext.isAllCompleted()) {          // TODO
           doc.addImage(gemImg, "png", 19.275, 5.5, 5, 5);
           doc.addImage(signature, "png", 19.775, 13, 4, 2);
-          doc.addImage(this.qrImg, "png", 20.775, 15.5, 2, 2);
+          doc.addImage(qrImg, "png", 20.775, 15.5, 2, 2);
           doc.save("alldone.pdf");
         }
         if (res.image == IMAGES.TEMPLATE) {
-
           this.addTextInfo(doc)
-
         }
       }
     })
@@ -121,22 +128,22 @@ export class PdfGenerationReportComponent implements OnInit {
 
 
     //gemImg image
-    let gemImg = new Image();
+    let gemImg = document.getElementById("gemImage") as HTMLImageElement
     gemImg.onload = function () {
       subject.next({ image: IMAGES.GEM })
     };
-    gemImg.crossOrigin = "";
-    gemImg.src = '/assets/pdf-templates/gem.png';
+    // gemImg.crossOrigin = "";
+    //gemImg.src = this.gemImageURL;
 
     //qrImg image
     let reportCanvas = document.getElementById("reportQRCodeImg") as HTMLCanvasElement;
 
-    this.qrImg = new Image();
-    this.qrImg.onload = function () {
+    let qrImg = new Image();
+    qrImg.onload = function () {
       subject.next({ image: IMAGES.QR })
     };
-    this.qrImg.crossOrigin = "";
-    this.qrImg.src = reportCanvas.toDataURL("png", 1);
+    qrImg.crossOrigin = "";
+    qrImg.src = reportCanvas.toDataURL("png", 1);
 
     //signature image
     let signature = new Image();

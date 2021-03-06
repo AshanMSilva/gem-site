@@ -31,6 +31,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { PdfGenerationComponent } from './pages/pdf-generation/pdf-generation.component';
 import { PdfGenerationCardComponent } from './pages/pdf-generation/pdf-generation-card/pdf-generation-card.component';
 import { PdfGenerationReportComponent } from './pages/pdf-generation/pdf-generation-report/pdf-generation-report.component';
+import { PdfViewComponent } from './pages/pdf-view/pdf-view.component';
+import { PdfViewReportComponent } from './pages/pdf-view/pdf-view-report/pdf-view-report.component';
+import { PdfViewCardComponent } from './pages/pdf-view/pdf-view-card/pdf-view-card.component';
 
 
 
@@ -59,6 +62,9 @@ import { PdfGenerationReportComponent } from './pages/pdf-generation/pdf-generat
     PdfGenerationComponent,
     PdfGenerationCardComponent,
     PdfGenerationReportComponent,
+    PdfViewComponent,
+    PdfViewReportComponent,
+    PdfViewCardComponent,
    
     
 

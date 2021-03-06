@@ -80,17 +80,26 @@
                             </div>
                         </div>
                         <div class="row text-center">
-                            <div class="col-4 col-md-4">
+                            <div class="col-3 col-md-3">
+                                <p>Template Image</p>
+                                <img src="" alt="Template image" style="width: 150px;height: 150px;"
+                                    id="templateImg">
+                                    <p *ngIf="mediaCompletionContext.isTemplateImageComplete" class="text-success">Loaded to PDF</p>
+                            </div>
+                            <div class="col-3 col-md-3">
                                 <p>Report QR Code</p>
                                 <canvas id="reportQRCodeImg"></canvas>
-
+                                <p *ngIf="mediaCompletionContext.isQRImageComplete" class="text-success">Loaded to PDF</p>
                             </div>
-                            <div class="col-4 col-md-4">
+                            <div class="col-3 col-md-3">
                                 <p>Gemstone Image</p>
-                                <!-- <canvas id="reportQRCodeImg"></canvas> -->
+                                <img src="{{gemImageURL}}" crossorigin="anonymous" alt="Gemstone image" style="width: 150px;height: 150px;"
+                                    id="gemImage">
+                                    <p *ngIf="mediaCompletionContext.isGemImageComplete" class="text-success">Loaded to PDF</p>
                             </div>
-                            <div class="col-4 col-md-4">
+                            <div class="col-3 col-md-3">
                                 <p>Signature Image</p>
+                                <p *ngIf="mediaCompletionContext.isSignatureImageComplete" class="text-success">Loaded to PDF</p>
                                 <!-- <canvas id="reportQRCodeImg"></canvas> -->
                             </div>
                         </div>
