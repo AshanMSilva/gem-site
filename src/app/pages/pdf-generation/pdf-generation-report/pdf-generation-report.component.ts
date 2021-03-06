@@ -156,9 +156,18 @@ export class PdfGenerationReportComponent implements OnInit {
       let reportCanvas = document.getElementById("reportQRCodeImg") as HTMLCanvasElement;
       let qrImg = new Image();
       let subject = this.imageSubject
+      let id = this.gemDetailIdToGenReport
+      let service = this.gemDetailService
       qrImg.onload = function () {
         subject.next({ image: IMAGES.QR })
         doc.addImage(qrImg, "png", 20.775, 15.5, 2, 2);
+        const blob = doc.output("blob");
+        const file = new File([blob], "filename")
+        const filePath = "viewpdf/report/" + id
+        const result = service.uploadFile(file, filePath + '.pdf');
+        result.task.then((res) => {
+          console.log("uploaded");
+        }, (e) => { console.log(e); })
         doc.save("alldone.pdf");
       };
       qrImg.crossOrigin = "";
