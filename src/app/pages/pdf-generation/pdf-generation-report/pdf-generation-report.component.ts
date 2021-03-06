@@ -24,6 +24,8 @@ export class PdfGenerationReportComponent implements OnInit {
 
   imageSubject: Subject<{ image: IMAGES }> = new Subject()
 
+  qrImg: any
+
   mediaCompletionContext: MediaCompletionContext = new MediaCompletionContext();
   reporContext: ReportContext
 
@@ -34,6 +36,7 @@ export class PdfGenerationReportComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.qrImg = new Image()
     this.mediaCompletionContext = new MediaCompletionContext();
     if (this.gemDetailService.getSelectedGemDetailIdForView() || true) {/////////////////////////
       this.gemDetailIdToGenReport = "1614970781510"// this.gemDetailService.getSelectedGemDetailIdForView()
@@ -52,7 +55,7 @@ export class PdfGenerationReportComponent implements OnInit {
   generateQRCodes() {
     let reportURL = environment.baseURLForQR + "/report/" + this.gemDetailIdToGenReport
 
-    let reportCanvas = document.getElementById("reportQRCodeImg");
+    let reportCanvas = document.getElementById("reportQRCodeImg") as HTMLCanvasElement;
     let qrcodeReport = QRCode.toCanvas(reportCanvas, reportURL, { errorCorrectionLevel: "quartile" }).then((res) => { }
       , (e) => {
         this.toasterService.error("reportQR code could not be generated")
@@ -82,55 +85,12 @@ export class PdfGenerationReportComponent implements OnInit {
         if (this.mediaCompletionContext.isAllCompleted()) {          // TODO
           doc.addImage(gemImg, "png", 19.275, 5.5, 5, 5);
           doc.addImage(signature, "png", 19.775, 13, 4, 2);
-          doc.addImage(qrImg, "png", 20.775, 15.5, 2, 2);
+          doc.addImage(this.qrImg, "png", 20.775, 15.5, 2, 2);
           doc.save("alldone.pdf");
         }
         if (res.image == IMAGES.TEMPLATE) {
 
-          let keyMargin = 2.2
-          let valueMargin = 7.5
-          var spacing = 0.6
-
-          var postion = 4.2
-          doc.setFontSize(10)
-
-          //Basic
-          this.reporContext.getBasicDetialsMap().forEach((value, key) => {
-            doc.text(key, keyMargin, postion, { align: "left" });
-            doc.text(": " + value, valueMargin - 1, postion, { align: "left" });
-            postion += spacing
-          })
-
-          var postion = 8.2
-          doc.setFontSize(10)
-
-          //Specimen
-          this.reporContext.getDetailsOfSpecimenMap().forEach((value, key) => {
-            doc.text(key, keyMargin, postion, { align: "left" });
-            doc.text(": " + value, valueMargin, postion, { align: "left" });
-            postion += spacing
-          })
-
-          var postion = 13
-          doc.setFontSize(10)
-
-          //test
-          this.reporContext.getTestedDataMap().forEach((value, key) => {
-            doc.text(key, keyMargin, postion, { align: "left" });
-            doc.text(": " + value, valueMargin, postion, { align: "left" });
-            postion += spacing
-          })
-
-          //Apex
-          if (this.reporContext.apex) {
-            doc.text("Apex", keyMargin, postion, { align: "left" });
-            doc.text(": " + this.reporContext.apex, valueMargin, postion, { align: "left" });
-          }
-          //species, variety
-          let speciesAndVariety = "Species : " + this.reporContext.species + "  Variety: " + this.reporContext.variety
-          doc.text(speciesAndVariety, 22.275, 11.5, { align: "center" });
-          let comments = "Comments : " + this.reporContext.comments
-          doc.text(comments, 22.275, 12, { align: "center" });
+          this.addTextInfo(doc)
 
         }
       }
@@ -169,12 +129,14 @@ export class PdfGenerationReportComponent implements OnInit {
     gemImg.src = '/assets/pdf-templates/gem.png';
 
     //qrImg image
-    let qrImg = new Image();
-    qrImg.onload = function () {
+    let reportCanvas = document.getElementById("reportQRCodeImg") as HTMLCanvasElement;
+
+    this.qrImg = new Image();
+    this.qrImg.onload = function () {
       subject.next({ image: IMAGES.QR })
     };
-    qrImg.crossOrigin = "";
-    qrImg.src = '/assets/pdf-templates/gem.png';
+    this.qrImg.crossOrigin = "";
+    this.qrImg.src = reportCanvas.toDataURL("png", 1);
 
     //signature image
     let signature = new Image();
@@ -184,6 +146,57 @@ export class PdfGenerationReportComponent implements OnInit {
     signature.crossOrigin = "";
     signature.src = '/assets/pdf-templates/signature.png';
 
+  }
+
+  addTextInfo(doc: jsPDF) {
+    let keyMargin = 2.2
+    let valueMargin = 7.5
+    var spacing = 0.6
+
+    var postion = 4.2
+
+    //Basic
+    doc.setFontSize(10)
+    this.reporContext.getBasicDetialsMap().forEach((value, key) => {
+      doc.text(key, keyMargin, postion, { align: "left" });
+      doc.text(": " + value, valueMargin - 1, postion, { align: "left" });
+      postion += spacing
+    })
+
+    var postion = 8.2
+
+    //Specimen
+    doc.setFontSize(12)
+    doc.text("Details of Specimen", keyMargin, postion - spacing, { align: "left" });
+    doc.setFontSize(10)
+    this.reporContext.getDetailsOfSpecimenMap().forEach((value, key) => {
+      doc.text(key, keyMargin, postion, { align: "left" });
+      doc.text(": " + value, valueMargin, postion, { align: "left" });
+      postion += spacing
+    })
+
+    var postion = 13
+
+    //test
+    doc.setFontSize(12)
+    doc.text("Tested Data", keyMargin, postion - spacing, { align: "left" });
+    doc.setFontSize(10)
+    this.reporContext.getTestedDataMap().forEach((value, key) => {
+      doc.text(key, keyMargin, postion, { align: "left" });
+      doc.text(": " + value, valueMargin, postion, { align: "left" });
+      postion += spacing
+    })
+
+    //Apex
+    if (this.reporContext.apex) {
+      doc.text("Apex", keyMargin, postion, { align: "left" });
+      doc.text(": " + this.reporContext.apex, valueMargin, postion, { align: "left" });
+    }
+    //species, variety
+    let speciesAndVariety = "Species : " + this.reporContext.species + "  Variety: " + this.reporContext.variety
+    doc.text(speciesAndVariety, 22.275, 11.5, { align: "center" });
+    let comments = "Comments : " + this.reporContext.comments
+    doc.text(comments, 22.275, 12, { align: "center" });
   }
 
 
