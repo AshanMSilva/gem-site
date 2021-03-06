@@ -152,6 +152,29 @@
                                     </mat-form-field>
                                 </div>
                             </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-4 col-md-4">
+                                    <p>Report QR Code</p>
+                                    <canvas id="reportQRCode"></canvas>
+                                    <mat-error *ngIf="formErrors.get('reportQRCodeImageURL')">
+                                        {{formErrors.get('reportQRCodeImageURL')}}
+                                    </mat-error>
+                                </div>
+                                <div class="col-4 col-md-4">
+                                    <p>Card QR Code</p>
+                                    <canvas id="cardQRCode"></canvas>
+                                    <mat-error *ngIf="formErrors.get('cardQRCodeImageURL')">
+                                        {{formErrors.get('cardQRCodeImageURL')}}
+                                    </mat-error>
+                                </div>
+                                <div class="col-4 col-md-4">
+                                    <p>Gem Image</p>
+                                    <mat-error *ngIf="formErrors.get('gemImageURL')">
+                                        {{formErrors.get('gemImageURL')}}
+                                    </mat-error>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-3">
                                     <button *ngIf="isRecordSaved" mat-raised-button type="submit" class="btn btn-info"

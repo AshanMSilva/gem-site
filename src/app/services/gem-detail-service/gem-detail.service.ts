@@ -101,14 +101,14 @@ export class GemDetailService {
   }
 
 
-  private selectedGemDetailForView: GemDetail
+  private selectedGemDetailIdForEditAndGen: string
 
-  getSelectedGemDetailForView() {
-    return this.selectedGemDetailForView
+  getSelectedGemDetailIdForView() {
+    return this.selectedGemDetailIdForEditAndGen
   }
 
-  setSelectedGemDetailForView(gemDetail: GemDetail) {
-    this.selectedGemDetailForView = gemDetail
+  setSelectedGemDetailIdForView(sgtlReportNumber: string) {
+    this.selectedGemDetailIdForEditAndGen = sgtlReportNumber
   }
 
 }

@@ -5,7 +5,7 @@ import { GemDetail } from 'app/shared/models/gem-detail';
 import { FormUtil } from 'app/shared/utils/form-utility';
 import { environment } from 'environments/environment';
 import { ToastrService } from 'ngx-toastr';
-
+import * as QRCode from 'qrcode';
 @Component({
   selector: 'app-gem-details-new',
   templateUrl: './gem-details-new.component.html',
@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 export class GemDetailsNewComponent implements OnInit {
   isRecordSaved: boolean = false
 
+  gemDetailIdToEdit: string //sgtlReportNumber
   gemDetailToEdit: GemDetail
 
   gemDetailsForm: FormGroup;
@@ -27,21 +28,30 @@ export class GemDetailsNewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.gemDetailToEdit = this.gemDetailService.getSelectedGemDetailForView();
+    if (this.gemDetailService.getSelectedGemDetailIdForView()) {
+      this.gemDetailIdToEdit = this.gemDetailService.getSelectedGemDetailIdForView()
+    } else {
+      this.gemDetailIdToEdit = new Date().getTime().toString(); //new
+      this.isRecordSaved = false
+      this.generateQRCodes()
+    }
     this.createForm();
-    this.bindFormData();
+    this.gemDetailService.getGemDetailById(this.gemDetailIdToEdit).subscribe(res => {
+      this.gemDetailToEdit = res as GemDetail
+      this.bindFormData(res)
+    })
+
   }
 
   createForm() {
     let today = new Date().toLocaleDateString()
-    let todayTime = new Date().getTime()
-    let cardURL = environment.baseURLForQR + "/card/" + todayTime.toString()
-    let reportURL = environment.baseURLForQR + "/report/" + todayTime.toString()
+    let cardURL = environment.baseURLForQR + "/card/" + this.gemDetailIdToEdit
+    let reportURL = environment.baseURLForQR + "/report/" + this.gemDetailIdToEdit
     this.gemDetailsForm = this.formBuilder.group({
 
       //common
       date: [{ value: today, disabled: true }, Validators.required],   //will get overidden at bind 
-      sgtlReportNumber: [{ value: todayTime, disabled: true }, Validators.required],
+      sgtlReportNumber: [{ value: this.gemDetailIdToEdit, disabled: true }, Validators.required],
 
       //Details of specimen
       weight: ['', Validators.required],           //common
@@ -66,12 +76,12 @@ export class GemDetailsNewComponent implements OnInit {
       gemImageURL: ['', Validators.required],       //common
 
       // //QR code URLs
-      cardQRCodeImageURL: [cardURL, Validators.required],       //common
-      reportQRCodeImageURL: [reportURL, Validators.required],       //common
+      cardQRCodeImageURL: ['', Validators.required],       //common
+      reportQRCodeImageURL: ['', Validators.required],       //common
 
-      // //Latest Card,Report Ids filter by sgtlReportNo and latest revision
-      // latestCardId: string
-      // latestReportId: string
+      // //Latest Card,Report Ids filter by sgtlReportNumber and latest revision
+      // latestCardId: [''],
+      // latestReportId: [''],
     });
 
     this.gemDetailsForm.valueChanges.subscribe(data => this.onFormChange())
@@ -80,13 +90,10 @@ export class GemDetailsNewComponent implements OnInit {
     this.formValidationMessages = FormUtil.getGenericFormValidators(this.gemDetailsForm);
   }
 
-  bindFormData() {
-    if (this.gemDetailToEdit) {
+  bindFormData(res: GemDetail) {
+    if (res) {
       this.isRecordSaved = true;
       this.gemDetailsForm.patchValue(this.gemDetailToEdit)
-      this.gemDetailsForm.disable();
-      // gemDetailsFormValue.date = this.gemDetailToEdit.detailId
-      // gemDetailsFormValue.sgtlReportNumber = this.gemDetailToEdit.sgtlReportNumber
     }
   }
 
@@ -113,9 +120,6 @@ export class GemDetailsNewComponent implements OnInit {
   onFormSubmit() {
     let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
     if (this.isRecordSaved) {
-      // gemDetailsFormValue.detailId = this.gemDetailToEdit.detailId
-      // gemDetailsFormValue.date = this.gemDetailToEdit.detailId
-      // gemDetailsFormValue.sgtlReportNumber = this.gemDetailToEdit.sgtlReportNumber
       this.editGemDetail(gemDetailsFormValue)
     } else {
       this.saveGemDetail(gemDetailsFormValue)
@@ -129,7 +133,6 @@ export class GemDetailsNewComponent implements OnInit {
   saveGemDetail(gemDetailsFormValue: GemDetail) {
     this.gemDetailService.setGemDetail(gemDetailsFormValue.sgtlReportNumber, gemDetailsFormValue).then((ref) => {
       this.isRecordSaved = true
-      this.gemDetailToEdit = gemDetailsFormValue
     }, (e) => {
       console.log(e);
     })
@@ -192,6 +195,26 @@ export class GemDetailsNewComponent implements OnInit {
   proceedToCardGeneration() {
 
   }
+
+  generateQRCodes() {
+
+    let cardCanvas = document.getElementById("cardQRCode");
+
+    let qrcodeCard = QRCode.toCanvas(cardCanvas, "localhost", { errorCorrectionLevel: "quartile" }).then(() => {
+
+    }, () => {
+      this.toasterService.error("Card QR code could not be generated")
+    })
+
+    let reportCanvas = document.getElementById("reportQRCode");
+
+    let qrcodeReport = QRCode.toCanvas(reportCanvas, "localhost", { errorCorrectionLevel: "quartile" }).then(() => {
+
+    }, () => {
+      this.toasterService.error("reportQR code could not be generated")
+    })
+  }
+
 
 
 }

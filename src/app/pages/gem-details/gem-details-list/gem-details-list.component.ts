@@ -18,7 +18,7 @@ export class GemDetailsListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.gemDetailService.setSelectedGemDetailForView(null)
+    this.gemDetailService.setSelectedGemDetailIdForView(null)
     this.gemDetailService.getGemDetails().subscribe(response => {
       if (response) {
         this.gemDetailsList = response
@@ -26,8 +26,8 @@ export class GemDetailsListComponent implements OnInit {
     })
   }
 
-  onClickViewItem(gemDetail: GemDetail) {
-    this.gemDetailService.setSelectedGemDetailForView(gemDetail)
+  onClickGenNewReportItem(gemDetail: GemDetail) {
+    this.gemDetailService.setSelectedGemDetailIdForView(gemDetail.sgtlReportNumber)
     this.router.navigateByUrl("gem-detail/new") // create view screen if time is available
   }
 
