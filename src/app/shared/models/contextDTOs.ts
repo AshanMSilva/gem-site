@@ -53,7 +53,6 @@ export class ReportContext {
         this.comments = gemDetail.comments
         this.apex = gemDetail.apex
 
-        this.gemImageURL = gemDetail.gemImageURL;
     }
 
     getBasicDetialsMap(): Map<string, string> {
@@ -98,9 +97,6 @@ export class CardContext {
     variety: string;
     comments: string;
 
-    //Not in report text
-    gemImageURL: string;
-
     constructor(gemDetail: GemDetail) {
         this.date = gemDetail.date
         this.sgtlReportNumber = gemDetail.sgtlReportNumber
@@ -113,7 +109,5 @@ export class CardContext {
         this.species = gemDetail.species
         this.variety = gemDetail.variety
         this.comments = gemDetail.comments
-
-        this.gemImageURL= gemDetail.gemImageURL;
     }
 }

@@ -25,7 +25,7 @@ export class GemDetail {
     apex: string;
 
     //Gem Image
-    gemImageURL: string;
+    isGemImageSaved: boolean;
 
     //Latest Card,Report Ids filter by sgtlReportNo and latest revision
     latestCardId: string

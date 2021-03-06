@@ -7,7 +7,7 @@
                         <h4 class="card-title">Generate Report</h4>
                         <p class="card-category">Genrate report pdf</p>
                     </div>
-                    <div class="card-body" >
+                    <div class="card-body">
                         <br>
                         <h5>Basic Data</h5>
                         <div class="row" *ngIf="gemDetailToGenReport">
@@ -117,12 +117,11 @@
                         </div>
                         <div class="row text-center">
                             <div class="col-3 col-md-3">
-                                <p *ngIf="mediaCompletionContext.isTemplateImageComplete" class="text-success">Template
-                                    Image Loaded to PDF
+                                <p *ngIf="mediaCompletionContext.isTemplateImageComplete" class="text-success">
+                                    Template Image Loaded to PDF
                                 </p>
                             </div>
                             <div class="col-3 col-md-3">
-                                Report QR Code
                                 <p *ngIf="mediaCompletionContext.isQRImageComplete" class="text-success">
                                     Report QR Code Loaded to PDF
                                 </p>

@@ -50,7 +50,7 @@ export class PdfGenerationReportComponent implements OnInit {
         }
       })
 
-      let filePath = this.gemDetailIdToGenReport + "_gem"
+      let filePath = "gems/" + this.gemDetailIdToGenReport + "_gem"
       this.gemImgSubscription = this.gemDetailService.getFiles(filePath).subscribe(res => {
         if (res) {
           console.log(res);

@@ -163,37 +163,29 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <p>Gem Image <span *ngIf="gemImagePercentage"
-                                            class="text-success">{{gemImagePercentage|number:"2.2-2"}}%</span></p>
+                                <div class="col-3" *ngIf="isRecordSaved&& gemDetailToEdit && displayGemImgFromURL">
+                                    <p *ngIf="gemDetailToEdit.isGemImageSaved">Current Gem Image </p>
+                                    <img *ngIf="gemImageURL&&gemDetailToEdit.isGemImageSaved" src="{{gemImageURL}}"
+                                        alt="Gemstone image" style="width: 150px;height: 150px;" id="gemImageInForm">
+                                </div>
+                                <div class="col-3" *ngIf="isRecordSaved">
+                                    <p>
+                                        <span *ngIf="!displayGemImgFromURL">Current Gem Image </span>
+                                        <span *ngIf="gemImagePercentage"
+                                            class="text-success">{{gemImagePercentage|number:"2.2-2"}}%</span>
+                                    </p>
 
                                     <ngx-image-uploader [options]="options" (drop)="onDrop($event)"
                                         (change)="selectImage($event)"></ngx-image-uploader>
 
-                                    <mat-error *ngIf="formErrors.get('gemImageURL')">
-                                        {{formErrors.get('gemImageURL')}}
+                                    <mat-error *ngIf="formErrors.get('isGemImageSaved')">
+                                        {{formErrors.get('isGemImageSaved')}}
                                     </mat-error>
+
                                 </div>
                             </div>
 
                             <br>
-                            <div class="row text-center">
-                                <div class="col-4 col-md-4">
-                                    <p>Report QR Code</p>
-                                    <canvas id="reportQRCode"></canvas>
-
-                                </div>
-                                <div class="col-4 col-md-4">
-                                    <p>Card QR Code</p>
-                                    <canvas id="cardQRCode"></canvas>
-
-                                </div>
-                                <div class="col-4 col-md-4">
-                                    <p>Signature</p>
-                                    <canvas id="signature"></canvas>
-
-                                </div>
-                            </div>
                             <br>
                             <div class="row">
                                 <div class="col-md-3">
@@ -205,8 +197,8 @@
                                         (click)="onClickGenerateCard()">Proceed to Card Gen</button>
                                 </div>
                                 <div class="col-md-3">
-                                    <button mat-raised-button type="button" class="btn btn-warning"
-                                        (click)="uploadGemImage()">Edit</button>
+                                    <button *ngIf="isRecordSaved" mat-raised-button type="button"
+                                        class="btn btn-warning" (click)="uploadGemImage()">Upload Image</button>
                                 </div>
                                 <div class="col-md-3">
                                     <button mat-raised-button type="submit" class="btn btn-success"
