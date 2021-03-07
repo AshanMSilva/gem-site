@@ -101,7 +101,7 @@ export class GemDetailsNewComponent implements OnInit {
       color: ['', Validators.required],       //common
       species: ['', Validators.required],       //common
       variety: ['', Validators.required],       //common
-      comments: ['', [Validators.required, Validators.maxLength(40)]],       //common
+      comments: ['', [Validators.required, Validators.maxLength(30)]],       //common
       apex: [''],
 
       // //Gem Image
@@ -119,7 +119,7 @@ export class GemDetailsNewComponent implements OnInit {
     this.onFormChange();
     this.formErrors = FormUtil.getFormErrorMap(this.gemDetailsForm);
     this.formValidationMessages = FormUtil.getGenericFormValidators(this.gemDetailsForm);
-    this.formValidationMessages.get("comments").set("maxlength", "Comments should be less than 40 characters")
+    this.formValidationMessages.get("comments").set("maxlength", "Comments should be less than 30 characters")
     this.formValidationMessages.get("isGemImageSaved").set("required", "Gem Image is required")
     this.disableGenBtn = false
   }
