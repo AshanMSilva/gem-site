@@ -33,6 +33,42 @@ export class GemDetailService {
     );
     return this.gemReports;
   }
+  getGemDetailsWithPagination(offsetReportNumber:string, limit:number,previous:boolean): Observable<GemDetail[]> {
+    if(offsetReportNumber == null){
+      this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByKey().limitToLast(limit));
+      this.gemReports = this.gemReportList.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.val() as GemDetail;
+        data.sgtlReportNumber = a.payload.key;
+        return data;
+      }))
+    );
+    }
+    else{
+      if(previous ==true){
+        this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByKey().startAfter(offsetReportNumber).limitToFirst(limit));
+        this.gemReports = this.gemReportList.snapshotChanges().pipe(
+          map(actions => actions.map(a => {
+            const data = a.payload.val() as GemDetail;
+            data.sgtlReportNumber = a.payload.key;
+            return data;
+          }))
+        );
+      }else{
+        this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByKey().endBefore(offsetReportNumber).limitToLast(limit));
+      this.gemReports = this.gemReportList.snapshotChanges().pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.val() as GemDetail;
+          data.sgtlReportNumber = a.payload.key;
+          return data;
+        }))
+      );
+      }
+      
+    }
+    
+    return this.gemReports;
+  }
 
 
   getGemDetailById(id: string): Observable<GemDetail> {

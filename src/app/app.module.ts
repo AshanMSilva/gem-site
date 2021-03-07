@@ -10,14 +10,8 @@ import { ComponentsModule } from './components/components.module';
 
 import { AppComponent } from './app.component';
 
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { TableListComponent } from './table-list/table-list.component';
-import { TypographyComponent } from './typography/typography.component';
-import { IconsComponent } from './icons/icons.component';
-import { MapsComponent } from './maps/maps.component';
-import { NotificationsComponent } from './notifications/notifications.component';
-import { UpgradeComponent } from './upgrade/upgrade.component';
+
+
 import {
   AgmCoreModule
 } from '@agm/core';
@@ -28,12 +22,7 @@ import { AngularFireModule } from '@angular/fire';
 import { environment } from 'environments/environment';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
-import { PdfGenerationComponent } from './pages/pdf-generation/pdf-generation.component';
-import { PdfGenerationCardComponent } from './pages/pdf-generation/pdf-generation-card/pdf-generation-card.component';
-import { PdfGenerationReportComponent } from './pages/pdf-generation/pdf-generation-report/pdf-generation-report.component';
-import { PdfViewComponent } from './pages/pdf-view/pdf-view.component';
-import { PdfViewReportComponent } from './pages/pdf-view/pdf-view-report/pdf-view-report.component';
-import { PdfViewCardComponent } from './pages/pdf-view/pdf-view-card/pdf-view-card.component';
+
 
 
 
@@ -59,12 +48,7 @@ import { PdfViewCardComponent } from './pages/pdf-view/pdf-view-card/pdf-view-ca
     AppComponent,
     AdminLayoutComponent,
     AuthLayoutComponent,
-    PdfGenerationComponent,
-    PdfGenerationCardComponent,
-    PdfGenerationReportComponent,
-    PdfViewComponent,
-    PdfViewReportComponent,
-    PdfViewCardComponent,
+    
    
     
 
