@@ -66,6 +66,46 @@ export class GemDetailService {
       }
       
     }
+    console.log(this.gemReportList);
+    
+    return this.gemReports;
+  }
+  getSearchGemDetailsBySGTL(query:string){
+    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByChild('sgtlReportNumber').equalTo(query));
+    
+    this.gemReports = this.gemReportList.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.val() as GemDetail;
+        data.sgtlReportNumber = a.payload.key;
+        return data;
+      }))
+    );
+    
+    return this.gemReports;
+  }
+  getSearchGemDetailsByDate(query:string){
+    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByChild('date').equalTo(query));
+    
+    this.gemReports = this.gemReportList.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.val() as GemDetail;
+        data.sgtlReportNumber = a.payload.key;
+        return data;
+      }))
+    );
+    
+    return this.gemReports;
+  }
+  getSearchGemDetailsByObject(query:string){
+    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByChild('object').equalTo(query));
+    
+    this.gemReports = this.gemReportList.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.val() as GemDetail;
+        data.sgtlReportNumber = a.payload.key;
+        return data;
+      }))
+    );
     
     return this.gemReports;
   }
