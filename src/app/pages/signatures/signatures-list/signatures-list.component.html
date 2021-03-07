@@ -1,0 +1,28 @@
+<div class="card-body table-responsive">
+    <table class="table table-hover">
+        <thead class="text-warning">
+            <th>#</th>
+            <th>Signature Name</th>
+            <th>--</th>
+            <th>Actions</th>
+        </thead>
+        <tbody *ngIf="signatureList">
+            <tr *ngFor="let signature of signatureList; index as i">
+                <td>{{i+1}}</td>
+                <td>{{signature.signatureName}}</td>
+                <td></td>
+                <td>
+                    <button mat-raised-button type="button" (click)="onClickEditSignature(signature)" class="btn btn-info">Edit Image</button>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="!signatureList">
+            <tr>
+                <td>--</td>
+                <td>No Signatures Added</td>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

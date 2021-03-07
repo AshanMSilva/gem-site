@@ -11,6 +11,7 @@ declare interface RouteInfo {
 export const ROUTES: RouteInfo[] = [
  
   { path: '/gem-details', title: 'Gem Details', icon: 'dashboard', class: '' },
+  { path: '/signatures', title: 'Signatures', icon: 'border_color', class: '' },
  
 ];
 

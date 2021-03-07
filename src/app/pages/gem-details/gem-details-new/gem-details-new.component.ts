@@ -40,7 +40,7 @@ export class GemDetailsNewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.displayGemImgFromURL = true
+    this.displayGemImgFromURL = true //check
     if (this.gemDetailService.getSelectedGemDetailIdForView()) {
       this.gemDetailIdToEdit = this.gemDetailService.getSelectedGemDetailIdForView()
     } else {
