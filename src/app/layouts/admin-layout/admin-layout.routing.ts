@@ -7,7 +7,7 @@ import { TypographyComponent } from '../../typography/typography.component';
 
 import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
-import { UpgradeComponent } from '../../upgrade/upgrade.component';
+
 import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 import { GemDetailsComponent } from 'app/pages/gem-details/gem-details.component';
