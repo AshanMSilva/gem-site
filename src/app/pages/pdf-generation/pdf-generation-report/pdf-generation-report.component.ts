@@ -189,7 +189,7 @@ export class PdfGenerationReportComponent implements OnInit {
           console.log("uploaded");
           toast.success("Report PDF uploaded to server")
         }, (e) => { console.log(e); })
-        doc.save("alldone.pdf");
+        doc.save(id+"_report.pdf");
       };
       qrImg.crossOrigin = "";
       qrImg.src = reportCanvas.toDataURL("png", 1);

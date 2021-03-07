@@ -190,7 +190,7 @@ export class PdfGenerationCardComponent implements OnInit {
           console.log("uploaded");
           toast.success("Card PDF uploaded to server")
         }, (e) => { console.log(e); })
-        doc.save("alldone.pdf");
+        doc.save(id+"_card.pdf");
       };
       qrImg.crossOrigin = "";
       qrImg.src = cardCanvas.toDataURL("png", 1);
