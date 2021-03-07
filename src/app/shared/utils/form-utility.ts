@@ -29,7 +29,7 @@ export class FormUtil {
             }
         })
 
-        return formValidationMessages;
+        return formErrors;
     }
 
     public static getGenericFormValidators(form: FormGroup) {

@@ -1,25 +1,33 @@
-class GemDetail{
-    type:string;
-    id:string;
+export class GemDetail {
+    // firebase
+    sgtlReportNumber: string;
     date: string;
-    sgtlReportNumber:string;
-    image:string;
-    weight:string;
-    shape:string;
-    transparency:string;
-    dimensions:string;
-    refractiveIndex:string;
-    specifyGravity:string;
-    hardness:string;
-    opticCharacter:string;
-    magnification:string;
-    color:string;
-    species:string;
-    variety:string;
-    comments:string;
-    apex:string;
-    qrCode:string;
-    
 
+    object: string;
 
+    //Details of specimen
+    weight: string;
+    shapeAndCut: string;
+    transparency: string;
+    dimensions: string;
+
+    //Tested data
+    refractiveIndex: string;
+    specificGravity: string;
+    hardness: string;
+    opticCharacter: string;
+    magnification: string;
+
+    color: string;
+    species: string;
+    variety: string;
+    comments: string;
+    apex: string;
+
+    //Gem Image
+    isGemImageSaved: boolean;
+
+    //Latest Card,Report Ids filter by sgtlReportNo and latest revision
+    // latestCardId: string
+    // latestReportId: string
 }
