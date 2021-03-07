@@ -25,4 +25,8 @@
             </tr>
         </tbody>
     </table>
+    <br>
+    <div align=right class="pr-2" *ngIf="gemDetailsList">
+        <a class="pagination2 pr-2" type="button" (click)="getPreviousGemDetails(gemDetailsList.length>0?gemDetailsList[0].sgtlReportNumber:previousGemDetailkey)"><i class="material-icons">keyboard_arrow_left</i></a>  <a class="pagination2 " type="button" (click)="getNextGemDetails(gemDetailsList.length>0?gemDetailsList[gemDetailsList.length-1].sgtlReportNumber:'')"><i class="material-icons">keyboard_arrow_right</i></a> 
+    </div>
 </div>
