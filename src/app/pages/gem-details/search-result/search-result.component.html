@@ -1,0 +1,53 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class=" col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-9 col-lg-10">
+                                <h4 class="card-title">Search Results</h4>
+                                <p class="card-category">List of Gems details searched</p>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-3 col-lg-2">
+                                
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-warning">
+                                <th>#</th>
+                                <th>SGTL ReportNumber</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </thead>
+                            <tbody *ngIf="gemDetailsList">
+                                <tr *ngFor="let gemDetail of gemDetailsList; index as i">
+                                    <td>{{i+1}}</td>
+                                    <td>{{gemDetail.sgtlReportNumber}}</td>
+                                    <td>{{gemDetail.date}}</td>
+                                    <td>
+                                        <button mat-raised-button type="button" (click)="onClickGenNewReportItem(gemDetail)" class="btn btn-info">Edit / Gen</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="!gemDetailsList">
+                                <tr>
+                                    <td>--</td>
+                                    <td>No gem details Added</td>
+                                    <td>--</td>
+                                    <td>--</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

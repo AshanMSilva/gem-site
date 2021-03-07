@@ -14,6 +14,7 @@ import { GemDetailsComponent } from 'app/pages/gem-details/gem-details.component
 import { GemDetailsNewComponent } from 'app/pages/gem-details/gem-details-new/gem-details-new.component';
 import { PdfGenerationReportComponent } from 'app/pages/pdf-generation/pdf-generation-report/pdf-generation-report.component';
 import { PdfGenerationCardComponent } from 'app/pages/pdf-generation/pdf-generation-card/pdf-generation-card.component';
+import { SearchResultComponent } from 'app/pages/gem-details/search-result/search-result.component';
 
 export const AdminLayoutRoutes: Routes = [
     
@@ -21,6 +22,8 @@ export const AdminLayoutRoutes: Routes = [
     
     { path: 'gem-details',    component: GemDetailsComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
     { path: 'gem-detail/new', component: GemDetailsNewComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+    { path: 'gem-details/search/:query', component: SearchResultComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+    { path: 'gem-details/search/:d/:m/:y', component: SearchResultComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
     { path: 'pdf-gen/report', component: PdfGenerationReportComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
     { path: 'pdf-gen/card', component: PdfGenerationCardComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
 ];

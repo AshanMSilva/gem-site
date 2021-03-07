@@ -27,6 +27,7 @@ import { PdfGenerationComponent } from 'app/pages/pdf-generation/pdf-generation.
 import { PdfViewCardComponent } from 'app/pages/pdf-view/pdf-view-card/pdf-view-card.component';
 import { PdfViewReportComponent } from 'app/pages/pdf-view/pdf-view-report/pdf-view-report.component';
 import { PdfViewComponent } from 'app/pages/pdf-view/pdf-view.component';
+import { SearchResultComponent } from 'app/pages/gem-details/search-result/search-result.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -59,6 +60,7 @@ import { PdfViewComponent } from 'app/pages/pdf-view/pdf-view.component';
     PdfViewComponent,
     PdfViewReportComponent,
     PdfViewCardComponent,
+    SearchResultComponent,
     
     GemDetailsComponent,
     GemDetailsListComponent,
