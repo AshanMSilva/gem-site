@@ -186,7 +186,14 @@
                                         </div>
                                         <div class="col-6 col-md-6" *ngIf="selectedSignatureName">
                                             <br>
-                                            <p>Selected Signature : <span class="text-info" >{{selectedSignatureName}}</span></p>
+                                            <p>Selected Signature : <span
+                                                    class="text-info">{{selectedSignatureName}}</span></p>
+                                        </div>
+                                        <div class="col-6 col-md-6 text-center" *ngIf="!signatureList">
+                                            <i class="material-icons" style="color: orange;">warning</i>
+                                            <p class="text-danger">
+                                                No Signatures Configured
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
