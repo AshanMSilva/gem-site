@@ -199,6 +199,7 @@ export class PdfGenerationReportComponent implements OnInit {
     var postion = 4.2
 
     //Basic
+    doc.setFont("times","bold")//Courier, Helvetica, Times, courier, helvetica, times
     doc.setFontSize(10)
     this.reporContext.getBasicDetialsMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
@@ -209,8 +210,10 @@ export class PdfGenerationReportComponent implements OnInit {
     var postion = 8.2
 
     //Specimen
-    doc.setFontSize(12)
+    doc.setFontSize(11)
+    doc.setFont("times","bold")//Courier, Helvetica, Times, courier, helvetica, times
     doc.text("Details of Specimen", keyMargin, postion - spacing, { align: "left" });
+    doc.setFont("times","regular")
     doc.setFontSize(10)
     this.reporContext.getDetailsOfSpecimenMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
@@ -221,8 +224,10 @@ export class PdfGenerationReportComponent implements OnInit {
     var postion = 13
 
     //test
-    doc.setFontSize(12)
+    doc.setFontSize(11)
+    doc.setFont("times","bold")
     doc.text("Tested Data", keyMargin, postion - spacing, { align: "left" });
+    doc.setFont("times","regular")
     doc.setFontSize(10)
     this.reporContext.getTestedDataMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
