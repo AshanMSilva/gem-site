@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 })
 export class GemDetailsNewComponent implements OnInit {
   isRecordSaved: boolean = false
+  disableGenBtn: boolean = false
 
   gemDetailIdToEdit: string //sgtlReportNumber
   gemDetailToEdit: GemDetail
@@ -99,7 +100,10 @@ export class GemDetailsNewComponent implements OnInit {
       // latestReportId: [''],
     });
 
-    this.gemDetailsForm.valueChanges.subscribe(data => this.onFormChange())
+    this.gemDetailsForm.valueChanges.subscribe(data => {
+      this.onFormChange()
+      this.disableGenBtn = true
+    })
     this.onFormChange();
     this.formErrors = FormUtil.getFormErrorMap(this.gemDetailsForm);
     this.formValidationMessages = FormUtil.getGenericFormValidators(this.gemDetailsForm);
@@ -116,6 +120,7 @@ export class GemDetailsNewComponent implements OnInit {
       this.gemDetailsForm.get("isGemImageSaved").setValidators([Validators.required])
       //updateValueAndValidity
       this.gemDetailsForm.get("isGemImageSaved").updateValueAndValidity()
+      this.disableGenBtn = false
     }
   }
 
@@ -140,6 +145,7 @@ export class GemDetailsNewComponent implements OnInit {
   }
 
   onFormSubmit() {
+    this.disableGenBtn = false
     let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
     if (this.isRecordSaved) {
       this.editGemDetail(gemDetailsFormValue)
