@@ -9,8 +9,11 @@ import { GemDetail } from 'app/shared/models/gem-detail';
   styleUrls: ['./gem-details-list.component.css']
 })
 export class GemDetailsListComponent implements OnInit {
-
+  limit:number = 10;
   gemDetailsList: GemDetail[]
+  firstGemDetailkey:string;
+  previousGemDetailkey:string;
+ 
 
   constructor(
     private gemDetailService: GemDetailService,
@@ -19,11 +22,38 @@ export class GemDetailsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.gemDetailService.setSelectedGemDetailIdForView(null)
-    this.gemDetailService.getGemDetails().subscribe(response => {
+    this.gemDetailService.getGemDetailsWithPagination(null, this.limit,false).subscribe(response => {
       if (response) {
-        this.gemDetailsList = response
+        this.gemDetailsList = response.reverse();
+        if(this.gemDetailsList.length>0){
+          this.firstGemDetailkey = this.gemDetailsList[0].sgtlReportNumber;
+        }
       }
     })
+  }
+  getNextGemDetails(offsetsgtlNumber:string){
+    if(this.gemDetailsList.length==this.limit){
+      this.gemDetailService.getGemDetailsWithPagination(offsetsgtlNumber,  this.limit,false).subscribe(response => {
+        if (response) {
+          this.gemDetailsList = response.reverse();
+          if(this.gemDetailsList.length>0){
+            this.previousGemDetailkey = this.gemDetailsList[0].sgtlReportNumber;
+          }
+         
+        }
+      })
+    }
+    
+  }
+  getPreviousGemDetails(offsetsgtlNumber:string){
+    if(offsetsgtlNumber != this.firstGemDetailkey){
+      this.gemDetailService.getGemDetailsWithPagination(offsetsgtlNumber,  this.limit,true).subscribe(response => {
+        if (response) {
+          this.gemDetailsList = response.reverse();
+        }
+      })
+    }
+    
   }
 
   onClickGenNewReportItem(gemDetail: GemDetail) {
