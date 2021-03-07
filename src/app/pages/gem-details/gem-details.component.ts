@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GemDetailService } from 'app/services/gem-detail-service/gem-detail.service';
+import { SignatureService } from 'app/services/signature/signature.service';
 import { FormUtil } from 'app/shared/utils/form-utility';
 
 @Component({
@@ -24,10 +25,11 @@ export class GemDetailsComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private gemDetailService: GemDetailService,
-
+    private signatureService: SignatureService,
   ) { }
 
   ngOnInit(): void {
+    this.signatureService.setSelectedSignatureNameToSign(null)
     this.createForm();
   }
 

@@ -169,6 +169,25 @@
                                                 </mat-error>
                                             </mat-form-field>
                                         </div>
+                                        <div class="col-6 col-md-6">
+                                            <div class="dropdown" *ngIf="signatureList">
+                                                <button href="#" class="btn dropdown-toggle" data-toggle="dropdown"
+                                                    aria-expanded="true">
+                                                    Choose Signature
+                                                    <b class="caret"></b>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li *ngFor="let sign of signatureList;index as i"><a
+                                                            href="javascript:void(0)"
+                                                            (click)="selectSignature(sign)">{{sign.signatureName}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-md-6" *ngIf="selectedSignatureName">
+                                            <br>
+                                            <p>Selected Signature : <span class="text-info" >{{selectedSignatureName}}</span></p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-3" *ngIf="isRecordSaved&& gemDetailToEdit && displayGemImgFromURL">

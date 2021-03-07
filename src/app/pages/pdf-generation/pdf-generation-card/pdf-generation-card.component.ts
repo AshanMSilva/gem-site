@@ -12,6 +12,7 @@ import { jsPDF } from "jspdf";
 import { MediaCompletionContext } from 'app/shared/models/media-completion';
 import { GemDetail } from 'app/shared/models/gem-detail';
 import { CardContext } from 'app/shared/models/contextDTOs';
+import { SignatureService } from 'app/services/signature/signature.service';
 @Component({
   selector: 'app-pdf-generation-card',
   templateUrl: './pdf-generation-card.component.html',
@@ -28,6 +29,13 @@ export class PdfGenerationCardComponent implements OnInit {
   gemImageURL: string
   gemImgSubscription: Subscription
 
+
+  signatureImageURL: string
+  signatureImgSubscription: Subscription
+
+  signatureImgNameUsedToSign: string
+
+
   qrImage: any
 
   mediaCompletionContext: MediaCompletionContext = new MediaCompletionContext();
@@ -35,12 +43,13 @@ export class PdfGenerationCardComponent implements OnInit {
 
   constructor(
     private gemDetailService: GemDetailService,
+    private signatureService: SignatureService,
     private toasterService: ToastrService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
-    if (this.gemDetailService.getSelectedGemDetailIdForView()) {
+    if (this.gemDetailService.getSelectedGemDetailIdForView() && this.signatureService.getSelectedSignatureNameToSign()) {
       this.mediaCompletionContext = new MediaCompletionContext();
 
       this.gemDetailIdToGenCard = this.gemDetailService.getSelectedGemDetailIdForView()
@@ -57,6 +66,16 @@ export class PdfGenerationCardComponent implements OnInit {
           console.log(res);
           this.gemImageURL = res
           this.gemImgSubscription.unsubscribe()
+        }
+      })
+
+      this.signatureImgNameUsedToSign = this.signatureService.getSelectedSignatureNameToSign()
+      let signFilepath = "signatures/" + this.signatureImgNameUsedToSign + "_sign"
+      this.signatureImgSubscription = this.signatureService.getFiles(signFilepath).subscribe(url => {
+        if (url) {
+          console.log(url)
+          this.signatureImageURL = url
+          this.signatureImgSubscription.unsubscribe()
         }
       })
 

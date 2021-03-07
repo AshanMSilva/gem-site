@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { FileQueueObject, ImageUploaderOptions } from 'ngx-image-uploader-next';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { SignatureService } from 'app/services/signature/signature.service';
+import { SignatureDTO } from 'app/shared/models/signatureDTO';
 
 @Component({
   selector: 'app-gem-details-new',
@@ -33,14 +35,20 @@ export class GemDetailsNewComponent implements OnInit {
 
   gemImageFile: File;
 
+
+  signatureList: SignatureDTO[]
+  selectedSignatureName: string
+
   constructor(
     private formBuilder: FormBuilder,
     private gemDetailService: GemDetailService,
+    private signatureService: SignatureService,
     private toasterService: ToastrService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
+    this.signatureService.setSelectedSignatureNameToSign(null)
     this.displayGemImgFromURL = true //check
     if (this.gemDetailService.getSelectedGemDetailIdForView()) {
       this.gemDetailIdToEdit = this.gemDetailService.getSelectedGemDetailIdForView()
@@ -60,6 +68,10 @@ export class GemDetailsNewComponent implements OnInit {
           this.gemImgSubscription.unsubscribe()
         }
       })
+    })
+
+    this.signatureService.getSignatures().subscribe(res => {
+      this.signatureList = res
     })
 
   }
@@ -109,6 +121,7 @@ export class GemDetailsNewComponent implements OnInit {
     this.formValidationMessages = FormUtil.getGenericFormValidators(this.gemDetailsForm);
     this.formValidationMessages.get("comments").set("maxlength", "Comments should be less than 40 characters")
     this.formValidationMessages.get("isGemImageSaved").set("required", "Gem Image is required")
+    this.disableGenBtn = false
   }
 
   bindFormData(res: GemDetail) {
@@ -205,19 +218,28 @@ export class GemDetailsNewComponent implements OnInit {
     this.gemDetailsForm.get("opticCharacter").updateValueAndValidity()
     this.gemDetailsForm.get("magnification").updateValueAndValidity()
     this.gemDetailsForm.get("apex").updateValueAndValidity()
-
+    this.disableGenBtn = false
   }
 
   proceedToReportGeneration() {
-    this.toasterService.info("Proceeding to Report Generation")
-    this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
-    this.router.navigateByUrl("pdf-gen/report") // create view screen if time is available
+    if (this.signatureService.getSelectedSignatureNameToSign()) {
+      this.toasterService.info("Proceeding to Report Generation")
+      this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
+      this.router.navigateByUrl("pdf-gen/report") // create view screen if time is available
+    } else {
+      this.toasterService.info("Please Select signature")
+    }
+
   }
 
   proceedToCardGeneration() {
-    this.toasterService.info("Proceeding to Card Generation")
-    this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
-    this.router.navigateByUrl("pdf-gen/card") // create view screen if time is available
+    if (this.signatureService.getSelectedSignatureNameToSign()) {
+      this.toasterService.info("Proceeding to Card Generation")
+      this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
+      this.router.navigateByUrl("pdf-gen/card") // create view screen if time is available
+    } else {
+      this.toasterService.info("Please Select signature")
+    }
   }
 
 
@@ -276,6 +298,11 @@ export class GemDetailsNewComponent implements OnInit {
     } else {
       this.toasterService.warning("Please Select Image to upload")
     }
+  }
+
+  selectSignature(sign: SignatureDTO) {
+    this.selectedSignatureName = sign.signatureName
+    this.signatureService.setSelectedSignatureNameToSign(sign.signatureName)
   }
 
 }
