@@ -11,7 +11,6 @@ import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 
 
-
 import {
   AgmCoreModule
 } from '@agm/core';
@@ -22,10 +21,6 @@ import { AngularFireModule } from '@angular/fire';
 import { environment } from 'environments/environment';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
-
-
-
-
 
 @NgModule({
   imports: [
@@ -49,9 +44,6 @@ import { ToastrModule } from 'ngx-toastr';
     AppComponent,
     AdminLayoutComponent,
     AuthLayoutComponent,
-   
-    
-   
     
 
   ],
