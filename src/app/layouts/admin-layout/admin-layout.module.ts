@@ -27,10 +27,6 @@ import { PdfGenerationCardComponent } from 'app/pages/pdf-generation/pdf-generat
 import { PdfGenerationReportComponent } from 'app/pages/pdf-generation/pdf-generation-report/pdf-generation-report.component';
 import { PdfGenerationComponent } from 'app/pages/pdf-generation/pdf-generation.component';
 
-import { PdfViewCardComponent } from 'app/pages/pdf-view/pdf-view-card/pdf-view-card.component';
-import { PdfViewReportComponent } from 'app/pages/pdf-view/pdf-view-report/pdf-view-report.component';
-import { PdfViewComponent } from 'app/pages/pdf-view/pdf-view.component';
-
 import { SearchResultComponent } from 'app/pages/gem-details/search-result/search-result.component';
 
 @NgModule({
@@ -62,18 +58,13 @@ import { SearchResultComponent } from 'app/pages/gem-details/search-result/searc
     PdfGenerationComponent,
     PdfGenerationCardComponent,
     PdfGenerationReportComponent,
-    PdfViewComponent,
-    PdfViewReportComponent,
-    PdfViewCardComponent,
+
     SearchResultComponent,
     
     GemDetailsComponent,
     GemDetailsListComponent,
     GemDetailsNewComponent,
     
-    PdfGenerationComponent,
-    PdfGenerationCardComponent,
-    PdfGenerationReportComponent,
   ]
 })
 

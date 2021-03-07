@@ -3,11 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GemDetailService } from 'app/services/gem-detail-service/gem-detail.service';
 import { GemDetail } from 'app/shared/models/gem-detail';
 import { FormUtil } from 'app/shared/utils/form-utility';
-import { environment } from 'environments/environment';
 import { ToastrService } from 'ngx-toastr';
 
 import { FileQueueObject, ImageUploaderOptions } from 'ngx-image-uploader-next';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -66,11 +64,10 @@ export class GemDetailsNewComponent implements OnInit {
   }
 
   createForm() {
-    let today = new Date().toLocaleDateString()
     this.gemDetailsForm = this.formBuilder.group({
 
       //common
-      date: [{ value: today, disabled: true }, Validators.required],   //will get overidden at bind 
+      date: ['', Validators.required],
       sgtlReportNumber: [{ value: this.gemDetailIdToEdit, disabled: true }, Validators.required],
       object: ['', Validators.required],           //common
 
@@ -251,23 +248,27 @@ export class GemDetailsNewComponent implements OnInit {
 
   gemImagePercentage: number
   uploadGemImage() {
-    let filePath = "gems/" + this.gemDetailIdToEdit + "_gem"
-    let result = this.gemDetailService.uploadFile(this.gemImageFile, filePath)
-    result.task.percentageChanges().subscribe(res => {
-      if (res) {
-        this.gemImagePercentage = (res >= 100) ? null : res;
-      }
-    })
+    if (this.gemImageFile) {
+      let filePath = "gems/" + this.gemDetailIdToEdit + "_gem"
+      let result = this.gemDetailService.uploadFile(this.gemImageFile, filePath)
+      result.task.percentageChanges().subscribe(res => {
+        if (res) {
+          this.gemImagePercentage = (res >= 100) ? null : res;
+        }
+      })
 
-    result.task.then(res => {
-      this.toasterService.success("Gem Stone Image Uploaded")
-      this.displayGemImgFromURL = false
-      this.gemImagePercentage = null
-      this.gemDetailService.updateGemDetail(this.gemDetailIdToEdit, { isGemImageSaved: true })
-    }, e => {
-      this.toasterService.error("Gem Stone Image could not be Uploaded")
-      this.gemImagePercentage = null
-    })
+      result.task.then(res => {
+        this.toasterService.success("Gem Stone Image Uploaded")
+        this.displayGemImgFromURL = false
+        this.gemImagePercentage = null
+        this.gemDetailService.updateGemDetail(this.gemDetailIdToEdit, { isGemImageSaved: true })
+      }, e => {
+        this.toasterService.error("Gem Stone Image could not be Uploaded")
+        this.gemImagePercentage = null
+      })
+    } else {
+      this.toasterService.warning("Please Select Image to upload")
+    }
   }
 
 }
