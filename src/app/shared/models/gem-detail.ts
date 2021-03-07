@@ -30,4 +30,5 @@ export class GemDetail {
     //Latest Card,Report Ids filter by sgtlReportNo and latest revision
     // latestCardId: string
     // latestReportId: string
+    gemologistName:string
 }

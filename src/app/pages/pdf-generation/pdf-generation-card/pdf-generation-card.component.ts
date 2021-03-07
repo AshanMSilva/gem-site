@@ -185,7 +185,7 @@ export class PdfGenerationCardComponent implements OnInit {
       // signature.src = '/assets/pdf-templates/signature.png';
       doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
       this.addTextInfo(doc)
-      doc.addImage(gemImg, "png", 5.68, 2, 1.8, 1.8);
+      doc.addImage(gemImg, "png", 5.67, 2, 1.8, 1.8);
       doc.addImage(signature, "png", 5, docHeight - 1.4, 2, 1);
 
     } else {
@@ -209,6 +209,11 @@ export class PdfGenerationCardComponent implements OnInit {
       doc.text(": " + value, valueMargin - 1, postion, { align: "left" });
       postion += spacing
     })
+
+    doc.setFontSize(5)
+    let gemologistName = this.cardContext.gemologistName
+    doc.text(gemologistName, 6, 4.85, { align: "center" });
+    console.log(doc.getFontList())
   }
 
 

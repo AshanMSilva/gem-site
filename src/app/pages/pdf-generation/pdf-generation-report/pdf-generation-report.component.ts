@@ -215,7 +215,7 @@ export class PdfGenerationReportComponent implements OnInit {
     doc.setFontSize(11)
     doc.setFont("times", "bold")//Courier, Helvetica, Times, courier, helvetica, times
     doc.text("Details of Specimen", keyMargin, postion - spacing, { align: "left" });
-    doc.setFont("times", "regular")
+    doc.setFont("times", "normal")
     doc.setFontSize(10)
     this.reporContext.getDetailsOfSpecimenMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
@@ -229,7 +229,7 @@ export class PdfGenerationReportComponent implements OnInit {
     doc.setFontSize(11)
     doc.setFont("times", "bold")
     doc.text("Tested Data", keyMargin, postion - spacing, { align: "left" });
-    doc.setFont("times", "regular")
+    doc.setFont("times", "normal")
     doc.setFontSize(10)
     this.reporContext.getTestedDataMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
@@ -251,6 +251,11 @@ export class PdfGenerationReportComponent implements OnInit {
     //comments
     let comments = "Comments : " + this.reporContext.comments
     doc.text(comments, 21.775, 12, { align: "center" });
+
+    doc.setFontSize(13)
+    let gemologistName = this.reporContext.gemologistName
+    doc.text(gemologistName, 21.775, 14.95, { align: "center" });
+    console.log(doc.getFontList())
   }
 
 

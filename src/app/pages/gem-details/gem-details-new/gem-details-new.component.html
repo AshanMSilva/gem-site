@@ -13,7 +13,7 @@
                             <br>
                             <h5>Basic Details</h5>
                             <div class="row">
-                                <div class="col-sm-4 col-md-4">
+                                <div class="col-sm-3 col-md-3">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="SGTL Report Number" type="text"
                                             formControlName="sgtlReportNumber">
@@ -22,18 +22,25 @@
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-4 col-md-4">
+                                <div class="col-sm-3 col-md-3">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Date" type="text" formControlName="date">
                                         <mat-error *ngIf="formErrors.get('date')">
                                             {{formErrors.get('date')}}</mat-error>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-4 col-md-4">
+                                <div class="col-sm-3 col-md-3">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Object" type="text" formControlName="object">
                                         <mat-error *ngIf="formErrors.get('object')">
                                             {{formErrors.get('object')}}</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-3 col-md-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Gemologist Name" type="text" formControlName="gemologistName">
+                                        <mat-error *ngIf="formErrors.get('gemologistName')">
+                                            {{formErrors.get('gemologistName')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
