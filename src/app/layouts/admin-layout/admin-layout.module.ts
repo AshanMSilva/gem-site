@@ -24,6 +24,9 @@ import { SelectReportTypeComponent } from 'app/pages/dashboard/components/select
 import { GemDetailsComponent } from 'app/pages/gem-details/gem-details.component';
 import { GemDetailsListComponent } from 'app/pages/gem-details/gem-details-list/gem-details-list.component';
 import { GemDetailsNewComponent } from 'app/pages/gem-details/gem-details-new/gem-details-new.component';
+import { PdfGenerationComponent } from 'app/pages/pdf-generation/pdf-generation.component';
+import { PdfGenerationCardComponent } from 'app/pages/pdf-generation/pdf-generation-card/pdf-generation-card.component';
+import { PdfGenerationReportComponent } from 'app/pages/pdf-generation/pdf-generation-report/pdf-generation-report.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -55,6 +58,10 @@ import { GemDetailsNewComponent } from 'app/pages/gem-details/gem-details-new/ge
     GemDetailsComponent,
     GemDetailsListComponent,
     GemDetailsNewComponent,
+    
+    PdfGenerationComponent,
+    PdfGenerationCardComponent,
+    PdfGenerationReportComponent,
   ]
 })
 

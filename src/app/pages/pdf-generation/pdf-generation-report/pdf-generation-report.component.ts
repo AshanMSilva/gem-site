@@ -98,7 +98,7 @@ export class PdfGenerationReportComponent implements OnInit {
   }
 
   generateQRCodes() {
-    let reportURL = environment.baseURLForQR + "/report/" + this.gemDetailIdToGenReport
+    let reportURL = environment.baseURLForQR + "viewpdf/report/" + this.gemDetailIdToGenReport
 
     let reportCanvas = document.getElementById("reportQRCodeImg") as HTMLCanvasElement;
     let qrcodeReport = QRCode.toCanvas(reportCanvas, reportURL, { errorCorrectionLevel: "quartile" }).then((res) => { }
