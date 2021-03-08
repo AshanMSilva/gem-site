@@ -152,7 +152,7 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-12 col-lg-6">
                                     <br>
                                     <div class="row">
                                         <div class="col-12 col-md-12">
@@ -199,12 +199,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-3" *ngIf="isRecordSaved&& gemDetailToEdit && displayGemImgFromURL">
+                                <div class="col-12 col-md-6 col-lg-3" *ngIf="isRecordSaved&& gemDetailToEdit && displayGemImgFromURL">
                                     <p *ngIf="gemDetailToEdit.isGemImageSaved">Current Gem Image </p>
                                     <img *ngIf="gemImageURL&&gemDetailToEdit.isGemImageSaved" src="{{gemImageURL}}"
                                         alt="Gemstone image" style="width: 150px;height: 150px;" id="gemImageInForm">
                                 </div>
-                                <div class="col-3" *ngIf="isRecordSaved">
+                                <div class="col-12 col-md-6 col-lg-3" *ngIf="isRecordSaved">
                                     <p>
                                         <span *ngIf="!displayGemImgFromURL">Current Gem Image </span>
                                         <span *ngIf="gemImagePercentage"
