@@ -7,11 +7,12 @@ import { ToastrService } from 'ngx-toastr';
 
 
 import * as QRCode from 'qrcode';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { jsPDF } from "jspdf";
 import { MediaCompletionContext } from 'app/shared/models/media-completion';
 import { GemDetail } from 'app/shared/models/gem-detail';
-import { ReportContext } from 'app/shared/models/contextDTOs';
+import { CardContext } from 'app/shared/models/contextDTOs';
+import { SignatureService } from 'app/services/signature/signature.service';
 @Component({
   selector: 'app-pdf-generation-card',
   templateUrl: './pdf-generation-card.component.html',
@@ -20,43 +21,109 @@ import { ReportContext } from 'app/shared/models/contextDTOs';
 export class PdfGenerationCardComponent implements OnInit {
 
 
-  gemDetailIdToGenReport: string
-  gemDetailToGenReport: GemDetail
+  gemDetailIdToGenCard: string
+  gemDetailToGenCard: GemDetail
 
   imageSubject: Subject<{ image: IMAGES }> = new Subject()
 
+  gemImageURL: string
+  gemImgSubscription: Subscription
+
+
+  signatureImageURL: string
+  signatureImgSubscription: Subscription
+
+  signatureImgNameUsedToSign: string
+
+
+  qrImage: any
+
   mediaCompletionContext: MediaCompletionContext = new MediaCompletionContext();
-  reporContext: ReportContext
+  cardContext: CardContext
 
   constructor(
     private gemDetailService: GemDetailService,
+    private signatureService: SignatureService,
     private toasterService: ToastrService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.mediaCompletionContext = new MediaCompletionContext();//set missing in card
-    if (this.gemDetailService.getSelectedGemDetailIdForView() || true) {//////////////////////////////////////
-      this.gemDetailIdToGenReport = "1614970781510"// this.gemDetailService.getSelectedGemDetailIdForView()
-      this.gemDetailService.getGemDetailById(this.gemDetailIdToGenReport).subscribe(res => {
+    if (this.gemDetailService.getSelectedGemDetailIdForView() && this.signatureService.getSelectedSignatureNameToSign()) {
+      this.mediaCompletionContext = new MediaCompletionContext();
+
+      this.gemDetailIdToGenCard = this.gemDetailService.getSelectedGemDetailIdForView()
+      this.gemDetailService.getGemDetailById(this.gemDetailIdToGenCard).subscribe(res => {
         if (res) {
-          this.gemDetailToGenReport = res as GemDetail
-          this.reporContext = new ReportContext(res)
+          this.gemDetailToGenCard = res as GemDetail
+          this.cardContext = new CardContext(res)
         }
       })
+
+      let filePath = "gems/" + this.gemDetailIdToGenCard + "_gem"
+      this.gemImgSubscription = this.gemDetailService.getFiles(filePath).subscribe(res => {
+        if (res) {
+          console.log(res);
+          this.gemImageURL = res
+          this.gemImgSubscription.unsubscribe()
+        }
+      })
+
+      this.signatureImgNameUsedToSign = this.signatureService.getSelectedSignatureNameToSign()
+      let signFilepath = "signatures/" + this.signatureImgNameUsedToSign + "_sign"
+      this.signatureImgSubscription = this.signatureService.getFiles(signFilepath).subscribe(url => {
+        if (url) {
+          console.log(url)
+          this.signatureImageURL = url
+          this.signatureImgSubscription.unsubscribe()
+        }
+      })
+
+      this.generateQRCodes()
+      this.setSubscriptionToOnload()
     } else {
-      //this.router.navigateByUrl("gem-details")
+      this.router.navigateByUrl("gem-details")
     }
-    this.generateQRCodes()
+  }
+
+  setSubscriptionToOnload() {
+    this.imageSubject.subscribe(res => {
+      this.onImageComplete(res.image)
+    })
+
+    let subject = this.imageSubject
+
+    let templateImg = document.getElementById("cardtemplateImg") as HTMLImageElement
+    templateImg.onload = function () {
+      subject.next({ image: IMAGES.TEMPLATE })
+    };
+
+    let gemImg = document.getElementById("cardgemImage") as HTMLImageElement
+    gemImg.onload = function () {
+      subject.next({ image: IMAGES.GEM })
+    };
+
+    let signature = document.getElementById("cardsignatureImg") as HTMLImageElement
+    signature.onload = function () {
+      subject.next({ image: IMAGES.SIGNATURE })
+    };
+
+    // let cardCanvas = document.getElementById("cardQRCodeImg") as HTMLCanvasElement;
+    // this.qrImage = new Image();
+    // this.qrImage.onload = function () {
+    //   subject.next({ image: IMAGES.QR })
+    // };
+    // this.qrImage.crossOrigin = "";
+    // this.qrImage.src = cardCanvas.toDataURL("png", 1);
   }
 
   generateQRCodes() {
-    let reportURL = environment.baseURLForQR + "viewpdf/report/" + this.gemDetailIdToGenReport
+    let cardURL = environment.baseURLForQR + "viewpdf/card/" + this.gemDetailIdToGenCard
 
-    let reportCanvas = document.getElementById("reportQRCodeImg");
-    let qrcodeReport = QRCode.toCanvas(reportCanvas, reportURL, { errorCorrectionLevel: "quartile" }).then((res) => { }
+    let cardCanvas = document.getElementById("cardQRCodeImg") as HTMLCanvasElement;
+    let qrcodeCard = QRCode.toCanvas(cardCanvas, cardURL, { errorCorrectionLevel: "quartile" }).then((res) => { }
       , (e) => {
-        this.toasterService.error("reportQR code could not be generated")
+        this.toasterService.error("Card QR Code code could not be generated")
       })
   }
 
@@ -75,116 +142,98 @@ export class PdfGenerationCardComponent implements OnInit {
     }
   }
 
-  OnClickGenerateReport() {
-    //subjet to image onload completion
-    this.imageSubject.subscribe(res => {
-      if (res.image) {
-        this.onImageComplete(res.image)
-        if (this.mediaCompletionContext.isAllCompleted()) {          // TODO
-          doc.addImage(gemImg, "png", 19.275, 5.5, 5, 5);
-          doc.addImage(signature, "png", 19.775, 13, 4, 2);
-          doc.addImage(qrImg, "png", 20.775, 15.5, 2, 2);
-          doc.save("alldone.pdf");
-        }
-        if (res.image == IMAGES.TEMPLATE) {
+  OnClickGenerateCard() {
+    if (this.mediaCompletionContext.isAllCompletedExecptQR()) {
+      //Length 85mm & width 54mm
+      var docHeight = 5.4
+      var docWidth = 8.5
 
-          let keyMargin = 2.2
-          let valueMargin = 7.5
-          var spacing = 0.6
+      //init Doc
+      const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "cm",
+        format: [docHeight, docWidth]
+      });
 
-          var postion = 4.2
-          doc.setFontSize(10)
+      //template image
+      let templateImg = document.getElementById("cardtemplateImg") as HTMLImageElement
+      // templateImg.onload = function () {
+      //   doc.addImage(templateImg, "jpg", 0, 0, docWidth, docHeight);
+      //   subject.next({ image: IMAGES.TEMPLATE })
+      // };
+      // templateImg.crossOrigin = "";
+      // templateImg.src = '/assets/pdf-templates/card_template.jpg';
 
-          //Basic
-          this.reporContext.getBasicDetialsMap().forEach((value, key) => {
-            doc.text(key, keyMargin, postion, { align: "left" });
-            doc.text(": " + value, valueMargin - 1, postion, { align: "left" });
-            postion += spacing
-          })
+      //gemImg image
+      let gemImg = document.getElementById("cardgemImage") as HTMLImageElement
+      // gemImg.onload = function () {
+      //   subject.next({ image: IMAGES.GEM })
+      // };
+      // gemImg.crossOrigin = "";
+      //gemImg.src = this.gemImageURL;
 
-          var postion = 8.2
-          doc.setFontSize(10)
+      // qrImg image
+      let cardCanvas = document.getElementById("cardQRCodeImg") as HTMLCanvasElement;
+      let qrImg = new Image();
+      let subject = this.imageSubject
+      let id = this.gemDetailIdToGenCard
+      let service = this.gemDetailService
+      let toast = this.toasterService
+      qrImg.onload = function () {
+        subject.next({ image: IMAGES.QR })
+        doc.addImage(qrImg, "png", 7.1, docHeight - 1.1, 0.8, 0.8);
+        const blob = doc.output("blob");
+        const file = new File([blob], "filename")
+        const filePath = "viewpdf/card/" + id
+        const result = service.uploadFile(file, filePath + '.pdf');
+        result.task.then((res) => {
+          console.log("uploaded");
+          toast.success("Card PDF uploaded to server")
+        }, (e) => { console.log(e); })
+        doc.save(id+"_card.pdf");
+      };
+      qrImg.crossOrigin = "";
+      qrImg.src = cardCanvas.toDataURL("png", 1);
 
-          //Specimen
-          this.reporContext.getDetailsOfSpecimenMap().forEach((value, key) => {
-            doc.text(key, keyMargin, postion, { align: "left" });
-            doc.text(": " + value, valueMargin, postion, { align: "left" });
-            postion += spacing
-          })
-
-          var postion = 13
-          doc.setFontSize(10)
-
-          //test
-          this.reporContext.getTestedDataMap().forEach((value, key) => {
-            doc.text(key, keyMargin, postion, { align: "left" });
-            doc.text(": " + value, valueMargin, postion, { align: "left" });
-            postion += spacing
-          })
-
-          //Apex
-          if (this.reporContext.apex) {
-            doc.text("Apex", keyMargin, postion, { align: "left" });
-            doc.text(": " + this.reporContext.apex, valueMargin, postion, { align: "left" });
-          }
-          //species, variety
-          let speciesAndVariety = "Species : " + this.reporContext.species + "  Variety: " + this.reporContext.variety
-          doc.text(speciesAndVariety, 22.275, 11.5, { align: "center" });
-          let comments = "Comments : " + this.reporContext.comments
-          doc.text(comments, 22.275, 12, { align: "center" });
-
-        }
-      }
-    })
-
-    let subject = this.imageSubject
-
-    //A4 210 x 297 
-    var docHeight = 21
-    var docWidth = 29.7
-
-    //init Doc
-    const doc = new jsPDF({
-      orientation: "landscape",
-      unit: "cm",
-      format: [docHeight, docWidth]
-    });
-
-    //template image
-    let templateImg = new Image();
-    templateImg.onload = function () {
+      //signature image
+      let signature = document.getElementById("cardsignatureImg") as HTMLImageElement
+      // signature.onload = function () {
+      //   subject.next({ image: IMAGES.SIGNATURE })
+      // };
+      // signature.crossOrigin = "";
+      // signature.src = '/assets/pdf-templates/signature.png';
       doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
-      subject.next({ image: IMAGES.TEMPLATE })
-    };
+      this.addTextInfo(doc)
+      doc.addImage(gemImg, "png", 5.67, 2, 1.8, 1.8);
+      doc.addImage(signature, "png", 5, docHeight - 1.4, 2, 1);
 
-    templateImg.crossOrigin = "";
-    templateImg.src = '/assets/pdf-templates/report_template.jpeg';
-
-
-    //gemImg image
-    let gemImg = new Image();
-    gemImg.onload = function () {
-      subject.next({ image: IMAGES.GEM })
-    };
-    gemImg.crossOrigin = "";
-    gemImg.src = '/assets/pdf-templates/gem.png';
-
-    //qrImg image
-    let qrImg = new Image();
-    qrImg.onload = function () {
-      subject.next({ image: IMAGES.QR })
-    };
-    qrImg.crossOrigin = "";
-    qrImg.src = '/assets/pdf-templates/gem.png';
-
-    //signature image
-    let signature = new Image();
-    signature.onload = function () {
-      subject.next({ image: IMAGES.SIGNATURE })
-    };
-    signature.crossOrigin = "";
-    signature.src = '/assets/pdf-templates/signature.png';
+    } else {
+      this.toasterService.warning("All media not loaded Yet")
+    }
 
   }
+
+  addTextInfo(doc: jsPDF) {
+    let keyMargin = 1.2
+    let valueMargin = 3.7
+    var spacing = 0.32
+
+    var postion = 2.3
+
+    // Basic
+    // doc.setFont("times", "bold")//Courier, Helvetica, Times, courier, helvetica, times
+    doc.setFontSize(5)
+    this.cardContext.getAllDetailsMap().forEach((value, key) => {
+      doc.text(key, keyMargin, postion, { align: "left" });
+      doc.text(": " + value, valueMargin - 1, postion, { align: "left" });
+      postion += spacing
+    })
+
+    doc.setFontSize(5)
+    let gemologistName = this.cardContext.gemologistName
+    doc.text(gemologistName, 6, 4.85, { align: "center" });
+    console.log(doc.getFontList())
+  }
+
 
 }

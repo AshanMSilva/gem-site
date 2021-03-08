@@ -11,34 +11,38 @@
                         <br>
                         <h5>Basic Data</h5>
                         <div class="row" *ngIf="gemDetailToGenReport">
-                            <div class="col-4 col-md-4">
+                            <div class="col-md-3">
                                 <p>SGTL Report Number : <span class="text-info">
                                         {{gemDetailToGenReport.sgtlReportNumber}}</span></p>
                             </div>
-                            <div class="col-4 col-md-4">
+                            <div class="col-md-3">
                                 <p>Date : <span class="text-info"> {{gemDetailToGenReport.date}}</span></p>
                             </div>
-                            <div class="col-4 col-md-4">
+                            <div class="col-md-3">
                                 <p>Object : <span class="text-info"> {{gemDetailToGenReport.object}}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Gemologist Name on Card : <span class="text-info"> {{gemDetailToGenReport.gemologistName}}</span>
                                 </p>
                             </div>
                         </div>
                         <br>
                         <h5>Details os Specimen</h5>
                         <div class="row" *ngIf="gemDetailToGenReport">
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Weight : <span class="text-info"> {{gemDetailToGenReport.weight}}</span>
                                 </p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Shape And Cut : <span class="text-info">
                                         {{gemDetailToGenReport.shapeAndCut}}</span></p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Transparency : <span class="text-info">
                                         {{gemDetailToGenReport.transparency}}</span></p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Dimentions : <span class="text-info">
                                         {{gemDetailToGenReport.dimensions}}</span></p>
                             </div>
@@ -46,44 +50,44 @@
                         <br>
                         <h5>Tested Data</h5>
                         <div class="row" *ngIf="gemDetailToGenReport">
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Refractive Index : <span class="text-info">
                                         {{gemDetailToGenReport.refractiveIndex}}</span></p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Specific Gravity : <span class="text-info">
                                         {{gemDetailToGenReport.specificGravity}}</span></p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Hardness : <span class="text-info"> {{gemDetailToGenReport.hardness}}</span>
                                 </p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Optic character : <span class="text-info">
                                         {{gemDetailToGenReport.opticCharacter}}</span></p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Magnification : <span class="text-info">
                                         {{gemDetailToGenReport.magnification}}</span></p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Colour : <span class="text-info"> {{gemDetailToGenReport.color}}</span>
                                 </p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Variety : <span class="text-info"> {{gemDetailToGenReport.variety}}</span>
                                 </p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Species : <span class="text-info"> {{gemDetailToGenReport.species}}</span>
                                 </p>
                             </div>
                         </div>
                         <div class="row" *ngIf="gemDetailToGenReport">
-                            <div class="col-6 col-md-6">
+                            <div class="col-md-6">
                                 <p>Apex : <span class="text-info"> {{gemDetailToGenReport.apex}}</span></p>
                             </div>
-                            <div class="col-6 col-md-6">
+                            <div class="col-md-6">
                                 <p>Comments : <span class="text-info"> {{gemDetailToGenReport.comments}}</span>
                                 </p>
                             </div>
@@ -91,49 +95,49 @@
                         <br>
                         <div class="row text-center">
 
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Template Image</p>
-                                <img src="/assets/pdf-templates/report_template.jpeg" alt="Template image"
+                                <img src="/assets/pdf-templates/report_template.jpg" alt="Template image"
                                     style="width: 150px;height: 150px;" id="templateImg">
                             </div>
 
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Report QR Code</p>
                                 <canvas id="reportQRCodeImg"></canvas>
                             </div>
 
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Gemstone Image</p>
                                 <img src="{{gemImageURL}}" crossorigin="anonymous" alt="Gemstone image"
                                     style="width: 150px;height: 150px;" id="gemImage">
                             </div>
 
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p>Signature Image</p>
-                                <img src="/assets/pdf-templates/signature.png" alt="Template image"
+                                <img src="{{signatureImageURL}}" alt="Template image"
                                     style="width: 150px;height: 150px;" id="signatureImg">
                             </div>
 
                         </div>
                         <div class="row text-center">
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p *ngIf="mediaCompletionContext.isTemplateImageComplete" class="text-success">
-                                    Template Image Loaded to PDF
+                                    Template Image Loaded
                                 </p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p *ngIf="mediaCompletionContext.isQRImageComplete" class="text-success">
-                                    Report QR Code Loaded to PDF
+                                    Report QR Code Loaded
                                 </p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p *ngIf="mediaCompletionContext.isGemImageComplete" class="text-success">
-                                    Gemstone Image Loaded to PDF
+                                    Gemstone Image Loaded
                                 </p>
                             </div>
-                            <div class="col-3 col-md-3">
+                            <div class="col-md-3">
                                 <p *ngIf="mediaCompletionContext.isSignatureImageComplete" class="text-success">
-                                    Signature Image Loaded to PDF
+                                    Signature Image Loaded
                                 </p>
                             </div>
                         </div>

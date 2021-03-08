@@ -12,6 +12,7 @@ import { jsPDF } from "jspdf";
 import { MediaCompletionContext } from 'app/shared/models/media-completion';
 import { GemDetail } from 'app/shared/models/gem-detail';
 import { ReportContext } from 'app/shared/models/contextDTOs';
+import { SignatureService } from 'app/services/signature/signature.service';
 
 @Component({
   selector: 'app-pdf-generation-report',
@@ -27,6 +28,13 @@ export class PdfGenerationReportComponent implements OnInit {
   gemImageURL: string
   gemImgSubscription: Subscription
 
+
+  signatureImageURL: string
+  signatureImgSubscription: Subscription
+
+  signatureImgNameUsedToSign: string
+
+
   qrImage: any
 
   mediaCompletionContext: MediaCompletionContext = new MediaCompletionContext();
@@ -34,12 +42,13 @@ export class PdfGenerationReportComponent implements OnInit {
 
   constructor(
     private gemDetailService: GemDetailService,
+    private signatureService: SignatureService,
     private toasterService: ToastrService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
-    if (this.gemDetailService.getSelectedGemDetailIdForView()) {
+    if (this.gemDetailService.getSelectedGemDetailIdForView() && this.signatureService.getSelectedSignatureNameToSign()) {
       this.mediaCompletionContext = new MediaCompletionContext();
 
       this.gemDetailIdToGenReport = this.gemDetailService.getSelectedGemDetailIdForView()
@@ -56,6 +65,16 @@ export class PdfGenerationReportComponent implements OnInit {
           console.log(res);
           this.gemImageURL = res
           this.gemImgSubscription.unsubscribe()
+        }
+      })
+
+      this.signatureImgNameUsedToSign = this.signatureService.getSelectedSignatureNameToSign()
+      let signFilepath = "signatures/" + this.signatureImgNameUsedToSign + "_sign"
+      this.signatureImgSubscription = this.signatureService.getFiles(signFilepath).subscribe(url => {
+        if (url) {
+          console.log(url)
+          this.signatureImageURL = url
+          this.signatureImgSubscription.unsubscribe()
         }
       })
 
@@ -138,11 +157,11 @@ export class PdfGenerationReportComponent implements OnInit {
       //template image
       let templateImg = document.getElementById("templateImg") as HTMLImageElement
       // templateImg.onload = function () {
-      //   doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
+      //   doc.addImage(templateImg, "jpg", 0, 0, docWidth, docHeight);
       //   subject.next({ image: IMAGES.TEMPLATE })
       // };
       // templateImg.crossOrigin = "";
-      // templateImg.src = '/assets/pdf-templates/report_template.jpeg';
+      // templateImg.src = '/assets/pdf-templates/report_template.jpg';
 
       //gemImg image
       let gemImg = document.getElementById("gemImage") as HTMLImageElement
@@ -158,6 +177,7 @@ export class PdfGenerationReportComponent implements OnInit {
       let subject = this.imageSubject
       let id = this.gemDetailIdToGenReport
       let service = this.gemDetailService
+      let toast = this.toasterService
       qrImg.onload = function () {
         subject.next({ image: IMAGES.QR })
         doc.addImage(qrImg, "png", 20.775, 15.5, 2, 2);
@@ -167,8 +187,9 @@ export class PdfGenerationReportComponent implements OnInit {
         const result = service.uploadFile(file, filePath + '.pdf');
         result.task.then((res) => {
           console.log("uploaded");
+          toast.success("Report PDF uploaded to server")
         }, (e) => { console.log(e); })
-        doc.save("alldone.pdf");
+        doc.save(id+"_report.pdf");
       };
       qrImg.crossOrigin = "";
       qrImg.src = reportCanvas.toDataURL("png", 1);
@@ -199,7 +220,7 @@ export class PdfGenerationReportComponent implements OnInit {
     var postion = 4.2
 
     //Basic
-    doc.setFont("times","bold")//Courier, Helvetica, Times, courier, helvetica, times
+    doc.setFont("times", "bold")//Courier, Helvetica, Times, courier, helvetica, times
     doc.setFontSize(10)
     this.reporContext.getBasicDetialsMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
@@ -211,9 +232,9 @@ export class PdfGenerationReportComponent implements OnInit {
 
     //Specimen
     doc.setFontSize(11)
-    doc.setFont("times","bold")//Courier, Helvetica, Times, courier, helvetica, times
+    doc.setFont("times", "bold")//Courier, Helvetica, Times, courier, helvetica, times
     doc.text("Details of Specimen", keyMargin, postion - spacing, { align: "left" });
-    doc.setFont("times","regular")
+    doc.setFont("times", "normal")
     doc.setFontSize(10)
     this.reporContext.getDetailsOfSpecimenMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
@@ -225,9 +246,9 @@ export class PdfGenerationReportComponent implements OnInit {
 
     //test
     doc.setFontSize(11)
-    doc.setFont("times","bold")
+    doc.setFont("times", "bold")
     doc.text("Tested Data", keyMargin, postion - spacing, { align: "left" });
-    doc.setFont("times","regular")
+    doc.setFont("times", "normal")
     doc.setFontSize(10)
     this.reporContext.getTestedDataMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
@@ -249,6 +270,11 @@ export class PdfGenerationReportComponent implements OnInit {
     //comments
     let comments = "Comments : " + this.reporContext.comments
     doc.text(comments, 21.775, 12, { align: "center" });
+
+    doc.setFontSize(13)
+    let gemologistName = this.reporContext.gemologistName
+    doc.text(gemologistName, 21.775, 14.95, { align: "center" });
+    console.log(doc.getFontList())
   }
 
 

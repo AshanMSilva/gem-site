@@ -1,1 +1,116 @@
-<p>pdf-generation-card works!</p>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h4 class="card-title">Generate Card</h4>
+                        <p class="card-category">Genrate Card pdf</p>
+                    </div>
+                    <div class="card-body">
+                        <br>
+                        <h5>Basic Data</h5>
+                        <div class="row" *ngIf="gemDetailToGenCard">
+                            <div class="col-md-4">
+                                <p>SGTL Report Number : <span class="text-info">
+                                        {{gemDetailToGenCard.sgtlReportNumber}}</span></p>
+                            </div>
+                            <div class="col-md-4">
+                                <p>Date : <span class="text-info"> {{gemDetailToGenCard.date}}</span></p>
+                            </div>
+                            <div class="col-md-4">
+                                <p>Gemologist Name on Card : <span class="text-info"> {{gemDetailToGenCard.gemologistName}}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="gemDetailToGenCard">
+                            <div class="col-md-3">
+                                <p>Weight : <span class="text-info"> {{gemDetailToGenCard.weight}}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Shape And Cut : <span class="text-info">
+                                        {{gemDetailToGenCard.shapeAndCut}}</span></p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Dimentions : <span class="text-info">
+                                        {{gemDetailToGenCard.dimensions}}</span></p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Colour : <span class="text-info"> {{gemDetailToGenCard.color}}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Variety : <span class="text-info"> {{gemDetailToGenCard.variety}}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Species : <span class="text-info"> {{gemDetailToGenCard.species}}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Comments : <span class="text-info"> {{gemDetailToGenCard.comments}}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row text-center">
+
+                            <div class="col-md-3">
+                                <p>Template Image</p>
+                                <img src="/assets/pdf-templates/card_template.jpg" alt="Template image"
+                                    style="width: 150px;height: 150px;" id="cardtemplateImg">
+                            </div>
+
+                            <div class="col-md-3">
+                                <p>Card QR Code</p>
+                                <canvas id="cardQRCodeImg"></canvas>
+                            </div>
+
+                            <div class="col-md-3">
+                                <p>Gemstone Image</p>
+                                <img src="{{gemImageURL}}" crossorigin="anonymous" alt="Gemstone image"
+                                    style="width: 150px;height: 150px;" id="cardgemImage">
+                            </div>
+
+                            <div class="col-md-3">
+                                <p>Signature Image</p>
+                                <img src="{{signatureImageURL}}" alt="Template image"
+                                    style="width: 150px;height: 150px;" id="cardsignatureImg">
+                            </div>
+
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <p *ngIf="mediaCompletionContext.isTemplateImageComplete" class="text-success">
+                                    Template Image Loaded
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <p *ngIf="mediaCompletionContext.isQRImageComplete" class="text-success">
+                                    Card QR Code Loaded to PDF
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <p *ngIf="mediaCompletionContext.isGemImageComplete" class="text-success">
+                                    Gemstone Image Loaded
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <p *ngIf="mediaCompletionContext.isSignatureImageComplete" class="text-success">
+                                    Signature Image Loaded
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button mat-raised-button type="submit" class="btn btn-success pull-right"
+                                    (click)="OnClickGenerateCard()">Generate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

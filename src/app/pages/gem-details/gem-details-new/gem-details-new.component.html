@@ -13,7 +13,7 @@
                             <br>
                             <h5>Basic Details</h5>
                             <div class="row">
-                                <div class="col-sm-4 col-md-4">
+                                <div class="col-sm-3 col-md-3">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="SGTL Report Number" type="text"
                                             formControlName="sgtlReportNumber">
@@ -22,18 +22,26 @@
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-4 col-md-4">
+                                <div class="col-sm-3 col-md-3">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Date" type="text" formControlName="date">
                                         <mat-error *ngIf="formErrors.get('date')">
                                             {{formErrors.get('date')}}</mat-error>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-4 col-md-4">
+                                <div class="col-sm-3 col-md-3">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Object" type="text" formControlName="object">
                                         <mat-error *ngIf="formErrors.get('object')">
                                             {{formErrors.get('object')}}</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-3 col-md-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Gemologist Name" type="text"
+                                            formControlName="gemologistName">
+                                        <mat-error *ngIf="formErrors.get('gemologistName')">
+                                            {{formErrors.get('gemologistName')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -161,6 +169,32 @@
                                                 </mat-error>
                                             </mat-form-field>
                                         </div>
+                                        <div class="col-6 col-md-6">
+                                            <div class="dropdown" *ngIf="signatureList">
+                                                <button href="#" class="btn dropdown-toggle" data-toggle="dropdown"
+                                                    aria-expanded="true">
+                                                    Choose Signature
+                                                    <b class="caret"></b>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li *ngFor="let sign of signatureList;index as i"><a
+                                                            href="javascript:void(0)"
+                                                            (click)="selectSignature(sign)">{{sign.signatureName}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-md-6" *ngIf="selectedSignatureName">
+                                            <br>
+                                            <p>Selected Signature : <span
+                                                    class="text-info">{{selectedSignatureName}}</span></p>
+                                        </div>
+                                        <div class="col-6 col-md-6 text-center" *ngIf="!signatureList">
+                                            <i class="material-icons" style="color: orange;">warning</i>
+                                            <p class="text-danger">
+                                                No Signatures Configured
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-3" *ngIf="isRecordSaved&& gemDetailToEdit && displayGemImgFromURL">
@@ -190,11 +224,13 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <button *ngIf="isRecordSaved" mat-raised-button type="submit" class="btn btn-info"
-                                        (click)="onClickGenerateReport()">Proceed to Report Gen</button>
+                                        [disabled]="disableGenBtn" (click)="onClickGenerateReport()">Proceed to Report
+                                        Gen</button>
                                 </div>
                                 <div class="col-md-3">
                                     <button *ngIf="isRecordSaved" mat-raised-button type="submit" class="btn btn-info"
-                                        (click)="onClickGenerateCard()">Proceed to Card Gen</button>
+                                        [disabled]="disableGenBtn" (click)="onClickGenerateCard()">Proceed to Card
+                                        Gen</button>
                                 </div>
                                 <div class="col-md-3">
                                     <button *ngIf="isRecordSaved" mat-raised-button type="button"

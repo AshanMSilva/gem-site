@@ -3,13 +3,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GemDetailService } from 'app/services/gem-detail-service/gem-detail.service';
 import { GemDetail } from 'app/shared/models/gem-detail';
 import { FormUtil } from 'app/shared/utils/form-utility';
-import { environment } from 'environments/environment';
 import { ToastrService } from 'ngx-toastr';
 
 import { FileQueueObject, ImageUploaderOptions } from 'ngx-image-uploader-next';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { SignatureService } from 'app/services/signature/signature.service';
+import { SignatureDTO } from 'app/shared/models/signatureDTO';
 
 @Component({
   selector: 'app-gem-details-new',
@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs';
 })
 export class GemDetailsNewComponent implements OnInit {
   isRecordSaved: boolean = false
+  disableGenBtn: boolean = false
 
   gemDetailIdToEdit: string //sgtlReportNumber
   gemDetailToEdit: GemDetail
@@ -34,15 +35,21 @@ export class GemDetailsNewComponent implements OnInit {
 
   gemImageFile: File;
 
+
+  signatureList: SignatureDTO[]
+  selectedSignatureName: string
+
   constructor(
     private formBuilder: FormBuilder,
     private gemDetailService: GemDetailService,
+    private signatureService: SignatureService,
     private toasterService: ToastrService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.displayGemImgFromURL = true
+    this.signatureService.setSelectedSignatureNameToSign(null)
+    this.displayGemImgFromURL = true //check
     if (this.gemDetailService.getSelectedGemDetailIdForView()) {
       this.gemDetailIdToEdit = this.gemDetailService.getSelectedGemDetailIdForView()
     } else {
@@ -63,16 +70,20 @@ export class GemDetailsNewComponent implements OnInit {
       })
     })
 
+    this.signatureService.getSignatures().subscribe(res => {
+      this.signatureList = res
+    })
+
   }
 
   createForm() {
-    let today = new Date().toLocaleDateString()
     this.gemDetailsForm = this.formBuilder.group({
 
       //common
-      date: [{ value: today, disabled: true }, Validators.required],   //will get overidden at bind 
+      date: ['', Validators.required],
       sgtlReportNumber: [{ value: this.gemDetailIdToEdit, disabled: true }, Validators.required],
       object: ['', Validators.required],           //common
+      gemologistName: ['', Validators.required],           //common
 
       //Details of specimen
       weight: ['', Validators.required],           //common
@@ -90,7 +101,7 @@ export class GemDetailsNewComponent implements OnInit {
       color: ['', Validators.required],       //common
       species: ['', Validators.required],       //common
       variety: ['', Validators.required],       //common
-      comments: ['', [Validators.required, Validators.maxLength(40)]],       //common
+      comments: ['', [Validators.required, Validators.maxLength(30)]],       //common
       apex: [''],
 
       // //Gem Image
@@ -101,12 +112,16 @@ export class GemDetailsNewComponent implements OnInit {
       // latestReportId: [''],
     });
 
-    this.gemDetailsForm.valueChanges.subscribe(data => this.onFormChange())
+    this.gemDetailsForm.valueChanges.subscribe(data => {
+      this.onFormChange()
+      this.disableGenBtn = true
+    })
     this.onFormChange();
     this.formErrors = FormUtil.getFormErrorMap(this.gemDetailsForm);
     this.formValidationMessages = FormUtil.getGenericFormValidators(this.gemDetailsForm);
-    this.formValidationMessages.get("comments").set("maxlength", "Comments should be less than 40 characters")
+    this.formValidationMessages.get("comments").set("maxlength", "Comments should be less than 30 characters")
     this.formValidationMessages.get("isGemImageSaved").set("required", "Gem Image is required")
+    this.disableGenBtn = false
   }
 
   bindFormData(res: GemDetail) {
@@ -118,6 +133,7 @@ export class GemDetailsNewComponent implements OnInit {
       this.gemDetailsForm.get("isGemImageSaved").setValidators([Validators.required])
       //updateValueAndValidity
       this.gemDetailsForm.get("isGemImageSaved").updateValueAndValidity()
+      this.disableGenBtn = false
     }
   }
 
@@ -142,6 +158,7 @@ export class GemDetailsNewComponent implements OnInit {
   }
 
   onFormSubmit() {
+    this.disableGenBtn = false
     let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
     if (this.isRecordSaved) {
       this.editGemDetail(gemDetailsFormValue)
@@ -201,19 +218,28 @@ export class GemDetailsNewComponent implements OnInit {
     this.gemDetailsForm.get("opticCharacter").updateValueAndValidity()
     this.gemDetailsForm.get("magnification").updateValueAndValidity()
     this.gemDetailsForm.get("apex").updateValueAndValidity()
-
+    this.disableGenBtn = false
   }
 
   proceedToReportGeneration() {
-    this.toasterService.info("Proceeding to Report Generation")
-    this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
-    this.router.navigateByUrl("pdf-gen/report") // create view screen if time is available
+    if (this.signatureService.getSelectedSignatureNameToSign()) {
+      this.toasterService.info("Proceeding to Report Generation")
+      this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
+      this.router.navigateByUrl("pdf-gen/report") // create view screen if time is available
+    } else {
+      this.toasterService.info("Please Select signature")
+    }
+
   }
 
   proceedToCardGeneration() {
-    this.toasterService.info("Proceeding to Card Generation")
-    this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
-    this.router.navigateByUrl("pdf-gen/card") // create view screen if time is available
+    if (this.signatureService.getSelectedSignatureNameToSign()) {
+      this.toasterService.info("Proceeding to Card Generation")
+      this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
+      this.router.navigateByUrl("pdf-gen/card") // create view screen if time is available
+    } else {
+      this.toasterService.info("Please Select signature")
+    }
   }
 
 
@@ -251,23 +277,32 @@ export class GemDetailsNewComponent implements OnInit {
 
   gemImagePercentage: number
   uploadGemImage() {
-    let filePath = "gems/" + this.gemDetailIdToEdit + "_gem"
-    let result = this.gemDetailService.uploadFile(this.gemImageFile, filePath)
-    result.task.percentageChanges().subscribe(res => {
-      if (res) {
-        this.gemImagePercentage = (res >= 100) ? null : res;
-      }
-    })
+    if (this.gemImageFile) {
+      let filePath = "gems/" + this.gemDetailIdToEdit + "_gem"
+      let result = this.gemDetailService.uploadFile(this.gemImageFile, filePath)
+      result.task.percentageChanges().subscribe(res => {
+        if (res) {
+          this.gemImagePercentage = (res >= 100) ? null : res;
+        }
+      })
 
-    result.task.then(res => {
-      this.toasterService.success("Gem Stone Image Uploaded")
-      this.displayGemImgFromURL = false
-      this.gemImagePercentage = null
-      this.gemDetailService.updateGemDetail(this.gemDetailIdToEdit, { isGemImageSaved: true })
-    }, e => {
-      this.toasterService.error("Gem Stone Image could not be Uploaded")
-      this.gemImagePercentage = null
-    })
+      result.task.then(res => {
+        this.toasterService.success("Gem Stone Image Uploaded")
+        this.displayGemImgFromURL = false
+        this.gemImagePercentage = null
+        this.gemDetailService.updateGemDetail(this.gemDetailIdToEdit, { isGemImageSaved: true })
+      }, e => {
+        this.toasterService.error("Gem Stone Image could not be Uploaded")
+        this.gemImagePercentage = null
+      })
+    } else {
+      this.toasterService.warning("Please Select Image to upload")
+    }
+  }
+
+  selectSignature(sign: SignatureDTO) {
+    this.selectedSignatureName = sign.signatureName
+    this.signatureService.setSelectedSignatureNameToSign(sign.signatureName)
   }
 
 }

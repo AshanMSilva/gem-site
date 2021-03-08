@@ -68,4 +68,7 @@ export class SearchResultComponent implements OnInit {
     this.router.navigateByUrl("gem-detail/new") // create view screen if time is available
   }
 
+  goBack(){
+    this.router.navigateByUrl("gem-details")
+  }
 }

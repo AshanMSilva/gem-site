@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { GemDetailService } from 'app/services/gem-detail-service/gem-detail.service';
+import { SignatureService } from 'app/services/signature/signature.service';
 import { FormUtil } from 'app/shared/utils/form-utility';
 
 @Component({
@@ -17,35 +19,36 @@ export class GemDetailsComponent implements OnInit {
 
   gemImageFile: File;
 
-  
+
 
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
+    private gemDetailService: GemDetailService,
+    private signatureService: SignatureService,
   ) { }
 
   ngOnInit(): void {
+    this.signatureService.setSelectedSignatureNameToSign(null)
     this.createForm();
   }
 
   redirectToNew() {
+    this.gemDetailService.setSelectedGemDetailIdForView(null)
     this.router.navigateByUrl("/gem-detail/new")
   }
 
   createForm() {
-    
     this.gemDetailsSearchForm = this.formBuilder.group({
-      query: ['', Validators.required],           
+      query: ['', Validators.required],
     });
 
     this.gemDetailsSearchForm.valueChanges.subscribe(data => this.onFormChange())
     this.onFormChange();
     this.formErrors = FormUtil.getFormErrorMap(this.gemDetailsSearchForm);
     this.formValidationMessages = FormUtil.getGenericFormValidators(this.gemDetailsSearchForm);
-   
-  }
 
-  
+  }
 
   onFormChange() {
     this.clearValidationMessages();
@@ -74,9 +77,7 @@ export class GemDetailsComponent implements OnInit {
       this.router.navigateByUrl(`/gem-details/search/${q}`);
     } catch (error) {
       console.log(error.message);
-      
     }
-   
   }
 
 }

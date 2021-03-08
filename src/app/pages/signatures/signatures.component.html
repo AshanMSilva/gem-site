@@ -1,0 +1,40 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class=" col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-4">
+                                <h4 class="card-title">Signatures</h4>
+                                <p class="card-category">List of signatures</p>
+                            </div>
+                            <div class="col-12 sm-col-8 col-md-5 col-lg-5">
+                                <!-- <form class="navbar-form" [formGroup]="gemDetailsSearchForm"
+                                    (ngSubmit)="preprocessForm()">
+                                    <div class="input-group no-border">
+                                        <input type="text" formControlName="query" value="" class="form-control"
+                                            placeholder="Search by SGTL/Date/Object ">
+                                        <button mat-raised-button type="submit"
+                                            class=" btn-white btn-round btn-just-icon">
+                                            <i class="material-icons">search</i>
+
+                                        </button>
+                                    </div>
+                                    <mat-error *ngIf="formErrors.get('query')" class="search-err">
+                                        {{formErrors.get('query')}}
+                                    </mat-error>
+                                </form> -->
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                                <button type="button" class="btn btn-success" (click)="redirectToNew()">Add New</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <app-signatures-list></app-signatures-list>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

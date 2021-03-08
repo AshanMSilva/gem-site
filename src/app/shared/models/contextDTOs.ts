@@ -25,8 +25,7 @@ export class ReportContext {
     comments: string;
     apex: string;
 
-    //Not in report as text
-    gemImageURL: string;
+    gemologistName:string
 
     constructor(gemDetail: GemDetail) {
 
@@ -52,6 +51,8 @@ export class ReportContext {
         this.variety = gemDetail.variety
         this.comments = gemDetail.comments
         this.apex = gemDetail.apex
+
+        this.gemologistName = gemDetail.gemologistName
 
     }
 
@@ -80,7 +81,7 @@ export class ReportContext {
         testData.set("Hardness", this.hardness)
         testData.set("Optic Character", this.opticCharacter)
         testData.set("Magnification", this.magnification)
-        testData.set("Color", this.magnification)
+        testData.set("Color", this.color)
         return testData
     }
 }
@@ -97,6 +98,9 @@ export class CardContext {
     variety: string;
     comments: string;
 
+    gemologistName:string
+
+
     constructor(gemDetail: GemDetail) {
         this.date = gemDetail.date
         this.sgtlReportNumber = gemDetail.sgtlReportNumber
@@ -109,5 +113,39 @@ export class CardContext {
         this.species = gemDetail.species
         this.variety = gemDetail.variety
         this.comments = gemDetail.comments
+
+        this.gemologistName = gemDetail.gemologistName
+    }
+
+    getBasicDetialsMap(): Map<string, string> {
+        let details = new Map<string, string>();
+        details.set("Date", this.date);
+        details.set("SGTL Report No.", this.sgtlReportNumber);
+        return details
+    }
+
+    getDetailsOfSpecimenMap(): Map<string, string> {
+        let details = new Map<string, string>();
+        details.set("Shape And Cut", this.shapeAndCut);
+        details.set("Weight", this.weight);
+        details.set("Dimensions", this.dimensions);
+        details.set("Color", this.color)
+        details.set("Species", this.species)
+        details.set("Variety", this.variety)
+        details.set("comments", this.comments)
+        return details
+    }
+    getAllDetailsMap(): Map<string, string> {
+        let details = new Map<string, string>();
+        details.set("Date", this.date);
+        details.set("SGTL Report No.", this.sgtlReportNumber);
+        details.set("Shape And Cut", this.shapeAndCut);
+        details.set("Weight", this.weight);
+        details.set("Dimensions", this.dimensions);
+        details.set("Color", this.color)
+        details.set("Species", this.species)
+        details.set("Variety", this.variety)
+        details.set("comments", this.comments)
+        return details
     }
 }

@@ -1,0 +1,58 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form [formGroup]="signatureForm" novalidate="novalidate">
+                    <div class="card">
+                        <div class="card-header card-header-info">
+                            <h4 *ngIf="isRecordSaved" class="card-title">Edit Signature</h4>
+                            <h4 *ngIf="!isRecordSaved" class="card-title">Add new Signature</h4>
+                            <p class="card-category">Upload signature</p>
+                        </div>
+                        <div class="card-body">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Signature Name" type="text"
+                                            formControlName="signatureName">
+                                        <mat-error *ngIf="formErrors.get('signatureName')">
+                                            {{formErrors.get('signatureName')}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3"
+                                    *ngIf="isRecordSaved&& signatureToEdit && displaySignatureImgFromURL">
+                                    <p *ngIf="isRecordSaved">Current Signature Image </p>
+                                    <img *ngIf="signatureImageURL&&isRecordSaved" src="{{signatureImageURL}}"
+                                        alt="Signature image" style="width: 150px;height: 150px;"
+                                        id="signatureImageInForm">
+                                </div>
+                                <div class="col-md-3">
+                                    <p>
+                                        <span *ngIf="!displaySignatureImgFromURL">Current Signature Image </span>
+                                        <span *ngIf="signatureImagePercentage"
+                                            class="text-success">{{signatureImagePercentage|number:"2.2-2"}}%</span>
+                                    </p>
+
+                                    <ngx-image-uploader [options]="options" (drop)="onDrop($event)"
+                                        (change)="selectImage($event)"></ngx-image-uploader>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3">
+                                </div>
+                                <div class="col-md-3">
+                                    <button mat-raised-button type="submit" class="btn btn-success"
+                                        (click)="preprocessForm()">Upload & Save</button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
