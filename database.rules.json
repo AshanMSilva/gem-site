@@ -1,9 +1,13 @@
 {
   "rules": {
-    ".read": "auth!=null",  // 2021-4-3
-    ".write": "auth!=null",  // 2021-4-3
+    ".read": "auth!=null",
+    ".write": "auth!=null",
     "gemDetails": {
-      ".indexOn": ["date", "object","sgtlReportNumber"]
+      ".indexOn": [
+        "date",
+        "object",
+        "sgtlReportNumber"
+      ]
     }
   }
 }
