@@ -148,6 +148,7 @@ export class PdfGenerationReportComponent implements OnInit {
 
   OnClickGenerateReport() {
     if (this.mediaCompletionContext.isAllCompletedExecptQR()) {
+      this.toasterService.info("PDF is being generated, Please Wait")
       //A4 210 x 297 
       var docHeight = 21
       var docWidth = 29.7

@@ -148,6 +148,8 @@ export class PdfGenerationCardComponent implements OnInit {
 
   OnClickGenerateCard() {
     if (this.mediaCompletionContext.isAllCompletedExecptQR()) {
+      this.toasterService.info("PDF is being generated, Please Wait")
+
       //Length 85mm & width 54mm
       var docHeight = 5.4
       var docWidth = 8.5
