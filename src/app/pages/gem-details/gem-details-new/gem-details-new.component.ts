@@ -121,6 +121,7 @@ export class GemDetailsNewComponent implements OnInit {
     this.formValidationMessages = FormUtil.getGenericFormValidators(this.gemDetailsForm);
     this.formValidationMessages.get("comments").set("maxlength", "Comments should be less than 30 characters")
     this.formValidationMessages.get("isGemImageSaved").set("required", "Gem Image is required")
+    this.formValidationMessages.get("date").set("matDatepickerParse", "Date is in incorrect format")
     this.disableGenBtn = false
   }
 

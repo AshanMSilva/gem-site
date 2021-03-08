@@ -12,7 +12,7 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
-import {MatRippleModule} from '@angular/material/core';
+import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
@@ -32,6 +32,8 @@ import { SignaturesComponent } from 'app/pages/signatures/signatures.component';
 import { SignaturesListComponent } from 'app/pages/signatures/signatures-list/signatures-list.component';
 import { SignaturesNewComponent } from 'app/pages/signatures/signatures-new/signatures-new.component';
 
+import {MatDatepickerModule} from '@angular/material/datepicker';
+;
 @NgModule({
   imports: [
     CommonModule,
@@ -45,8 +47,11 @@ import { SignaturesNewComponent } from 'app/pages/signatures/signatures-new/sign
     MatSelectModule,
     MatTooltipModule,
     MatDialogModule,
-    ImageUploaderModule
-   
+    ImageUploaderModule,
+
+    MatDatepickerModule,
+    MatNativeDateModule, 
+
     
   ],
   declarations: [

@@ -1,3 +1,4 @@
+import { DatePipe } from "@angular/common";
 import { GemDetail } from "./gem-detail";
 
 export class ReportContext {
@@ -25,11 +26,11 @@ export class ReportContext {
     comments: string;
     apex: string;
 
-    gemologistName:string
+    gemologistName: string
 
     constructor(gemDetail: GemDetail) {
-
-        this.date = gemDetail.date
+        let pipe = new DatePipe('en-US'); // Use your own locale
+        this.date = pipe.transform(gemDetail.date, "dd/MM/yy")
         this.sgtlReportNumber = gemDetail.sgtlReportNumber
         this.object = gemDetail.object
 
@@ -98,11 +99,12 @@ export class CardContext {
     variety: string;
     comments: string;
 
-    gemologistName:string
+    gemologistName: string
 
 
     constructor(gemDetail: GemDetail) {
-        this.date = gemDetail.date
+        let pipe = new DatePipe('en-US'); // Use your own locale
+        this.date = pipe.transform(gemDetail.date, "dd/MM/yy")
         this.sgtlReportNumber = gemDetail.sgtlReportNumber
 
         this.weight = gemDetail.weight
