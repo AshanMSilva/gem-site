@@ -1,13 +1,13 @@
 <div class="logo">
-    <a href="https://www.creative-tim.com" class="simple-text">
+    <a href="gem-details" class="simple-text">
         <div class="logo-img">
-            <img src="/assets/img/angular2-logo-red.png"/>
+            <img src="/assets/img/serendip_logo.PNG" />
         </div>
-        Creative Tim
+            Serendip
     </a>
 </div>
 <div class="sidebar-wrapper">
-  
+
     <ul class="nav">
         <li routerLinkActive="active" *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
             <a class="nav-link" [routerLink]="[menuItem.path]">
@@ -15,8 +15,8 @@
                 <p>{{menuItem.title}}</p>
             </a>
         </li>
-        <li routerLinkActive="active"  class="nav-item">
-            <a class="nav-link sign-out" (click)="signOut()" >
+        <li routerLinkActive="active" class="nav-item">
+            <a class="nav-link sign-out" (click)="signOut()">
                 <i class="material-icons sign-out">logout</i>
                 <p class="sign-out">Sign Out</p>
             </a>
