@@ -8,9 +8,10 @@ export const environment = {
     messagingSenderId: "1060794128738",
     appId: "1:1060794128738:web:d3ea51edfd879dc39c343b"
   },
-  baseURLForQR: "http://serendip-gem-lab-certification.web.app/#/viewpdf",//todo replace
+  baseURLForQR: "https://serendip-gem-lab-cert.web.app/#/",//todo replace
 };
 // "site": "serendip-gem-lab-certification",
+//https://serendip-gem-lab-cert.web.app
 //firebase login
 //firebase init
 //firebase deploy --only hosting:serendip-gem-lab-certification
