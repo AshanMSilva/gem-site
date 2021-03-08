@@ -41,6 +41,8 @@ export class PdfGenerationCardComponent implements OnInit {
   mediaCompletionContext: MediaCompletionContext = new MediaCompletionContext();
   cardContext: CardContext
 
+  includeComment: boolean
+
   constructor(
     private gemDetailService: GemDetailService,
     private signatureService: SignatureService,
@@ -49,6 +51,8 @@ export class PdfGenerationCardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.includeComment = true
+
     if (this.gemDetailService.getSelectedGemDetailIdForView() && this.signatureService.getSelectedSignatureNameToSign()) {
       this.mediaCompletionContext = new MediaCompletionContext();
 
@@ -190,7 +194,7 @@ export class PdfGenerationCardComponent implements OnInit {
           console.log("uploaded");
           toast.success("Card PDF uploaded to server")
         }, (e) => { console.log(e); })
-        doc.save(id+"_card.pdf");
+        doc.save(id + "_card.pdf");
       };
       qrImg.crossOrigin = "";
       qrImg.src = cardCanvas.toDataURL("png", 1);
@@ -229,11 +233,18 @@ export class PdfGenerationCardComponent implements OnInit {
       postion += spacing
     })
 
+    if (this.includeComment) {
+      doc.text("Comments", keyMargin, postion, { align: "left" });
+      doc.text(": " + this.cardContext.comments, valueMargin - 1, postion, { align: "left" });
+    }
+
     doc.setFontSize(5)
     let gemologistName = this.cardContext.gemologistName
     doc.text(gemologistName, 6, 4.85, { align: "center" });
     console.log(doc.getFontList())
   }
 
-
+  toggleIncludeComment() {
+    this.includeComment = !this.includeComment
+  }
 }

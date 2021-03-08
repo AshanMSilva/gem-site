@@ -103,7 +103,18 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-3">
+                                <button mat-raised-button type="submit" class="btn btn-info"
+                                    (click)="toggleIncludeComment()">Comment
+                                    <span class="text-danger" *ngIf="!includeComment">Excluded</span>
+                                    <span *ngIf="includeComment">Included</span>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-3">
                                 <button mat-raised-button type="submit" class="btn btn-success pull-right"
                                     (click)="OnClickGenerateCard()">Generate</button>
                             </div>

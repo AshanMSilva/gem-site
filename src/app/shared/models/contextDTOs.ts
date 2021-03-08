@@ -147,7 +147,6 @@ export class CardContext {
         details.set("Color", this.color)
         details.set("Species", this.species)
         details.set("Variety", this.variety)
-        details.set("comments", this.comments)
         return details
     }
 }
