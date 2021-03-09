@@ -83,7 +83,7 @@ export class GemDetailsNewComponent implements OnInit {
       date: ['', Validators.required],
       sgtlReportNumber: [{ value: this.gemDetailIdToEdit, disabled: true }, Validators.required],
       object: ['', Validators.required],           //common
-      gemologistName: ['', Validators.required],           //common
+      gemologistName: ['',],           //common
 
       //Details of specimen
       weight: ['', Validators.required],           //common

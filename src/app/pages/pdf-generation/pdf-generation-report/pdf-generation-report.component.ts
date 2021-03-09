@@ -292,9 +292,9 @@ export class PdfGenerationReportComponent implements OnInit {
     }
 
 
-    doc.setFontSize(13)
-    let gemologistName = this.reporContext.gemologistName
-    doc.text(gemologistName, 22.375, 15.8, { align: "center" });
+    // doc.setFontSize(13)
+    // let gemologistName = this.reporContext.gemologistName
+    // doc.text(gemologistName, 22.375, 15.8, { align: "center" });
     console.log(doc.getFontList())
   }
 
