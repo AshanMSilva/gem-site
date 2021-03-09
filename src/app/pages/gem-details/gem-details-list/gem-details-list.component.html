@@ -10,7 +10,7 @@
             <tr *ngFor="let gemDetail of gemDetailsList; index as i">
                 <td>{{i+1}}</td>
                 <td>{{gemDetail.sgtlReportNumber}}</td>
-                <td>{{gemDetail.date}}</td>
+                <td>{{gemDetail.date | date : "dd/MM/yyyy"}}</td>
                 <td>
                     <button mat-raised-button type="button" (click)="onClickGenNewReportItem(gemDetail)" class="btn btn-info">Edit / Gen</button>
                 </td>

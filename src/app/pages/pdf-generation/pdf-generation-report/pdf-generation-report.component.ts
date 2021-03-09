@@ -40,6 +40,9 @@ export class PdfGenerationReportComponent implements OnInit {
   mediaCompletionContext: MediaCompletionContext = new MediaCompletionContext();
   reporContext: ReportContext
 
+  includeApex: boolean
+  includeComment: boolean
+
   constructor(
     private gemDetailService: GemDetailService,
     private signatureService: SignatureService,
@@ -48,6 +51,8 @@ export class PdfGenerationReportComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.includeApex = true
+    this.includeComment = true
     if (this.gemDetailService.getSelectedGemDetailIdForView() && this.signatureService.getSelectedSignatureNameToSign()) {
       this.mediaCompletionContext = new MediaCompletionContext();
 
@@ -143,6 +148,7 @@ export class PdfGenerationReportComponent implements OnInit {
 
   OnClickGenerateReport() {
     if (this.mediaCompletionContext.isAllCompletedExecptQR()) {
+      this.toasterService.info("PDF is being generated, Please Wait")
       //A4 210 x 297 
       var docHeight = 21
       var docWidth = 29.7
@@ -189,7 +195,7 @@ export class PdfGenerationReportComponent implements OnInit {
           console.log("uploaded");
           toast.success("Report PDF uploaded to server")
         }, (e) => { console.log(e); })
-        doc.save(id+"_report.pdf");
+        doc.save(id + "_report.pdf");
       };
       qrImg.crossOrigin = "";
       qrImg.src = reportCanvas.toDataURL("png", 1);
@@ -257,7 +263,7 @@ export class PdfGenerationReportComponent implements OnInit {
     })
 
     //Apex
-    if (this.reporContext.apex) {
+    if (this.reporContext.apex && this.includeApex) {
       doc.text("Apex", keyMargin, postion, { align: "left", maxWidth: 2.5 });
       var splitApexText = doc.splitTextToSize(this.reporContext.apex, 5);
       doc.text(": ", valueMargin, postion, { align: "left" });
@@ -268,8 +274,11 @@ export class PdfGenerationReportComponent implements OnInit {
     doc.text(speciesAndVariety, 21.775, 11.5, { align: "center" });
 
     //comments
-    let comments = "Comments : " + this.reporContext.comments
-    doc.text(comments, 21.775, 12, { align: "center" });
+    if (this.includeComment) {
+      let comments = "Comments : " + this.reporContext.comments
+      doc.text(comments, 21.775, 12, { align: "center" });
+    }
+
 
     doc.setFontSize(13)
     let gemologistName = this.reporContext.gemologistName
@@ -277,5 +286,11 @@ export class PdfGenerationReportComponent implements OnInit {
     console.log(doc.getFontList())
   }
 
+  toggleIncludeComment() {
+    this.includeComment = !this.includeComment
+  }
 
+  toggleIncludeApex() {
+    this.includeApex = !this.includeApex
+  }
 }
