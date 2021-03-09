@@ -24,9 +24,9 @@
                                 </p>
                             </div>
                             <div class="col-md-3">
-                                <p>Gemologist Name on Card : <span class="text-info">
+                                <!-- <p>Gemologist Name on Card : <span class="text-info">
                                         {{gemDetailToGenReport.gemologistName}}</span>
-                                </p>
+                                </p> -->
                             </div>
                         </div>
                         <br>
@@ -159,6 +159,11 @@
                                 </button>
                             </div>
                             <div class="col-md-3">
+                                <button mat-raised-button type="submit" class="btn btn-info"
+                                    (click)="toggleIncludeSignture()">Signature
+                                    <span class="text-danger" *ngIf="!includeSignature">Excluded</span>
+                                    <span *ngIf="includeSignature">Included</span>
+                                </button>
                             </div>
                             <div class="col-md-3">
                                 <button mat-raised-button type="submit" class="btn btn-success pull-right"

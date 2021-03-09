@@ -83,7 +83,7 @@ export class GemDetailsNewComponent implements OnInit {
       date: ['', Validators.required],
       sgtlReportNumber: [{ value: this.gemDetailIdToEdit, disabled: true }, Validators.required],
       object: ['', Validators.required],           //common
-      gemologistName: ['', Validators.required],           //common
+      gemologistName: ['',],           //common
 
       //Details of specimen
       weight: ['', Validators.required],           //common
@@ -234,13 +234,13 @@ export class GemDetailsNewComponent implements OnInit {
   }
 
   proceedToCardGeneration() {
-    if (this.signatureService.getSelectedSignatureNameToSign()) {
+    // if (this.signatureService.getSelectedSignatureNameToSign()) {
       this.toasterService.info("Proceeding to Card Generation")
       this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
       this.router.navigateByUrl("pdf-gen/card") // create view screen if time is available
-    } else {
-      this.toasterService.info("Please Select signature")
-    }
+    // } else {
+      // this.toasterService.info("Please Select signature")
+    // }
   }
 
 
