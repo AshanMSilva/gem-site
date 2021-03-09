@@ -52,14 +52,6 @@ export class GemDetailsNewComponent implements OnInit {
     this.displayGemImgFromURL = true //check
     if (this.gemDetailService.getSelectedGemDetailIdForView()) {
       this.gemDetailIdToEdit = this.gemDetailService.getSelectedGemDetailIdForView()
-    } else {
-      this.gemDetailIdToEdit = new Date().getTime().toString(); //new
-      this.isRecordSaved = false
-    }
-    this.createForm();
-    this.gemDetailService.getGemDetailById(this.gemDetailIdToEdit).subscribe(res => {
-      this.gemDetailToEdit = res as GemDetail
-      this.bindFormData(res)
       let filePath = "gems/" + this.gemDetailIdToEdit + "_gem"
       this.gemImgSubscription = this.gemDetailService.getFiles(filePath).subscribe(res => {
         if (res) {
@@ -68,6 +60,15 @@ export class GemDetailsNewComponent implements OnInit {
           this.gemImgSubscription.unsubscribe()
         }
       })
+    } else {
+      this.gemDetailIdToEdit = new Date().getTime().toString(); //new
+      this.isRecordSaved = false
+    }
+    this.createForm();
+    this.gemDetailService.getGemDetailById(this.gemDetailIdToEdit).subscribe(res => {
+      this.gemDetailToEdit = res as GemDetail
+      this.bindFormData(res)
+
     })
 
     this.signatureService.getSignatures().subscribe(res => {
@@ -80,7 +81,7 @@ export class GemDetailsNewComponent implements OnInit {
     this.gemDetailsForm = this.formBuilder.group({
 
       //common
-      date: ['', Validators.required],
+      date: [new Date(), Validators.required],
       sgtlReportNumber: [{ value: this.gemDetailIdToEdit, disabled: true }, Validators.required],
       object: ['', Validators.required],           //common
       gemologistName: ['',],           //common
@@ -101,7 +102,7 @@ export class GemDetailsNewComponent implements OnInit {
       color: ['', Validators.required],       //common
       species: ['', Validators.required],       //common
       variety: ['', Validators.required],       //common
-      comments: ['', [Validators.required, Validators.maxLength(30)]],       //common
+      comments: ['', [Validators.required, Validators.maxLength(50)]],       //common
       apex: [''],
 
       // //Gem Image
@@ -119,17 +120,21 @@ export class GemDetailsNewComponent implements OnInit {
     this.onFormChange();
     this.formErrors = FormUtil.getFormErrorMap(this.gemDetailsForm);
     this.formValidationMessages = FormUtil.getGenericFormValidators(this.gemDetailsForm);
-    this.formValidationMessages.get("comments").set("maxlength", "Comments should be less than 30 characters")
+    this.formValidationMessages.get("comments").set("maxlength", "Comments should be less than 50 characters")
     this.formValidationMessages.get("isGemImageSaved").set("required", "Gem Image is required")
     this.formValidationMessages.get("date").set("matDatepickerParse", "Date is in incorrect format")
     this.disableGenBtn = false
+  }
+
+  onSelectetValueChange(event) {
+    this.gemDetailsForm.controls.date.setValue(event.value)
   }
 
   bindFormData(res: GemDetail) {
     if (res) {
       this.isRecordSaved = true;
       this.gemDetailsForm.patchValue(this.gemDetailToEdit)
-
+      this.gemDetailsForm.controls.date.setValue(new Date(res.date))
       //set validators when saved
       this.gemDetailsForm.get("isGemImageSaved").setValidators([Validators.required])
       //updateValueAndValidity
@@ -161,6 +166,8 @@ export class GemDetailsNewComponent implements OnInit {
   onFormSubmit() {
     this.disableGenBtn = false
     let gemDetailsFormValue = this.gemDetailsForm.getRawValue() as GemDetail;
+    let date = this.gemDetailsForm.controls.date.value as Date
+    gemDetailsFormValue.date = date.toISOString()
     if (this.isRecordSaved) {
       this.editGemDetail(gemDetailsFormValue)
     } else {
@@ -235,11 +242,11 @@ export class GemDetailsNewComponent implements OnInit {
 
   proceedToCardGeneration() {
     // if (this.signatureService.getSelectedSignatureNameToSign()) {
-      this.toasterService.info("Proceeding to Card Generation")
-      this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
-      this.router.navigateByUrl("pdf-gen/card") // create view screen if time is available
+    this.toasterService.info("Proceeding to Card Generation")
+    this.gemDetailService.setSelectedGemDetailIdForView(this.gemDetailIdToEdit)
+    this.router.navigateByUrl("pdf-gen/card") // create view screen if time is available
     // } else {
-      // this.toasterService.info("Please Select signature")
+    // this.toasterService.info("Please Select signature")
     // }
   }
 
