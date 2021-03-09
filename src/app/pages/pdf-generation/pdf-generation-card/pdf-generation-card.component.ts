@@ -12,7 +12,7 @@ import { jsPDF } from "jspdf";
 import { MediaCompletionContext } from 'app/shared/models/media-completion';
 import { GemDetail } from 'app/shared/models/gem-detail';
 import { CardContext } from 'app/shared/models/contextDTOs';
-import { SignatureService } from 'app/services/signature/signature.service';
+// import { SignatureService } from 'app/services/signature/signature.service';
 @Component({
   selector: 'app-pdf-generation-card',
   templateUrl: './pdf-generation-card.component.html',
@@ -30,10 +30,10 @@ export class PdfGenerationCardComponent implements OnInit {
   gemImgSubscription: Subscription
 
 
-  signatureImageURL: string
-  signatureImgSubscription: Subscription
+  // signatureImageURL: string
+  // signatureImgSubscription: Subscription
 
-  signatureImgNameUsedToSign: string
+  // signatureImgNameUsedToSign: string
 
 
   qrImage: any
@@ -45,7 +45,7 @@ export class PdfGenerationCardComponent implements OnInit {
 
   constructor(
     private gemDetailService: GemDetailService,
-    private signatureService: SignatureService,
+    // private signatureService: SignatureService,
     private toasterService: ToastrService,
     private router: Router,
   ) { }
@@ -53,8 +53,9 @@ export class PdfGenerationCardComponent implements OnInit {
   ngOnInit(): void {
     this.includeComment = true
 
-    if (this.gemDetailService.getSelectedGemDetailIdForView() && this.signatureService.getSelectedSignatureNameToSign()) {
+    if (this.gemDetailService.getSelectedGemDetailIdForView()) {//&& this.signatureService.getSelectedSignatureNameToSign()) {
       this.mediaCompletionContext = new MediaCompletionContext();
+      this.mediaCompletionContext.isSignatureImageComplete = true
 
       this.gemDetailIdToGenCard = this.gemDetailService.getSelectedGemDetailIdForView()
       this.gemDetailService.getGemDetailById(this.gemDetailIdToGenCard).subscribe(res => {
@@ -73,15 +74,15 @@ export class PdfGenerationCardComponent implements OnInit {
         }
       })
 
-      this.signatureImgNameUsedToSign = this.signatureService.getSelectedSignatureNameToSign()
-      let signFilepath = "signatures/" + this.signatureImgNameUsedToSign + "_sign"
-      this.signatureImgSubscription = this.signatureService.getFiles(signFilepath).subscribe(url => {
-        if (url) {
-          console.log(url)
-          this.signatureImageURL = url
-          this.signatureImgSubscription.unsubscribe()
-        }
-      })
+      // this.signatureImgNameUsedToSign = this.signatureService.getSelectedSignatureNameToSign()
+      // let signFilepath = "signatures/" + this.signatureImgNameUsedToSign + "_sign"
+      // this.signatureImgSubscription = this.signatureService.getFiles(signFilepath).subscribe(url => {
+      //   if (url) {
+      //     console.log(url)
+      //     this.signatureImageURL = url
+      //     this.signatureImgSubscription.unsubscribe()
+      //   }
+      // })
 
       this.generateQRCodes()
       this.setSubscriptionToOnload()
@@ -107,10 +108,10 @@ export class PdfGenerationCardComponent implements OnInit {
       subject.next({ image: IMAGES.GEM })
     };
 
-    let signature = document.getElementById("cardsignatureImg") as HTMLImageElement
-    signature.onload = function () {
-      subject.next({ image: IMAGES.SIGNATURE })
-    };
+    // let signature = document.getElementById("cardsignatureImg") as HTMLImageElement
+    // signature.onload = function () {
+    //   subject.next({ image: IMAGES.SIGNATURE })
+    // };
 
     // let cardCanvas = document.getElementById("cardQRCodeImg") as HTMLCanvasElement;
     // this.qrImage = new Image();
@@ -141,9 +142,9 @@ export class PdfGenerationCardComponent implements OnInit {
     if (image == IMAGES.QR) {
       this.mediaCompletionContext.isQRImageComplete = true
     }
-    if (image == IMAGES.SIGNATURE) {
-      this.mediaCompletionContext.isSignatureImageComplete = true
-    }
+    // if (image == IMAGES.SIGNATURE) {
+    //   this.mediaCompletionContext.isSignatureImageComplete = true
+    // }
   }
 
   OnClickGenerateCard() {
@@ -187,7 +188,7 @@ export class PdfGenerationCardComponent implements OnInit {
       let toast = this.toasterService
       qrImg.onload = function () {
         subject.next({ image: IMAGES.QR })
-        doc.addImage(qrImg, "png", 7.1, docHeight - 1.1, 0.8, 0.8);
+        doc.addImage(qrImg, "png", 6.2, docHeight - 1.2, 0.8, 0.8);
         const blob = doc.output("blob");
         const file = new File([blob], "filename")
         const filePath = "viewpdf/card/" + id
@@ -202,7 +203,7 @@ export class PdfGenerationCardComponent implements OnInit {
       qrImg.src = cardCanvas.toDataURL("png", 1);
 
       //signature image
-      let signature = document.getElementById("cardsignatureImg") as HTMLImageElement
+      // let signature = document.getElementById("cardsignatureImg") as HTMLImageElement
       // signature.onload = function () {
       //   subject.next({ image: IMAGES.SIGNATURE })
       // };
@@ -210,8 +211,8 @@ export class PdfGenerationCardComponent implements OnInit {
       // signature.src = '/assets/pdf-templates/signature.png';
       doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
       this.addTextInfo(doc)
-      doc.addImage(gemImg, "png", 5.67, 2, 1.8, 1.8);
-      doc.addImage(signature, "png", 5, docHeight - 1.4, 2, 1);
+      doc.addImage(gemImg, "png", 5.67, 1.9, 1.8, 1.8);
+      // doc.addImage(signature, "png", 5, docHeight - 1.4, 2, 1);
 
     } else {
       this.toasterService.warning("All media not loaded Yet")
@@ -235,14 +236,22 @@ export class PdfGenerationCardComponent implements OnInit {
       postion += spacing
     })
 
+    doc.setFont("times", "bold")
+    doc.text("Species", keyMargin, postion, { align: "left" });
+    doc.text(": " + this.cardContext.species, valueMargin - 1, postion, { align: "left" });
+    postion += spacing
+    doc.text("Variety", keyMargin, postion, { align: "left" });
+    doc.text(": " + this.cardContext.variety, valueMargin - 1, postion, { align: "left" });
+    postion += spacing
+
     if (this.includeComment) {
       doc.text("Comments", keyMargin, postion, { align: "left" });
       doc.text(": " + this.cardContext.comments, valueMargin - 1, postion, { align: "left" });
     }
 
-    doc.setFontSize(5)
-    let gemologistName = this.cardContext.gemologistName
-    doc.text(gemologistName, 6, 4.85, { align: "center" });
+    // doc.setFontSize(5)
+    // let gemologistName = this.cardContext.gemologistName
+    // doc.text(gemologistName, 6, 4.85, { align: "center" });
     console.log(doc.getFontList())
   }
 

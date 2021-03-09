@@ -145,8 +145,8 @@ export class CardContext {
         details.set("Weight", this.weight);
         details.set("Dimensions", this.dimensions);
         details.set("Color", this.color)
-        details.set("Species", this.species)
-        details.set("Variety", this.variety)
+        // details.set("Species", this.species)
+        // details.set("Variety", this.variety)
         return details
     }
 }
