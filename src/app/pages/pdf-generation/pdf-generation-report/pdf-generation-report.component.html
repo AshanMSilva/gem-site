@@ -99,7 +99,7 @@
 
                             <div class="col-md-3">
                                 <p>Template Image</p>
-                                <img src="/assets/pdf-templates/report_template.jpg" alt="Template image"
+                                <img src="/assets/pdf-templates/report_template.jpeg" alt="Template image"
                                     style="width: 150px;height: 150px;" id="templateImg">
                             </div>
 
@@ -159,6 +159,11 @@
                                 </button>
                             </div>
                             <div class="col-md-3">
+                                <button mat-raised-button type="submit" class="btn btn-info"
+                                    (click)="toggleIncludeSignture()">Signature
+                                    <span class="text-danger" *ngIf="!includeSignature">Excluded</span>
+                                    <span *ngIf="includeSignature">Included</span>
+                                </button>
                             </div>
                             <div class="col-md-3">
                                 <button mat-raised-button type="submit" class="btn btn-success pull-right"
