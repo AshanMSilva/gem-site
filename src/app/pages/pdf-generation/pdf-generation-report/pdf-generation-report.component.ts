@@ -42,6 +42,7 @@ export class PdfGenerationReportComponent implements OnInit {
 
   includeApex: boolean
   includeComment: boolean
+  includeSignature: boolean
 
   constructor(
     private gemDetailService: GemDetailService,
@@ -53,6 +54,7 @@ export class PdfGenerationReportComponent implements OnInit {
   ngOnInit(): void {
     this.includeApex = true
     this.includeComment = true
+    this.includeSignature = true
     if (this.gemDetailService.getSelectedGemDetailIdForView() && this.signatureService.getSelectedSignatureNameToSign()) {
       this.mediaCompletionContext = new MediaCompletionContext();
 
@@ -210,7 +212,9 @@ export class PdfGenerationReportComponent implements OnInit {
       doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
       this.addTextInfo(doc)
       doc.addImage(gemImg, "png", 20.275, 3.5, 4.5, 4.5);
-      doc.addImage(signature, "png", 20.275, 14, 4, 2);
+      if (this.includeSignature){
+        doc.addImage(signature, "png", 20.275, 13.8, 4, 2);
+      }
 
     } else {
       this.toasterService.warning("All media not loaded Yet")
@@ -300,5 +304,9 @@ export class PdfGenerationReportComponent implements OnInit {
 
   toggleIncludeApex() {
     this.includeApex = !this.includeApex
+  }
+
+  toggleIncludeSignture() {
+    this.includeSignature = !this.includeSignature
   }
 }
