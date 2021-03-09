@@ -211,7 +211,7 @@ export class PdfGenerationCardComponent implements OnInit {
       // signature.src = '/assets/pdf-templates/signature.png';
       doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
       this.addTextInfo(doc)
-      doc.addImage(gemImg, "png", 5.67, 1.9, 1.8, 1.8);
+      doc.addImage(gemImg, "png", 5.87, 2.15, 1.4, 1.4);
       // doc.addImage(signature, "png", 5, docHeight - 1.4, 2, 1);
 
     } else {
@@ -221,8 +221,8 @@ export class PdfGenerationCardComponent implements OnInit {
   }
 
   addTextInfo(doc: jsPDF) {
-    let keyMargin = 1.2
-    let valueMargin = 3.7
+    let keyMargin = 0.75
+    let valueMargin = 3.45
     var spacing = 0.32
 
     var postion = 2.3
