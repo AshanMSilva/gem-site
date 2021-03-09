@@ -221,15 +221,15 @@ export class PdfGenerationCardComponent implements OnInit {
   }
 
   addTextInfo(doc: jsPDF) {
-    let keyMargin = 0.75
-    let valueMargin = 3.45
-    var spacing = 0.32
+    let keyMargin = 0.58
+    let valueMargin = 3.5
+    var spacing = 0.326
 
     var postion = 2.3
 
     // Basic
     // doc.setFont("times", "bold")//Courier, Helvetica, Times, courier, helvetica, times
-    doc.setFontSize(5)
+    doc.setFontSize(7)
     this.cardContext.getAllDetailsMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
       doc.text(": " + value, valueMargin - 1, postion, { align: "left" });

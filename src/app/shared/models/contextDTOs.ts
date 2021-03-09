@@ -78,8 +78,8 @@ export class ReportContext {
         let testData = new Map<string, string>()
 
         testData.set("Refractive Index", this.refractiveIndex)
-        testData.set("Specific Gravity", this.specificGravity)
-        testData.set("Hardness", this.hardness)
+        testData.set("Specific Gravity (ref data)", this.specificGravity)
+        testData.set("Hardness (ref data)", this.hardness)
         testData.set("Optic Character", this.opticCharacter)
         testData.set("Magnification", this.magnification)
         testData.set("Color", this.color)
