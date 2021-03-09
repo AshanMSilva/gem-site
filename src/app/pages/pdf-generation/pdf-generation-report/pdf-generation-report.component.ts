@@ -186,7 +186,7 @@ export class PdfGenerationReportComponent implements OnInit {
       let toast = this.toasterService
       qrImg.onload = function () {
         subject.next({ image: IMAGES.QR })
-        doc.addImage(qrImg, "png", 20.775, 15.5, 2, 2);
+        doc.addImage(qrImg, "png", 23.5, 16.9, 1.6, 1.6);
         const blob = doc.output("blob");
         const file = new File([blob], "filename")
         const filePath = "viewpdf/report/" + id
@@ -209,8 +209,8 @@ export class PdfGenerationReportComponent implements OnInit {
       // signature.src = '/assets/pdf-templates/signature.png';
       doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
       this.addTextInfo(doc)
-      doc.addImage(gemImg, "png", 19.275, 5.5, 5, 5);
-      doc.addImage(signature, "png", 19.775, 13, 4, 2);
+      doc.addImage(gemImg, "png", 20.275, 3.5, 4.5, 4.5);
+      doc.addImage(signature, "png", 20.275, 14, 4, 2);
 
     } else {
       this.toasterService.warning("All media not loaded Yet")
@@ -219,43 +219,45 @@ export class PdfGenerationReportComponent implements OnInit {
   }
 
   addTextInfo(doc: jsPDF) {
+    let titleFontSize = 14
+    let textFontSize = 11
     let keyMargin = 2.2
     let valueMargin = 7.5
-    var spacing = 0.6
+    var spacing = 0.9
 
-    var postion = 4.2
+    var postion = 3.7
 
     //Basic
     doc.setFont("times", "bold")//Courier, Helvetica, Times, courier, helvetica, times
-    doc.setFontSize(10)
+    doc.setFontSize(textFontSize)
     this.reporContext.getBasicDetialsMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
-      doc.text(": " + value, valueMargin - 1, postion, { align: "left" });
+      doc.text(": " + value, valueMargin, postion, { align: "left" });
       postion += spacing
     })
 
-    var postion = 8.2
+    var postion = 7.9
 
     //Specimen
-    doc.setFontSize(11)
+    doc.setFontSize(titleFontSize)
     doc.setFont("times", "bold")//Courier, Helvetica, Times, courier, helvetica, times
-    doc.text("Details of Specimen", keyMargin, postion - spacing, { align: "left" });
+    doc.text("Specimen Details", keyMargin, postion - spacing, { align: "left" });
     doc.setFont("times", "normal")
-    doc.setFontSize(10)
+    doc.setFontSize(textFontSize)
     this.reporContext.getDetailsOfSpecimenMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
       doc.text(": " + value, valueMargin, postion, { align: "left" });
       postion += spacing
     })
 
-    var postion = 13
+    var postion = 13.3
 
     //test
-    doc.setFontSize(11)
+    doc.setFontSize(titleFontSize)
     doc.setFont("times", "bold")
     doc.text("Tested Data", keyMargin, postion - spacing, { align: "left" });
     doc.setFont("times", "normal")
-    doc.setFontSize(10)
+    doc.setFontSize(textFontSize)
     this.reporContext.getTestedDataMap().forEach((value, key) => {
       doc.text(key, keyMargin, postion, { align: "left" });
       doc.text(": " + value, valueMargin, postion, { align: "left" });
@@ -267,22 +269,28 @@ export class PdfGenerationReportComponent implements OnInit {
       doc.text("Apex", keyMargin, postion, { align: "left", maxWidth: 2.5 });
       var splitApexText = doc.splitTextToSize(this.reporContext.apex, 5);
       doc.text(": ", valueMargin, postion, { align: "left" });
-      doc.text(splitApexText, valueMargin + 0.2, postion, { align: "justify", maxWidth: 5 });
+      doc.text(splitApexText, valueMargin + 0.2, postion, { align: "justify", maxWidth: 5 ,lineHeightFactor:0.9});
     }
     //species, variety
-    let speciesAndVariety = "Species : " + this.reporContext.species + "  Variety: " + this.reporContext.variety
-    doc.text(speciesAndVariety, 21.775, 11.5, { align: "center" });
+    doc.setFontSize(18)
+    doc.setFont("times", "bold")
+    let species = "Species : " + this.reporContext.species
+    let variety = "Variety: " + this.reporContext.variety
+    doc.text(species, 22.275, 10.7, { align: "center" });
+    doc.text(variety, 22.275, 11.5, { align: "center" });
 
     //comments
+    doc.setFont("times", "normal")
     if (this.includeComment) {
+      doc.setFontSize(textFontSize)
       let comments = "Comments : " + this.reporContext.comments
-      doc.text(comments, 21.775, 12, { align: "center" });
+      doc.text(comments, 22.275, 12.5, { align: "center" });
     }
 
 
     doc.setFontSize(13)
     let gemologistName = this.reporContext.gemologistName
-    doc.text(gemologistName, 21.775, 14.95, { align: "center" });
+    doc.text(gemologistName, 22.375, 15.8, { align: "center" });
     console.log(doc.getFontList())
   }
 
