@@ -321,7 +321,7 @@ export class GemDetailsNewComponent implements OnInit {
   }
 
   selectReportIssueType(issueType: string) {
-    this.gemDetailsForm.controls.issueType.setValue(ISSUETYPE[issueType])
+    this.gemDetailsForm.controls.issueType.setValue(ISSUETYPE[issueType], { emitEvent: false })
   }
 
   getReportIssueTypeFormValue() {

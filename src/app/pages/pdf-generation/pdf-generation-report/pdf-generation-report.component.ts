@@ -196,6 +196,7 @@ export class PdfGenerationReportComponent implements OnInit {
         result.task.then((res) => {
           console.log("uploaded");
           toast.success("Report PDF uploaded to server")
+          service.updateGemDetail(id, { isReportGenerated: true });
         }, (e) => { console.log(e); })
         doc.save(id + "_report.pdf");
       };
@@ -212,7 +213,7 @@ export class PdfGenerationReportComponent implements OnInit {
       doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
       this.addTextInfo(doc)
       doc.addImage(gemImg, "png", 20.275, 3, 4.5, 4.5);
-      if (this.includeSignature){
+      if (this.includeSignature) {
         doc.addImage(signature, "png", 20.5, 13.8, 4, 2);
       }
 
@@ -273,7 +274,7 @@ export class PdfGenerationReportComponent implements OnInit {
       doc.text("Apex", keyMargin, postion, { align: "left", maxWidth: 2.5 });
       var splitApexText = doc.splitTextToSize(this.reporContext.apex, 5);
       doc.text(": ", valueMargin, postion, { align: "left" });
-      doc.text(splitApexText, valueMargin + 0.2, postion, { align: "justify", maxWidth: 5 ,lineHeightFactor:0.9});
+      doc.text(splitApexText, valueMargin + 0.2, postion, { align: "justify", maxWidth: 5, lineHeightFactor: 0.9 });
     }
     //species, variety
     doc.setFontSize(18)

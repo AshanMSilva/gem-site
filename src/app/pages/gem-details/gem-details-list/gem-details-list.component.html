@@ -24,17 +24,29 @@
                 <td>
                     <button mat-raised-button type="button" (click)="onClickGenNewReportItem(gemDetail)"
                         class="btn btn-sm btn-info">Edit / Gen</button>
+
                     <a mat-raised-button type="button" href="#/viewpdf/report/{{gemDetail.sgtlReportNumber}}"
-                        target="_blank" class="btn btn-sm btn-success">View Report</a>
+                        target="_blank" class="btn btn-sm btn-success" *ngIf="gemDetail.isReportGenerated">
+                        View Report</a>
+                    <button mat-raised-button type="button" class="btn btn-sm btn-danger"
+                        *ngIf="!gemDetail.isReportGenerated" matTooltip="Not Generated"
+                        [matTooltipPosition]="'above'">View Report</button>
+
                     <a mat-raised-button type="button" href="#/viewpdf/card/{{gemDetail.sgtlReportNumber}}"
-                        target="_blank" class="btn btn-sm btn-success">View Card</a>
+                        target="_blank" class="btn btn-sm btn-success" *ngIf="gemDetail.isCardGenerated">
+                        View Card</a>
+                    <button mat-raised-button type="button" class="btn btn-sm btn-danger"
+                        *ngIf="!gemDetail.isCardGenerated" matTooltip="Not Generated"
+                        [matTooltipPosition]="'above'">View Card</button>
+
                 </td>
             </tr>
         </tbody>
         <tbody *ngIf="!gemDetailsList">
             <tr>
                 <td>--</td>
-                <td>No gem details Added</td>
+                <td>Loading...</td>
+                <td>--</td>
                 <td>--</td>
                 <td>--</td>
             </tr>

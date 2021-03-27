@@ -196,6 +196,7 @@ export class PdfGenerationCardComponent implements OnInit {
         result.task.then((res) => {
           console.log("uploaded");
           toast.success("Card PDF uploaded to server")
+          service.updateGemDetail(id, { isCardGenerated: true });
         }, (e) => { console.log(e); })
         doc.save(id + "_card.pdf");
       };
