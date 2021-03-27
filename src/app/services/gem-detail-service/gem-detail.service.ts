@@ -99,7 +99,7 @@ export class GemDetailService {
   }
 
   getSearchGemDetailsByDate(query: string) {
-    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByChild('date').equalTo(query));
+    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByChild('date').startAt(query));
 
     this.gemReports = this.gemReportList.snapshotChanges().pipe(
       map(actions => actions.map(a => {

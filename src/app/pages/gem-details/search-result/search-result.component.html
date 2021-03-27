@@ -16,10 +16,11 @@
 
                     </div>
                     <div class="card-body table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover text-center">
                             <thead class="text-warning">
                                 <th>#</th>
                                 <th>SGTL ReportNumber</th>
+                                <th>Issue Type</th>
                                 <th>Date</th>
                                 <th>Actions</th>
                             </thead>
@@ -27,16 +28,40 @@
                                 <tr *ngFor="let gemDetail of gemDetailsList; index as i">
                                     <td>{{i+1}}</td>
                                     <td>{{gemDetail.sgtlReportNumber}}</td>
-                                    <td>{{gemDetail.date}}</td>
                                     <td>
-                                        <button mat-raised-button type="button" (click)="onClickGenNewReportItem(gemDetail)" class="btn btn-info">Edit / Gen</button>
+                                        <ng-container *ngIf="gemDetail.issueType">
+                                            <span
+                                                [ngClass]="{'text-info':gemDetail.issueType=='COPY','text-success':gemDetail.issueType=='ORIGINAL'}">
+                                                {{gemDetail.issueType}}
+                                            </span>
+                                        </ng-container>
+                                        <ng-container *ngIf="!gemDetail.issueType">--</ng-container>
                                     </td>
+                                    <td>{{gemDetail.date | date : "dd/MM/yyyy"}}</td>
+                                    <td>
+                                        <button mat-raised-button type="button" (click)="onClickGenNewReportItem(gemDetail)"
+                                        class="btn btn-sm btn-info">Edit / Gen</button>
+                
+                                    <a mat-raised-button type="button" href="#/viewpdf/report/{{gemDetail.sgtlReportNumber}}"
+                                        target="_blank" class="btn btn-sm btn-success" *ngIf="gemDetail.isReportGenerated">
+                                        View Report</a>
+                                    <button mat-raised-button type="button" class="btn btn-sm btn-danger"
+                                        *ngIf="!gemDetail.isReportGenerated" matTooltip="Not Generated"
+                                        [matTooltipPosition]="'above'">View Report</button>
+                
+                                    <a mat-raised-button type="button" href="#/viewpdf/card/{{gemDetail.sgtlReportNumber}}"
+                                        target="_blank" class="btn btn-sm btn-success" *ngIf="gemDetail.isCardGenerated">
+                                        View Card</a>
+                                    <button mat-raised-button type="button" class="btn btn-sm btn-danger"
+                                        *ngIf="!gemDetail.isCardGenerated" matTooltip="Not Generated"
+                                        [matTooltipPosition]="'above'">View Card</button>                                    </td>
                                 </tr>
                             </tbody>
                             <tbody *ngIf="!gemDetailsList">
                                 <tr>
                                     <td>--</td>
-                                    <td>No gem details Added</td>
+                                    <td>Loading...</td>
+                                    <td>--</td>
                                     <td>--</td>
                                     <td>--</td>
                                 </tr>

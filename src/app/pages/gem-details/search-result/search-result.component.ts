@@ -10,9 +10,9 @@ import { GemDetail } from 'app/shared/models/gem-detail';
 })
 export class SearchResultComponent implements OnInit {
 
-  d:string;
-  m:string;
-  y:string;
+  d: string;
+  m: string;
+  y: string;
   query: string;
   gemDetailsList: GemDetail[]
 
@@ -26,11 +26,11 @@ export class SearchResultComponent implements OnInit {
   ngOnInit(): void {
     this.gemDetailService.setSelectedGemDetailIdForView(null);
     this.query = this.route.snapshot.paramMap.get('query');
-    if(this.query == null){
+    if (this.query == null) {
       this.d = this.route.snapshot.paramMap.get('d');
       this.m = this.route.snapshot.paramMap.get('m');
       this.y = this.route.snapshot.paramMap.get('y');
-      this.query=`${this.d}/${this.m}/${this.y}`
+      this.query = new Date(new Date(`${this.y}-${this.m}-${this.d}`).setHours(0, 0, 0, 0)).toISOString()
     }
     this.gemDetailService.getSearchGemDetailsBySGTL(this.query).subscribe(response => {
       if (response) {
@@ -68,7 +68,7 @@ export class SearchResultComponent implements OnInit {
     this.router.navigateByUrl("gem-detail/new") // create view screen if time is available
   }
 
-  goBack(){
+  goBack() {
     this.router.navigateByUrl("gem-details")
   }
 }
