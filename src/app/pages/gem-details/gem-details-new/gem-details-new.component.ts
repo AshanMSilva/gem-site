@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SignatureService } from 'app/services/signature/signature.service';
 import { SignatureDTO } from 'app/shared/models/signatureDTO';
+import { ISSUETYPE } from 'app/shared/utils/gem-details-types';
 
 @Component({
   selector: 'app-gem-details-new',
@@ -38,6 +39,8 @@ export class GemDetailsNewComponent implements OnInit {
 
   signatureList: SignatureDTO[]
   selectedSignatureName: string
+
+  reportIssueTypeList: string[] = Object.keys(ISSUETYPE);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -83,6 +86,12 @@ export class GemDetailsNewComponent implements OnInit {
       //common
       date: [new Date(), Validators.required],
       sgtlReportNumber: [{ value: this.gemDetailIdToEdit, disabled: true }, Validators.required],
+
+      issueType: ISSUETYPE.ORIGINAL,
+
+      isReportGenerated: false,
+      isCardGenerated: false,
+
       object: ['', Validators.required],           //common
       gemologistName: ['',],           //common
 
@@ -108,9 +117,6 @@ export class GemDetailsNewComponent implements OnInit {
       // //Gem Image
       isGemImageSaved: [''],       //common
 
-      // //Latest Card,Report Ids filter by sgtlReportNumber and latest revision
-      // latestCardId: [''],
-      // latestReportId: [''],
     });
 
     this.gemDetailsForm.valueChanges.subscribe(data => {
@@ -140,6 +146,7 @@ export class GemDetailsNewComponent implements OnInit {
       //updateValueAndValidity
       this.gemDetailsForm.get("isGemImageSaved").updateValueAndValidity()
       this.disableGenBtn = false
+      if (res.issueType) this.selectReportIssueType(res.issueType)
     }
   }
 
@@ -311,6 +318,14 @@ export class GemDetailsNewComponent implements OnInit {
   selectSignature(sign: SignatureDTO) {
     this.selectedSignatureName = sign.signatureName
     this.signatureService.setSelectedSignatureNameToSign(sign.signatureName)
+  }
+
+  selectReportIssueType(issueType: string) {
+    this.gemDetailsForm.controls.issueType.setValue(ISSUETYPE[issueType])
+  }
+
+  getReportIssueTypeFormValue() {
+    return this.gemDetailsForm.controls.issueType.value;
   }
 
 }

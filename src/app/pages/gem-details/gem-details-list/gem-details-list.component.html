@@ -1,8 +1,9 @@
 <div class="card-body table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover text-center">
         <thead class="text-warning">
             <th>#</th>
             <th>SGTL ReportNumber</th>
+            <th>Issue Type</th>
             <th>Date</th>
             <th>Actions</th>
         </thead>
@@ -10,9 +11,23 @@
             <tr *ngFor="let gemDetail of gemDetailsList; index as i">
                 <td>{{i+1}}</td>
                 <td>{{gemDetail.sgtlReportNumber}}</td>
+                <td>
+                    <ng-container *ngIf="gemDetail.issueType">
+                        <span
+                            [ngClass]="{'text-info':gemDetail.issueType=='COPY','text-success':gemDetail.issueType=='ORIGINAL'}">
+                            {{gemDetail.issueType}}
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="!gemDetail.issueType">--</ng-container>
+                </td>
                 <td>{{gemDetail.date | date : "dd/MM/yyyy"}}</td>
                 <td>
-                    <button mat-raised-button type="button" (click)="onClickGenNewReportItem(gemDetail)" class="btn btn-info">Edit / Gen</button>
+                    <button mat-raised-button type="button" (click)="onClickGenNewReportItem(gemDetail)"
+                        class="btn btn-sm btn-info">Edit / Gen</button>
+                    <a mat-raised-button type="button" href="#/viewpdf/report/{{gemDetail.sgtlReportNumber}}"
+                        target="_blank" class="btn btn-sm btn-success">View Report</a>
+                    <a mat-raised-button type="button" href="#/viewpdf/card/{{gemDetail.sgtlReportNumber}}"
+                        target="_blank" class="btn btn-sm btn-success">View Card</a>
                 </td>
             </tr>
         </tbody>
@@ -27,6 +42,10 @@
     </table>
     <br>
     <div align=right class="pr-2" *ngIf="gemDetailsList">
-        <a class="pagination2 pr-2" type="button" (click)="getPreviousGemDetails(gemDetailsList.length>0?gemDetailsList[0].sgtlReportNumber:previousGemDetailkey)"><i class="material-icons">keyboard_arrow_left</i></a>  <a class="pagination2 " type="button" (click)="getNextGemDetails(gemDetailsList.length>0?gemDetailsList[gemDetailsList.length-1].sgtlReportNumber:'')"><i class="material-icons">keyboard_arrow_right</i></a> 
+        <a class="pagination2 pr-2" type="button"
+            (click)="getPreviousGemDetails(gemDetailsList.length>0?gemDetailsList[0].sgtlReportNumber:previousGemDetailkey)"><i
+                class="material-icons">keyboard_arrow_left</i></a> <a class="pagination2 " type="button"
+            (click)="getNextGemDetails(gemDetailsList.length>0?gemDetailsList[gemDetailsList.length-1].sgtlReportNumber:'')"><i
+                class="material-icons">keyboard_arrow_right</i></a>
     </div>
 </div>

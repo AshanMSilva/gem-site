@@ -24,9 +24,11 @@
                                 </div>
                                 <div class="col-sm-3 col-md-3">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Date" type="text" formControlName="date" [matDatepicker]="picker">
+                                        <input matInput placeholder="Date" type="text" formControlName="date"
+                                            [matDatepicker]="picker">
                                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                        <mat-datepicker #picker (selectedValueChange)="onSelectetValueChange($event)"></mat-datepicker>
+                                        <mat-datepicker #picker (selectedValueChange)="onSelectetValueChange($event)">
+                                        </mat-datepicker>
                                         <mat-error *ngIf="formErrors.get('date')">
                                             {{formErrors.get('date')}}</mat-error>
                                     </mat-form-field>
@@ -38,13 +40,28 @@
                                             {{formErrors.get('object')}}</mat-error>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-3 col-md-3">
-                                    <!-- <mat-form-field class="example-full-width">
+                                <!-- <div class="col-sm-3 col-md-3">
+                                    <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Gemologist Name" type="text"
                                             formControlName="gemologistName">
                                         <mat-error *ngIf="formErrors.get('gemologistName')">
                                             {{formErrors.get('gemologistName')}}</mat-error>
-                                    </mat-form-field> -->
+                                    </mat-form-field>
+                                </div> -->
+                                <div class="col-sm-3 col-md-3">
+                                    <div class="dropdown" matTooltip="Issue Type" [matTooltipPosition]="'above'">
+                                        <button href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                            aria-expanded="true">
+                                            <span *ngIf="getReportIssueTypeFormValue()">{{getReportIssueTypeFormValue()}}</span>
+                                            <b class="caret"></b>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li *ngFor="let issueType of reportIssueTypeList;index as i"><a
+                                                    href="javascript:void(0)"
+                                                    (click)="selectReportIssueType(issueType)">{{issueType}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                             <br>
@@ -199,7 +216,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-lg-3" *ngIf="isRecordSaved&& gemDetailToEdit && displayGemImgFromURL">
+                                <div class="col-12 col-md-6 col-lg-3"
+                                    *ngIf="isRecordSaved&& gemDetailToEdit && displayGemImgFromURL">
                                     <p *ngIf="gemDetailToEdit.isGemImageSaved">Current Gem Image </p>
                                     <img *ngIf="gemImageURL&&gemDetailToEdit.isGemImageSaved" src="{{gemImageURL}}"
                                         alt="Gemstone image" style="width: 150px;height: 150px;" id="gemImageInForm">

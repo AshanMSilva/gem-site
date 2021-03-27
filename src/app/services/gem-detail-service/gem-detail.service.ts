@@ -33,29 +33,9 @@ export class GemDetailService {
     );
     return this.gemReports;
   }
-  getGemDetailsWithPagination(offsetReportNumber:string, limit:number,previous:boolean): Observable<GemDetail[]> {
-    if(offsetReportNumber == null){
-      this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByKey().limitToLast(limit));
-      this.gemReports = this.gemReportList.snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.val() as GemDetail;
-        data.sgtlReportNumber = a.payload.key;
-        return data;
-      }))
-    );
-    }
-    else{
-      if(previous ==true){
-        this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByKey().startAfter(offsetReportNumber).limitToFirst(limit));
-        this.gemReports = this.gemReportList.snapshotChanges().pipe(
-          map(actions => actions.map(a => {
-            const data = a.payload.val() as GemDetail;
-            data.sgtlReportNumber = a.payload.key;
-            return data;
-          }))
-        );
-      }else{
-        this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByKey().endBefore(offsetReportNumber).limitToLast(limit));
+  getGemDetailsWithPagination(offsetReportNumber: string, limit: number, previous: boolean): Observable<GemDetail[]> {
+    if (offsetReportNumber == null) {
+      this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByKey().limitToLast(limit));
       this.gemReports = this.gemReportList.snapshotChanges().pipe(
         map(actions => actions.map(a => {
           const data = a.payload.val() as GemDetail;
@@ -63,16 +43,36 @@ export class GemDetailService {
           return data;
         }))
       );
+    }
+    else {
+      if (previous == true) {
+        this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByKey().startAfter(offsetReportNumber).limitToFirst(limit));
+        this.gemReports = this.gemReportList.snapshotChanges().pipe(
+          map(actions => actions.map(a => {
+            const data = a.payload.val() as GemDetail;
+            data.sgtlReportNumber = a.payload.key;
+            return data;
+          }))
+        );
+      } else {
+        this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByKey().endBefore(offsetReportNumber).limitToLast(limit));
+        this.gemReports = this.gemReportList.snapshotChanges().pipe(
+          map(actions => actions.map(a => {
+            const data = a.payload.val() as GemDetail;
+            data.sgtlReportNumber = a.payload.key;
+            return data;
+          }))
+        );
       }
-      
+
     }
     console.log(this.gemReportList);
-    
+
     return this.gemReports;
   }
-  getSearchGemDetailsBySGTL(query:string){
-    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByChild('sgtlReportNumber').equalTo(query));
-    
+  getSearchGemDetailsBySGTL(query: string) {
+    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByChild('sgtlReportNumber').equalTo(query));
+
     this.gemReports = this.gemReportList.snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.val() as GemDetail;
@@ -80,12 +80,12 @@ export class GemDetailService {
         return data;
       }))
     );
-    
+
     return this.gemReports;
   }
-  getSearchGemDetailsByDate(query:string){
-    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByChild('date').equalTo(query));
-    
+  getSearchGemDetailsByDate(query: string) {
+    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByChild('date').equalTo(query));
+
     this.gemReports = this.gemReportList.snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.val() as GemDetail;
@@ -93,12 +93,12 @@ export class GemDetailService {
         return data;
       }))
     );
-    
+
     return this.gemReports;
   }
-  getSearchGemDetailsByObject(query:string){
-    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref=>ref.orderByChild('object').equalTo(query));
-    
+  getSearchGemDetailsByObject(query: string) {
+    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByChild('object').equalTo(query));
+
     this.gemReports = this.gemReportList.snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.val() as GemDetail;
@@ -106,7 +106,7 @@ export class GemDetailService {
         return data;
       }))
     );
-    
+
     return this.gemReports;
   }
 
@@ -156,7 +156,7 @@ export class GemDetailService {
   deleteGemDetail(id: string) {
     this.db.object(MODELTYPE.GEM_DETAILS + '/' + id).remove();
   }
-  
+
   getFiles(filepath: string): Observable<string> {
     return this.storage.ref(filepath).getDownloadURL();
   }

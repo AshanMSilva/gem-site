@@ -1,5 +1,5 @@
-export enum GEMREPORTTYPE {
-    REPORT = "Report",
-    MEMO_CARD = "Memo Card",
-    BOTH = "Both",
-  }
+export enum ISSUETYPE {
+  COPY = "COPY",
+  ORIGINAL = "ORIGINAL",
+}
+

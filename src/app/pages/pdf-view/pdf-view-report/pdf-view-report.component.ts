@@ -15,6 +15,8 @@ export class PdfViewReportComponent implements OnInit {
 
   loadPercentage: number
 
+  isDownloadable: boolean = false;
+
   constructor(
     private gemDetailService: GemDetailService,
     private router: Router,
@@ -42,5 +44,9 @@ export class PdfViewReportComponent implements OnInit {
   onLoad(pdf: PDFDocumentProxy) {
     this.loadPercentage = null
     // do anything with "pdf"
+    let downloadConfig = JSON.parse(localStorage.getItem('downloadConfig'));
+    if (downloadConfig) {
+      this.isDownloadable = !!downloadConfig.isAllowed
+    }
   }
 }

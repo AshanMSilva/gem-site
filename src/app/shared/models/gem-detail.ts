@@ -1,7 +1,13 @@
+import { ISSUETYPE } from "../utils/gem-details-types";
+
 export class GemDetail {
     // firebase
     sgtlReportNumber: string;
     date: string;
+    issueType: ISSUETYPE;
+
+    isReportGenerated: boolean
+    isCardGenerated: boolean
 
     object: string;
 
@@ -27,8 +33,5 @@ export class GemDetail {
     //Gem Image
     isGemImageSaved: boolean;
 
-    //Latest Card,Report Ids filter by sgtlReportNo and latest revision
-    // latestCardId: string
-    // latestReportId: string
-    gemologistName:string
+    gemologistName: string
 }
