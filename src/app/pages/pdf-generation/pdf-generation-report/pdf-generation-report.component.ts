@@ -188,7 +188,7 @@ export class PdfGenerationReportComponent implements OnInit {
       let toast = this.toasterService
       qrImg.onload = function () {
         subject.next({ image: IMAGES.QR })
-        doc.addImage(qrImg, "png", 23.5, 16.9, 1.6, 1.6);
+        doc.addImage(qrImg, "png", 23.95, 16.8, 1.8, 1.8);
         const blob = doc.output("blob");
         const file = new File([blob], "filename")
         const filePath = "viewpdf/report/" + id
@@ -211,9 +211,9 @@ export class PdfGenerationReportComponent implements OnInit {
       // signature.src = '/assets/pdf-templates/signature.png';
       doc.addImage(templateImg, "jpeg", 0, 0, docWidth, docHeight);
       this.addTextInfo(doc)
-      doc.addImage(gemImg, "png", 20.275, 3.5, 4.5, 4.5);
+      doc.addImage(gemImg, "png", 20.275, 3, 4.5, 4.5);
       if (this.includeSignature){
-        doc.addImage(signature, "png", 20.275, 13.8, 4, 2);
+        doc.addImage(signature, "png", 20.5, 13.8, 4, 2);
       }
 
     } else {

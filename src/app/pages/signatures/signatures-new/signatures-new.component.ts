@@ -85,7 +85,7 @@ export class SignaturesNewComponent implements OnInit {
   }
 
   preprocessForm() {
-    if (this.signatureForm.valid) {
+    if (this.signatureForm.valid || this.signatureForm.disabled) {
       this.onFormSubmit();
     } else {
       this.displayValidation();
