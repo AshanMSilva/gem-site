@@ -42,6 +42,9 @@ export class GemDetailsNewComponent implements OnInit {
 
   reportIssueTypeList: string[] = Object.keys(ISSUETYPE);
 
+  allSavedIDList: string[] = []
+  allSavedIDListSubscription: Subscription;
+
   constructor(
     private formBuilder: FormBuilder,
     private gemDetailService: GemDetailService,
@@ -52,6 +55,7 @@ export class GemDetailsNewComponent implements OnInit {
 
   ngOnInit(): void {
     this.signatureService.setSelectedSignatureNameToSign(null)
+
     this.displayGemImgFromURL = true //check
     if (this.gemDetailService.getSelectedGemDetailIdForView()) {
       this.gemDetailIdToEdit = this.gemDetailService.getSelectedGemDetailIdForView()
@@ -64,7 +68,12 @@ export class GemDetailsNewComponent implements OnInit {
         }
       })
     } else {
-      this.gemDetailIdToEdit = new Date().getTime().toString(); //new
+      this.allSavedIDListSubscription = this.gemDetailService.getAllSavedGemDetailIds().subscribe(res => {
+        if (res) {
+          this.allSavedIDList = res;
+        }
+        this.gemDetailIdToEdit = this.getNewAvailableID(); //new
+      });
       this.isRecordSaved = false
     }
     this.createForm();
@@ -74,10 +83,24 @@ export class GemDetailsNewComponent implements OnInit {
 
     })
 
+
     this.signatureService.getSignatures().subscribe(res => {
       this.signatureList = res
     })
 
+  }
+
+  getNewAvailableID(): string {
+    let yearPrefix = new Date().getFullYear().toString().substring(2)
+    let randomSuffix = Math.random().toString().substr(2, 4)
+    var newID = 'SG' + yearPrefix + randomSuffix
+    while (this.allSavedIDList.includes(newID)) {
+      let randomSuffix = Math.random().toString().substr(2, 4)
+      var newID = 'SG' + yearPrefix + randomSuffix
+    }
+    this.gemDetailsForm.controls.sgtlReportNumber.setValue(newID)
+    this.allSavedIDListSubscription.unsubscribe()
+    return newID
   }
 
   createForm() {
@@ -85,7 +108,7 @@ export class GemDetailsNewComponent implements OnInit {
 
       //common
       date: [new Date(), Validators.required],
-      sgtlReportNumber: [{ value: this.gemDetailIdToEdit, disabled: true }, Validators.required],
+      sgtlReportNumber: [{ value: '', disabled: true }, Validators.required],
 
       issueType: ISSUETYPE.ORIGINAL,
 

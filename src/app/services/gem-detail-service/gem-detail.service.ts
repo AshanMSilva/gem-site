@@ -14,6 +14,7 @@ export class GemDetailService {
 
   gemReportList: AngularFireList<GemDetail>;
   gemReports: Observable<GemDetail[]>;
+  gemReportsSavedIDList: Observable<string[]>;
   gemReport: Observable<GemDetail>;
   constructor(
     private db: AngularFireDatabase,
@@ -33,6 +34,18 @@ export class GemDetailService {
     );
     return this.gemReports;
   }
+
+  getAllSavedGemDetailIds() {
+    let year = new Date().getFullYear().toString()
+    this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS,ref => ref.orderByChild('date').startAt(year));
+    this.gemReportsSavedIDList = this.gemReportList.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        return a.payload.key;
+      }))
+    );
+    return this.gemReportsSavedIDList;
+  }
+
   getGemDetailsWithPagination(offsetReportNumber: string, limit: number, previous: boolean): Observable<GemDetail[]> {
     if (offsetReportNumber == null) {
       this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByKey().limitToLast(limit));
@@ -70,6 +83,7 @@ export class GemDetailService {
 
     return this.gemReports;
   }
+
   getSearchGemDetailsBySGTL(query: string) {
     this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByChild('sgtlReportNumber').equalTo(query));
 
@@ -83,6 +97,7 @@ export class GemDetailService {
 
     return this.gemReports;
   }
+
   getSearchGemDetailsByDate(query: string) {
     this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByChild('date').equalTo(query));
 
@@ -96,6 +111,7 @@ export class GemDetailService {
 
     return this.gemReports;
   }
+
   getSearchGemDetailsByObject(query: string) {
     this.gemReportList = this.db.list<GemDetail>(MODELTYPE.GEM_DETAILS, ref => ref.orderByChild('object').equalTo(query));
 
