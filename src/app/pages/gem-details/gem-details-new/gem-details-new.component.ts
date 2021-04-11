@@ -72,7 +72,7 @@ export class GemDetailsNewComponent implements OnInit {
         if (res) {
           this.allSavedIDList = res;
         }
-        this.gemDetailIdToEdit = this.getNewAvailableID(); //new
+        this.gemDetailIdToEdit = this.getNewAvailableIDByIncrement(); //new
       });
       this.isRecordSaved = false
     }
@@ -90,7 +90,7 @@ export class GemDetailsNewComponent implements OnInit {
 
   }
 
-  getNewAvailableID(): string {
+  getNewAvailableIDByRandom(): string {
     let yearPrefix = new Date().getFullYear().toString().substring(2)
     let randomSuffix = Math.random().toString().substr(2, 4)
     var newID = 'SG' + yearPrefix + randomSuffix
@@ -98,6 +98,24 @@ export class GemDetailsNewComponent implements OnInit {
       let randomSuffix = Math.random().toString().substr(2, 4)
       var newID = 'SG' + yearPrefix + randomSuffix
     }
+    this.gemDetailsForm.controls.sgtlReportNumber.setValue(newID)
+    this.allSavedIDListSubscription.unsubscribe()
+    return newID
+  }
+
+  getNewAvailableIDByIncrement(): string {
+    let yearPrefix = new Date().getFullYear().toString().substring(2)
+    let suffixDigitsExistingList = this.allSavedIDList.map(value => value.substr(4, 4))
+    //suffixDigitsExistingList = suffixDigitsExistingList.sort()
+    console.log(suffixDigitsExistingList);
+    let suffix = 0
+    let suffixStr = suffix.toString().padStart(4, "0")
+    while (suffixDigitsExistingList.includes(suffixStr)) {
+      suffix += 1
+      suffixStr = suffix.toString().padStart(4, "0")
+    }
+
+    var newID = 'SG' + yearPrefix + suffixStr
     this.gemDetailsForm.controls.sgtlReportNumber.setValue(newID)
     this.allSavedIDListSubscription.unsubscribe()
     return newID
