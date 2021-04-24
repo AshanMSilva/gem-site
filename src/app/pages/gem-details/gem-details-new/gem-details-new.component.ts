@@ -105,17 +105,17 @@ export class GemDetailsNewComponent implements OnInit {
 
   getNewAvailableIDByIncrement(): string {
     let yearPrefix = new Date().getFullYear().toString().substring(2)
-    let suffixDigitsExistingList = this.allSavedIDList.map(value => value.substr(4, 4))
+    let suffixDigitsExistingList = this.allSavedIDList.map(value => value.substr(2, 6)) //yyxxxx ex - 210001
     //suffixDigitsExistingList = suffixDigitsExistingList.sort()
     console.log(suffixDigitsExistingList);
     let suffix = 0
-    let suffixStr = suffix.toString().padStart(4, "0")
+    let suffixStr = yearPrefix + suffix.toString().padStart(4, "0")
     while (suffixDigitsExistingList.includes(suffixStr)) {
       suffix += 1
-      suffixStr = suffix.toString().padStart(4, "0")
+      suffixStr = yearPrefix + suffix.toString().padStart(4, "0")
     }
 
-    var newID = 'SG' + yearPrefix + suffixStr
+    var newID = 'SG' + suffixStr
     this.gemDetailsForm.controls.sgtlReportNumber.setValue(newID)
     this.allSavedIDListSubscription.unsubscribe()
     return newID
