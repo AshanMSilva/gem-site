@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import firebase from "firebase";
 
 @Injectable({
   providedIn: 'root'
@@ -16,16 +17,23 @@ export class AuthService {
   ) { }
 
 
-  login(email:string, password: string){
-      this.auth.signInWithEmailAndPassword(email, password).then(res =>{
-        this.router.navigateByUrl('dashboard');
-        this.toastr.info('You have successfully logged in..!');
+  login(email: string, password: string) {
+    this.auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(res => this.auth.signInWithEmailAndPassword(email, password)
+        .then(res => {
+          this.router.navigateByUrl('dashboard');
+          this.toastr.info('You have successfully logged in..!');
 
-      }).catch(error => {
-        this.toastr.error(error.message);
-      });
+        }).catch(error => {
+          this.toastr.error(error.message);
+        })
+    ).catch(e=>{
+      this.toastr.error('Persistent SESSION Error');
+      }
+    );
 
-    }
+  }
+
   signOut(){
     this.auth.signOut().then(res =>{
       this.router.navigateByUrl('login');
