@@ -253,7 +253,10 @@ export class PdfGenerationCardComponent implements OnInit {
     // doc.setFontSize(5)
     // let gemologistName = this.cardContext.gemologistName
     // doc.text(gemologistName, 6, 4.85, { align: "center" });
-    console.log(doc.getFontList())
+    doc.setFontSize(4);
+    doc.setFont("times", "regular");
+    doc.text("Photo(s) does not accurately represent size or colour.", 6.55, 3.8, { align: "center", maxWidth:2});
+    // console.log(doc.getFontList())
   }
 
   toggleIncludeComment() {
